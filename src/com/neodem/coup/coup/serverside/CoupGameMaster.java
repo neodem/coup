@@ -4,16 +4,13 @@ import com.neodem.coup.coup.CoupGameContext;
 import com.neodem.coup.coup.CoupPlayerInfo;
 import com.neodem.coup.coup.cards.CoupCard;
 import com.neodem.coup.coup.cards.CoupDeck;
-import com.neodem.coup.game.BaseGameMaster;
-import com.neodem.coup.game.GameContext;
-import com.neodem.coup.game.PlayerId;
+import com.neodem.coup.game.*;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
 /**
- *
  * Author: vfumo
  * Date: 2/28/14
  */
@@ -33,6 +30,24 @@ public class CoupGameMaster extends BaseGameMaster {
     protected void runGameLoop() {
         while (true) {
 
+
+            for (Player p : registeredPlayers) {
+                GameContext gc = generateCurrentGameContext();
+                Action a = p.yourTurn(gc);
+
+                // alert other players in sequence
+                for (Player op : registeredPlayers) {
+                    if (op == p) continue;
+                    Action opa = op.actionHappened(p.getPlayerId(), a, gc);
+                    if (Action.NoAction == opa) continue;
+                    if (Action.Challenge == opa) {
+
+                    }
+                    if (Action.Block == opa) {
+
+                    }
+                }
+            }
         }
     }
 
@@ -40,9 +55,9 @@ public class CoupGameMaster extends BaseGameMaster {
     protected void initGame() {
         deck = new CoupDeck();
 
-        for (PlayerId pid : registeredPlayers) {
+        for (Player p : registeredPlayers) {
             CoupSSPlayerInfo info = makeNewPlayerInfo();
-            playerInfoMap.put(pid, info);
+            playerInfoMap.put(p.getPlayerId(), info);
         }
     }
 

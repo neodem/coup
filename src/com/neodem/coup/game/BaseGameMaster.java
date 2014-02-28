@@ -14,12 +14,12 @@ public abstract class BaseGameMaster implements GameMaster {
 
     private Collection<String> usedNames;
     private int nextId = 0;
-    protected List<PlayerId> registeredPlayers;
+    protected List<Player> registeredPlayers;
     private int maxPlayers;
 
     public BaseGameMaster(int playersAllowed) {
         usedNames = new HashSet<String>();
-        registeredPlayers = new ArrayList<PlayerId>();
+        registeredPlayers = new ArrayList<Player>();
         maxPlayers = playersAllowed;
     }
 
@@ -42,8 +42,8 @@ public abstract class BaseGameMaster implements GameMaster {
 
         PlayerId id = player.getPlayerId();
         if (id == null) throw new IllegalArgumentException("need to be registered");
-        if (!registeredPlayers.contains(id)) throw new IllegalArgumentException("Already registered");
-        registeredPlayers.add(id);
+        if (!registeredPlayers.contains(player)) throw new IllegalArgumentException("Already registered");
+        registeredPlayers.add(player);
 
         return generateCurrentGameContext();
     }
