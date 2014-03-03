@@ -22,6 +22,12 @@ public class CoupAction extends Action {
         this.actionType = actionType;
     }
 
+    public static boolean validPlayableAction(ActionType actionType) {
+        return actionType != ActionType.NoAction &&
+                actionType != ActionType.Challenge &&
+                actionType != ActionType.Counter;
+    }
+
     public ActionType getActionType() {
         return actionType;
     }

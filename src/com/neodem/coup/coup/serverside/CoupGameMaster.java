@@ -54,19 +54,7 @@ public class CoupGameMaster extends BaseGameMaster {
                     CoupAction a = getValidCoupAction(p, info);
 
                     // alert other players in sequence
-                    for (Player op : registeredPlayers) {
-                        if (op == p) continue;
-                        CoupAction opa = (CoupAction) op.actionHappened(p.getPlayerId(), a, generateCurrentGameContext());
-                        if (opa.getActionType() == CoupAction.ActionType.NoAction) continue;
-                        if (opa.getActionType() == CoupAction.ActionType.Challenge) {
-                            // resolve challenge
-                            //TODO impl this.
-                        }
-                        if (opa.getActionType() == CoupAction.ActionType.Counter) {
-                            // resolve counter
-                            // TODO impl this.
-                        }
-                    }
+                    alertOtherPlayers(p, a);
 
                     // process the action
                     processAction(p, info, a);
@@ -76,6 +64,27 @@ public class CoupGameMaster extends BaseGameMaster {
                         break;
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * TODO need to fix this so we start with the player to thr left of the one who did the action
+     * @param p
+     * @param a
+     */
+    private void alertOtherPlayers(Player p, CoupAction a) {
+        for (Player op : registeredPlayers) {
+            if (op == p) continue;
+            CoupAction opa = (CoupAction) op.actionHappened(p.getPlayerId(), a, generateCurrentGameContext());
+            if (opa.getActionType() == CoupAction.ActionType.NoAction) continue;
+            if (opa.getActionType() == CoupAction.ActionType.Challenge) {
+                // resolve challenge
+                //TODO impl this.
+            }
+            if (opa.getActionType() == CoupAction.ActionType.Counter) {
+                // resolve counter
+                // TODO impl this.
             }
         }
     }
@@ -125,6 +134,10 @@ public class CoupGameMaster extends BaseGameMaster {
         if (info.coins < 7 && a.getActionType() == CoupAction.ActionType.Coup) {
             // not enough money
             throw new PlayerError("Player doesn't have enough coins to Coup : " + info.coins);
+        }
+
+        if(!CoupAction.validPlayableAction(a.getActionType())) {
+            throw new PlayerError("You need to perform a valid action on your turn");
         }
     }
 

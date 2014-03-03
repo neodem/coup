@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0329f64b-b029-461c-ab0a-40eebba34407" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/PlayerError.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="coup.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -17,7 +16,7 @@
     <file path="/BasePlayer.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393866531990" ignored="false" />
     <file path="/PlayerId.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393606213591" ignored="false" />
     <file path="/ServerSideGameContext.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393606488014" ignored="false" />
-    <file path="/CoupGameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393881036236" ignored="false" />
+    <file path="/CoupGameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393881238927" ignored="false" />
     <file path="/CoupPlayerInfo.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393612185481" ignored="false" />
     <file path="/CoupCard.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393864242011" ignored="false" />
     <file path="/BaseGameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393858372661" ignored="false" />
@@ -28,7 +27,7 @@
     <file path="/CoupPlayer.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393879974376" ignored="false" />
     <file path="/Action.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393864881301" ignored="false" />
     <file path="/Dummy.txt" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872168703" ignored="false" />
-    <file path="/CoupAction.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393865021417" ignored="false" />
+    <file path="/CoupAction.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393881316894" ignored="false" />
     <file path="/CoupAlert.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393866424342" ignored="false" />
     <file path="$USER_HOME$/repo/projects/linearDataService/indexer/src/main/resources/com/theplatform/data/tv/linear/indexer/spring-indexer-station.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393867028510" ignored="false" />
     <file path="$USER_HOME$/repo/projects/linearDataService/indexer/src/main/resources/com/theplatform/data/tv/linear/indexer/spring-indexer-stream.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393867095166" ignored="false" />
@@ -145,10 +144,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="CoupGameMaster.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="CoupGameMaster.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="76" column="37" selection-start="2520" selection-end="2520" vertical-scroll-proportion="0.56647396">
+            <state line="138" column="30" selection-start="4154" selection-end="4154" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -174,10 +173,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CoupAction.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="CoupAction.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="61" selection-start="723" selection-end="723" vertical-scroll-proportion="0.0">
+            <state line="39" column="44" selection-start="1023" selection-end="1023" vertical-scroll-proportion="0.61849713">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -266,7 +265,6 @@
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupCard.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupDeck.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/game/Action.java" />
-        <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/game/Alert.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAlert.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupAlert.java" />
@@ -275,6 +273,7 @@
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupPlayer.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/PlayerError.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java" />
+        <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java" />
       </list>
     </option>
   </component>
@@ -734,15 +733,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="61" selection-start="723" selection-end="723" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/Alert.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="7" selection-start="191" selection-end="191" vertical-scroll-proportion="0.0">
@@ -796,7 +786,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="37" selection-start="2520" selection-end="2520" vertical-scroll-proportion="0.56647396">
+        <state line="138" column="30" selection-start="4154" selection-end="4154" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="44" selection-start="1023" selection-end="1023" vertical-scroll-proportion="0.61849713">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
