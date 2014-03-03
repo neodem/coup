@@ -3,6 +3,7 @@ package com.neodem.coup.coup.serverside;
 import com.neodem.coup.coup.CoupGameContext;
 import com.neodem.coup.coup.CoupPlayer;
 import com.neodem.coup.coup.CoupPlayerInfo;
+import com.neodem.coup.coup.PlayerError;
 import com.neodem.coup.coup.cards.CoupCard;
 import com.neodem.coup.coup.cards.CoupDeck;
 import com.neodem.coup.game.BaseGameMaster;
@@ -50,7 +51,7 @@ public class CoupGameMaster extends BaseGameMaster {
                 CoupSSPlayerInfo info = playerInfoMap.get(p);
 
                 if (info.active) {
-                    CoupAction a = getValidActionFromPlayer(p, info);
+                    CoupAction a = getValidCoupAction(p, info);
 
                     // alert other players in sequence
                     for (Player op : registeredPlayers) {
@@ -59,9 +60,11 @@ public class CoupGameMaster extends BaseGameMaster {
                         if (opa.getActionType() == CoupAction.ActionType.NoAction) continue;
                         if (opa.getActionType() == CoupAction.ActionType.Challenge) {
                             // resolve challenge
+                            //TODO impl this.
                         }
                         if (opa.getActionType() == CoupAction.ActionType.Counter) {
                             // resolve counter
+                            // TODO impl this.
                         }
                     }
 
@@ -75,6 +78,24 @@ public class CoupGameMaster extends BaseGameMaster {
                 }
             }
         }
+    }
+
+    private CoupAction getValidCoupAction(Player p, CoupSSPlayerInfo info) {
+        CoupAction a;
+        boolean playerCantGetTheirShitTogether = false;
+        do {
+            a = (CoupAction) p.yourTurn(generateCurrentGameContext());
+
+            try {
+                validateAction(info, a);
+            } catch (PlayerError e) {
+                p.tryAgain(e.getMessage());
+                playerCantGetTheirShitTogether = true;
+            }
+        } while (playerCantGetTheirShitTogether);
+
+
+        return a;
     }
 
     /**
@@ -95,23 +116,16 @@ public class CoupGameMaster extends BaseGameMaster {
         return false;
     }
 
-    private CoupAction getValidActionFromPlayer(Player p, CoupSSPlayerInfo info) {
-        CoupAction a;
-
-        while (true) {
-            //  let the player take his turn
-            a = (CoupAction) p.yourTurn(generateCurrentGameContext());
-
-            // player must coup if they have 10 or more coins
-            if ((info.coins >= 10) && a.getActionType() != CoupAction.ActionType.Coup) {
-                // error
-                p.tryAgain("You have 10 coins, you Must Coup");
-            } else {
-                break;
-            }
+    private void validateAction(CoupSSPlayerInfo info, CoupAction a) throws PlayerError {
+        if ((info.coins >= 10) && a.getActionType() != CoupAction.ActionType.Coup) {
+            // error
+            throw new PlayerError("You need to Coup. You have 10 or more coins");
         }
 
-        return a;
+        if (info.coins < 7 && a.getActionType() == CoupAction.ActionType.Coup) {
+            // not enough money
+            throw new PlayerError("Player doesn't have enough coins to Coup : " + info.coins);
+        }
     }
 
     /**
@@ -121,7 +135,6 @@ public class CoupGameMaster extends BaseGameMaster {
      * @return true if the action passed
      */
     private void processAction(Player p, CoupSSPlayerInfo info, CoupAction a) {
-
         switch (a.getActionType()) {
             case Income:
                 info.addCoin();
@@ -156,12 +169,9 @@ public class CoupGameMaster extends BaseGameMaster {
         info.addCoins(coins);
     }
 
+    // TODO finish this method
     private void handleCoup(CoupSSPlayerInfo info) {
-        if (info.coins < 7) {
-            // not enough money
-        } else {
-            // deal with coup
-        }
+
     }
 
     private void handleExchange(CoupPlayer p, CoupSSPlayerInfo info) {
