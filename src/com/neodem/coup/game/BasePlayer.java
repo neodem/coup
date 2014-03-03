@@ -1,46 +1,56 @@
 package com.neodem.coup.game;
 
+import org.springframework.beans.factory.annotation.Required;
+
 /**
  *
  * Author: vfumo
  * Date: 2/28/14
  */
 public abstract class BasePlayer implements Player {
-    private String playerName;
+    protected String playerName;
+    protected GameMaster gameMaster;
 
-    protected PlayerId id;
-    protected GameMaster s;
-
-    public BasePlayer(String playerName) {
-        this.playerName = playerName;
-        startPlayer();
+    @Override
+    public String toString() {
+        return playerName;
     }
 
     public void startPlayer() {
 
-        id = s.registerPlayerName(playerName);
-        int i = 1;
-        while(id == null) {
-            playerName = String.format("%s%s", playerName, i++);
-        }
-
-        GameContext currentGameContext = s.registerPlayerForNextGame(this);
+        GameContext currentGameContext = gameMaster.registerPlayerForNextGame(this);
 
         initializePlayer(currentGameContext);
 
-        while(true) {
-             // wait for turn
-             // process turn
-        }
+//        Runnable r = new Runnable() {
+//            public void run() {
+//                playerProcess();
+//            }
+//        };
+//
+//        new Thread(r).start();
     }
+
+//    private void playerProcess() {
+//        while(true) {
+//            // wait for turn
+//            // process turn
+//        }
+//    }
 
     protected abstract void initializePlayer(GameContext g);
 
-    @Override
-    public PlayerId getPlayerId() {
-        return id;
+    public String getPlayerName() {
+        return playerName;
     }
 
+    @Required
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
 
-
+    @Required
+    public void setGameMaster(GameMaster gameMaster) {
+        this.gameMaster = gameMaster;
+    }
 }

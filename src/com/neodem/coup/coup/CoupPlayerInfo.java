@@ -1,6 +1,7 @@
 package com.neodem.coup.coup;
 
 import com.neodem.coup.coup.cards.CoupCard;
+import com.neodem.coup.game.Player;
 
 /**
  *
@@ -18,5 +19,24 @@ public class CoupPlayerInfo {
         }
 
         cardTwo = card;
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuffer b = new StringBuffer();
+        b.append("coins : ");
+        b.append(coins);
+        b.append('\n');
+
+        b.append("card1 : ");
+        b.append(cardOne);
+        b.append('\n');
+
+        b.append("card2 : ");
+        b.append(cardTwo);
+        b.append('\n');
+
+        return b.toString();
     }
 }

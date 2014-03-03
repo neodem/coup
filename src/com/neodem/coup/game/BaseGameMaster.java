@@ -6,15 +6,13 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- *
  * Author: vfumo
  * Date: 2/28/14
  */
 public abstract class BaseGameMaster implements GameMaster {
 
-    private Collection<String> usedNames;
-    private int nextId = 0;
     protected List<Player> registeredPlayers;
+    private Collection<String> usedNames;
     private int maxPlayers;
 
     public BaseGameMaster(int playersAllowed) {
@@ -23,25 +21,23 @@ public abstract class BaseGameMaster implements GameMaster {
         maxPlayers = playersAllowed;
     }
 
-    @Override
-    public PlayerId registerPlayerName(String playerName) {
-        if (usedNames.contains(playerName)) {
-            return null;
-        }
+    protected abstract void runGameLoop();
 
-        PlayerId id = new PlayerId(playerName, nextId++);
+    protected abstract void initGame();
 
-        return id;
-    }
+    protected abstract GameContext makeEmptyGameContextObject();
 
     @Override
     public GameContext registerPlayerForNextGame(Player player) {
-        if(registeredPlayers.size() == maxPlayers) {
+        String playerName = player.getPlayerName();
+
+        if (usedNames.contains(playerName)) throw new IllegalArgumentException("name already used");
+        usedNames.add(playerName);
+
+        if (registeredPlayers.size() == maxPlayers) {
             throw new IllegalStateException("max players already");
         }
 
-        PlayerId id = player.getPlayerId();
-        if (id == null) throw new IllegalArgumentException("need to be registered");
         if (!registeredPlayers.contains(player)) throw new IllegalArgumentException("Already registered");
         registeredPlayers.add(player);
 
@@ -50,24 +46,17 @@ public abstract class BaseGameMaster implements GameMaster {
 
     @Override
     public void startGame() {
-         initGame();
-
-         runGameLoop();
+        initGame();
+        runGameLoop();
     }
-
-    protected abstract void runGameLoop();
-
-    protected abstract void initGame();
 
     protected GameContext generateCurrentGameContext() {
         GameContext gc = makeEmptyGameContextObject();
-        
-        for(Player p : registeredPlayers) {
-            gc.addPlayer(p.getPlayerId());
+
+        for (Player p : registeredPlayers) {
+            gc.addPlayer(p);
         }
-        
+
         return gc;
     }
-
-    protected abstract GameContext makeEmptyGameContextObject();
 }

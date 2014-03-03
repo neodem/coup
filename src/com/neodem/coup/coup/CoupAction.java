@@ -1,4 +1,4 @@
-package com.neodem.coup.coup.serverside;
+package com.neodem.coup.coup;
 
 import com.neodem.coup.game.Action;
 import com.neodem.coup.game.Player;
@@ -12,11 +12,13 @@ import com.neodem.coup.game.Player;
  */
 public class CoupAction extends Action {
 
+    public static CoupAction NoAction = new CoupAction(null, null, ActionType.NoAction);
+
     private ActionType actionType;
     private Player actionBy;
     private Player actionOn;
 
-    CoupAction(Player actionBy, Player actionOn, ActionType actionType) {
+    public CoupAction(Player actionBy, Player actionOn, ActionType actionType) {
         this.actionBy = actionBy;
         this.actionOn = actionOn;
         this.actionType = actionType;

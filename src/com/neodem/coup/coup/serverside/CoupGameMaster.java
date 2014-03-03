@@ -1,7 +1,8 @@
 package com.neodem.coup.coup.serverside;
 
+import com.neodem.coup.coup.CoupAction;
 import com.neodem.coup.coup.CoupGameContext;
-import com.neodem.coup.coup.CoupPlayer;
+import com.neodem.coup.coup.players.CoupPlayer;
 import com.neodem.coup.coup.CoupPlayerInfo;
 import com.neodem.coup.coup.PlayerError;
 import com.neodem.coup.coup.cards.CoupCard;
@@ -20,7 +21,7 @@ import java.util.Map;
  * Date: 2/28/14
  */
 public class CoupGameMaster extends BaseGameMaster {
-    private Map<Player, CoupSSPlayerInfo> playerInfoMap;
+    private Map<CoupPlayer, CoupSSPlayerInfo> playerInfoMap;
     private CoupDeck deck;
 
     public CoupGameMaster() {
@@ -30,11 +31,11 @@ public class CoupGameMaster extends BaseGameMaster {
     @Override
     protected void initGame() {
         deck = new CoupDeck();
-        playerInfoMap = new HashMap<Player, CoupSSPlayerInfo>();
+        playerInfoMap = new HashMap<CoupPlayer, CoupSSPlayerInfo>();
 
         for (Player p : registeredPlayers) {
             CoupSSPlayerInfo info = makeNewPlayerInfo();
-            playerInfoMap.put(p, info);
+            playerInfoMap.put((CoupPlayer) p, info);
         }
     }
 
@@ -57,7 +58,7 @@ public class CoupGameMaster extends BaseGameMaster {
                     alertOtherPlayers(p, a);
 
                     // process the action
-                    processAction(p, info, a);
+                    processAction((CoupPlayer) p, info, a);
 
                     // evaluate end game (is there a winner?)
                     if (evaluateGame()) {
@@ -70,13 +71,14 @@ public class CoupGameMaster extends BaseGameMaster {
 
     /**
      * TODO need to fix this so we start with the player to thr left of the one who did the action
+     *
      * @param p
      * @param a
      */
     private void alertOtherPlayers(Player p, CoupAction a) {
         for (Player op : registeredPlayers) {
             if (op == p) continue;
-            CoupAction opa = (CoupAction) op.actionHappened(p.getPlayerId(), a, generateCurrentGameContext());
+            CoupAction opa = (CoupAction) op.actionHappened(p, a, generateCurrentGameContext());
             if (opa.getActionType() == CoupAction.ActionType.NoAction) continue;
             if (opa.getActionType() == CoupAction.ActionType.Challenge) {
                 // resolve challenge
@@ -136,7 +138,7 @@ public class CoupGameMaster extends BaseGameMaster {
             throw new PlayerError("Player doesn't have enough coins to Coup : " + info.coins);
         }
 
-        if(!CoupAction.validPlayableAction(a.getActionType())) {
+        if (!CoupAction.validPlayableAction(a.getActionType())) {
             throw new PlayerError("You need to perform a valid action on your turn");
         }
     }
@@ -147,7 +149,7 @@ public class CoupGameMaster extends BaseGameMaster {
      * @param a
      * @return true if the action passed
      */
-    private void processAction(Player p, CoupSSPlayerInfo info, CoupAction a) {
+    private void processAction(CoupPlayer p, CoupSSPlayerInfo info, CoupAction a) {
         switch (a.getActionType()) {
             case Income:
                 info.addCoin();
@@ -175,7 +177,7 @@ public class CoupGameMaster extends BaseGameMaster {
     }
 
     private void handleSteal(CoupSSPlayerInfo info, CoupAction a) {
-        CoupSSPlayerInfo oinfo = playerInfoMap.get(a.getActionOn().getPlayerId());
+        CoupSSPlayerInfo oinfo = playerInfoMap.get(a.getActionOn());
 
         // we may also get 0 or 1 coin here
         int coins = oinfo.removeCoins(2);
@@ -223,9 +225,9 @@ public class CoupGameMaster extends BaseGameMaster {
 
         CoupGameContext gc = (CoupGameContext) super.generateCurrentGameContext();
 
-        for (Player p : playerInfoMap.keySet()) {
+        for (CoupPlayer p : playerInfoMap.keySet()) {
             CoupSSPlayerInfo pi = playerInfoMap.get(p);
-            gc.addInfo(p.getPlayerId(), pi.makePlayerInfo());
+            gc.addInfo(p, pi.makePlayerInfo());
         }
 
         return gc;
@@ -284,6 +286,4 @@ public class CoupGameMaster extends BaseGameMaster {
             coins = coins + i;
         }
     }
-
-
 }
