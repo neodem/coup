@@ -28,11 +28,11 @@ public interface Player {
     public Action actionHappened(PlayerId playerId, Action hisAction, GameContext gc);
 
     /**
-     * the player is sent a message/alert. Players must always be aware of these.
+     * The players action was rejected and they will be called to try again
      *
-     * @param a
+     * @param reason
      */
-    public void alert(Alert a);
+    public void tryAgain(String reason);
 
     /**
      * get the id of the player

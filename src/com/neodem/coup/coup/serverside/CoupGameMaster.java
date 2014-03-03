@@ -1,7 +1,7 @@
 package com.neodem.coup.coup.serverside;
 
-import com.neodem.coup.coup.CoupAlert;
 import com.neodem.coup.coup.CoupGameContext;
+import com.neodem.coup.coup.CoupPlayer;
 import com.neodem.coup.coup.CoupPlayerInfo;
 import com.neodem.coup.coup.cards.CoupCard;
 import com.neodem.coup.coup.cards.CoupDeck;
@@ -10,6 +10,7 @@ import com.neodem.coup.game.GameContext;
 import com.neodem.coup.game.Player;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -25,6 +26,18 @@ public class CoupGameMaster extends BaseGameMaster {
         super(4);
     }
 
+    @Override
+    protected void initGame() {
+        deck = new CoupDeck();
+        playerInfoMap = new HashMap<Player, CoupSSPlayerInfo>();
+
+        for (Player p : registeredPlayers) {
+            CoupSSPlayerInfo info = makeNewPlayerInfo();
+            playerInfoMap.put(p, info);
+        }
+    }
+
+    @Override
     protected GameContext makeEmptyGameContextObject() {
         return new CoupGameContext();
     }
@@ -33,47 +46,80 @@ public class CoupGameMaster extends BaseGameMaster {
     protected void runGameLoop() {
         while (true) {
 
-
             for (Player p : registeredPlayers) {
-                CoupSSPlayerInfo info =  playerInfoMap.get(p);
-                boolean mustCoup = false;
+                CoupSSPlayerInfo info = playerInfoMap.get(p);
 
-                // does the player have a manditory action?
-                if(info.coins >= 10) {
-                    // player must coup.
-                    p.alert(CoupAlert.MustCoup);
-                    mustCoup = true;
-                }
+                if (info.active) {
+                    CoupAction a = getValidActionFromPlayer(p, info);
 
-                //  let the player take his turn
-                CoupAction a = (CoupAction) p.yourTurn(generateCurrentGameContext());
-
-                if(mustCoup && a.getActionType() != CoupAction.ActionType.Coup) {
-                       // error
-                }
-
-                // alert other players in sequence
-                for (Player op : registeredPlayers) {
-                    if (op == p) continue;
-                    CoupAction opa = (CoupAction) op.actionHappened(p.getPlayerId(), a, generateCurrentGameContext());
-                    if (opa.getActionType() == CoupAction.ActionType.NoAction) continue;
-                    if (opa.getActionType() == CoupAction.ActionType.Challenge) {
-                        // resolve challenge
+                    // alert other players in sequence
+                    for (Player op : registeredPlayers) {
+                        if (op == p) continue;
+                        CoupAction opa = (CoupAction) op.actionHappened(p.getPlayerId(), a, generateCurrentGameContext());
+                        if (opa.getActionType() == CoupAction.ActionType.NoAction) continue;
+                        if (opa.getActionType() == CoupAction.ActionType.Challenge) {
+                            // resolve challenge
+                        }
+                        if (opa.getActionType() == CoupAction.ActionType.Counter) {
+                            // resolve counter
+                        }
                     }
-                    if (opa.getActionType() == CoupAction.ActionType.Counter) {
-                        // resolve counter
+
+                    // process the action
+                    processAction(p, info, a);
+
+                    // evaluate end game (is there a winner?)
+                    if (evaluateGame()) {
+                        break;
                     }
                 }
-
-                // process the action
-                processAction(p, info, a);
-
-                // evaluate end game (is there a winner?)
-
             }
         }
     }
 
+    /**
+     * determine who may still have a turn
+     *
+     * @return true if there is a winner
+     */
+    private boolean evaluateGame() {
+        int activeCount = 0;
+
+        for (Player p : registeredPlayers) {
+            CoupSSPlayerInfo info = playerInfoMap.get(p);
+            if (info.evaluateActive()) activeCount++;
+        }
+
+        if (activeCount == 1) return true;
+
+        return false;
+    }
+
+    private CoupAction getValidActionFromPlayer(Player p, CoupSSPlayerInfo info) {
+        CoupAction a;
+
+        while (true) {
+            //  let the player take his turn
+            a = (CoupAction) p.yourTurn(generateCurrentGameContext());
+
+            // player must coup if they have 10 or more coins
+            if ((info.coins >= 10) && a.getActionType() != CoupAction.ActionType.Coup) {
+                // error
+                p.tryAgain("You have 10 coins, you Must Coup");
+            } else {
+                break;
+            }
+        }
+
+        return a;
+    }
+
+    /**
+     * @param p
+     * @param info
+     * @param a
+     * @return true if the action passed
+     */
     private void processAction(Player p, CoupSSPlayerInfo info, CoupAction a) {
 
         switch (a.getActionType()) {
@@ -84,11 +130,7 @@ public class CoupGameMaster extends BaseGameMaster {
                 info.addCoins(2);
                 break;
             case Coup:
-                if (info.coins < 7) {
-                    // not enough money
-                } else {
-                    // deal with coup
-                }
+                handleCoup(info);
                 break;
             case Tax:
                 info.addCoins(2);
@@ -96,38 +138,48 @@ public class CoupGameMaster extends BaseGameMaster {
             case Assassinate:
                 break;
             case Steal:
-                CoupSSPlayerInfo oinfo = playerInfoMap.get(a.getActionOn().getPlayerId());
-
-                // we may also get 0 or 1 coin here
-                int coins = oinfo.removeCoins(2);
-                info.addCoins(coins);
-
+                handleSteal(info, a);
                 break;
             case Exchange:
-                CoupCard c1 = deck.takeCard();
-                CoupCard c2 = deck.takeCard();
-
-                // deal with exchange  (collection must return 2 cards)
-                Collection<CoupCard> returnedCards = dealWithExchange(c1, c2, p, info);
-
-                for (CoupCard c : returnedCards) {
-                    deck.putCard(c);
-                }
-
+                handleExchange((CoupPlayer) p, info);
                 break;
         }
-
 
         playerInfoMap.put(p, info);
     }
 
-    @Override
-    protected void initGame() {
-        deck = new CoupDeck();
+    private void handleSteal(CoupSSPlayerInfo info, CoupAction a) {
+        CoupSSPlayerInfo oinfo = playerInfoMap.get(a.getActionOn().getPlayerId());
 
-        for (Player p : registeredPlayers) {
-            CoupSSPlayerInfo info = makeNewPlayerInfo();
-            playerInfoMap.put(p, info);
+        // we may also get 0 or 1 coin here
+        int coins = oinfo.removeCoins(2);
+        info.addCoins(coins);
+    }
+
+    private void handleCoup(CoupSSPlayerInfo info) {
+        if (info.coins < 7) {
+            // not enough money
+        } else {
+            // deal with coup
+        }
+    }
+
+    private void handleExchange(CoupPlayer p, CoupSSPlayerInfo info) {
+        // TODO : deal with the case where 1 card is up!
+
+        info.cardsInHand.add(deck.takeCard());
+        info.cardsInHand.add(deck.takeCard());
+
+        // deal with exchange  (collection must return 2 cards)
+        Collection<CoupCard> returnedCards = ((CoupPlayer) p).exchangeCards(info.cardsInHand);
+
+        if (returnedCards.size() != 2) {
+            // error..
+        }
+
+        for (CoupCard c : returnedCards) {
+            info.cardsInHand.remove(c);
+            deck.putCard(c);
         }
     }
 
@@ -138,6 +190,7 @@ public class CoupGameMaster extends BaseGameMaster {
         info.cardsInHand = new HashSet<CoupCard>();
         info.cardsInHand.add(deck.takeCard());
         info.cardsInHand.add(deck.takeCard());
+        info.active = true;
 
         return info;
     }
@@ -155,9 +208,13 @@ public class CoupGameMaster extends BaseGameMaster {
         return gc;
     }
 
+    /**
+     * this class is for the servers view of all the users
+     */
     private class CoupSSPlayerInfo {
         public int coins;
         public Collection<CoupCard> cardsInHand;
+        public boolean active;
 
         public CoupPlayerInfo makePlayerInfo() {
             CoupPlayerInfo pi = new CoupPlayerInfo();
@@ -172,12 +229,25 @@ public class CoupGameMaster extends BaseGameMaster {
             return pi;
         }
 
+        public boolean evaluateActive() {
+            short upCount = 0;
+            for (CoupCard card : cardsInHand) {
+                if (card.faceUp) {
+                    upCount++;
+                }
+            }
+
+            if (upCount == 2) active = false;
+
+            return active;
+        }
+
         public void addCoin() {
             coins++;
         }
 
         public int removeCoins(int i) {
-            if(coins >= i) {
+            if (coins >= i) {
                 coins = coins - i;
                 return i;
             }
@@ -188,7 +258,7 @@ public class CoupGameMaster extends BaseGameMaster {
         }
 
         public void addCoins(int i) {
-           coins = coins + i;
+            coins = coins + i;
         }
     }
 

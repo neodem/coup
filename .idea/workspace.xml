@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0329f64b-b029-461c-ab0a-40eebba34407" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/neodem/coup/game/Alert.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupAlert.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/game/BasePlayer.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/game/BasePlayer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupPlayer.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupPlayer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/game/Player.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/game/Player.java" />
@@ -20,19 +17,73 @@
     <file path="/BasePlayer.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393866531990" ignored="false" />
     <file path="/PlayerId.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393606213591" ignored="false" />
     <file path="/ServerSideGameContext.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393606488014" ignored="false" />
-    <file path="/CoupGameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393866606242" ignored="false" />
+    <file path="/CoupGameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393880321291" ignored="false" />
     <file path="/CoupPlayerInfo.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393612185481" ignored="false" />
     <file path="/CoupCard.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393864242011" ignored="false" />
     <file path="/BaseGameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393858372661" ignored="false" />
     <file path="/CoupGameContext.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393858746684" ignored="false" />
     <file path="/GameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393858531097" ignored="false" />
     <file path="/CoupDeck.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393864260389" ignored="false" />
-    <file path="/Player.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393866204510" ignored="false" />
-    <file path="/CoupPlayer.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393620294352" ignored="false" />
+    <file path="/Player.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393879831300" ignored="false" />
+    <file path="/CoupPlayer.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393879974376" ignored="false" />
     <file path="/Action.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393864881301" ignored="false" />
-    <file path="/Dummy.txt" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393864211703" ignored="false" />
+    <file path="/Dummy.txt" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872168703" ignored="false" />
     <file path="/CoupAction.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393865021417" ignored="false" />
     <file path="/CoupAlert.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393866424342" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/linearDataService/indexer/src/main/resources/com/theplatform/data/tv/linear/indexer/spring-indexer-station.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393867028510" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/linearDataService/indexer/src/main/resources/com/theplatform/data/tv/linear/indexer/spring-indexer-stream.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393867095166" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/linearDataService/indexer/src/main/resources/com/theplatform/data/tv/linear/indexer/spring-indexer.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393867330640" ignored="false" />
+    <file path="/spring-indexer.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393867328142" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/linearDataService/int-test/target/checkstyle-checker.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393867764784" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/linearDataService/int-test/target/checkstyle-result.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393867764784" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/linearDataService/webapp/config/DS_Configuration.properties" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393871365269" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/pom.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/solr-program-index-plugins/src/main/java/com/theplatform/search/tv/type/Quanta.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/solr-program-index-plugins/src/main/java/com/theplatform/search/tv/directory/InstrumentedDirectoryFactory.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/index.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/registry.xsl" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/threaddump.xsl" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/form.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171214" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/raw-schema.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/distributiondump.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/schema.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/solr-program-index-plugins/src/main/java/com/theplatform/search/tv/directory/DirectoryStatsHandler.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/solr-program-index-plugins/src/main/java/com/theplatform/search/tv/type/Step.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/stats.xsl" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/action.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/analysis.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/get-properties.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/threaddump.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/solr-program-index-plugins/src/main/java/com/theplatform/search/tv/type/Interval.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/registry.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/tabular.xsl" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/ping.xsl" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/solr-program-index-plugins/src/main/java/com/theplatform/search/tv/directory/RamDirectoryFactory.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/solr-program-index-plugins/src/main/java/com/theplatform/search/tv/type/FastDateFormat.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/_info.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/meta.xsl" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171215" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/index.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/analysis.xsl" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/stats.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/ping.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171215" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/header.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/admin/get-file.jsp" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171303" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/WEB-INF/web.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393874187159" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/src/main/webapp/WEB-INF/weblogic.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872171753" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/solr-entity/conf/schema_program.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872172510" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/solr-pa-2/conf/schema.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872172510" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/linearDataService/indexer/pom.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393872693962" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/linearDataService/indexer/derby.log" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393873559593" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/linearDataService/indexer/logs/LinearIndexer.log" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393873559593" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/solr-entity/solr.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393876395328" ignored="false" />
+    <file path="/solr.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393876387925" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/solr-entity/conf/schema_location.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393878286421" ignored="false" />
+    <file path="/schema_location.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393878241886" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/solr-entity/conf/schema_station.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393876472514" ignored="false" />
+    <file path="/schema_station.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393876473480" ignored="false" />
+    <file path="/schema_stream.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393876479117" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/solrProgramIndex/webapp/solr-entity/conf/schema_stream.xml" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393876478673" ignored="false" />
+    <file path="$USER_HOME$/repo/projects/linearDataService/db/create_Stream.sql" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393876867468" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +147,7 @@
       <file leaf-file-name="CoupGameMaster.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="63" column="58" selection-start="2165" selection-end="2165" vertical-scroll-proportion="1.0899653">
+            <state line="209" column="35" selection-start="6021" selection-end="6021" vertical-scroll-proportion="0.49710983">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -157,7 +208,7 @@
       <file leaf-file-name="Player.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="24" selection-start="793" selection-end="793" vertical-scroll-proportion="0.0">
+            <state line="34" column="4" selection-start="772" selection-end="807" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -175,8 +226,10 @@
       <file leaf-file-name="CoupPlayer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/CoupPlayer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="44" selection-start="523" selection-end="523" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="20" column="8" selection-start="373" selection-end="373" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -217,11 +270,11 @@
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupDeck.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/game/Action.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java" />
-        <option value="$PROJECT_DIR$/src/com/neodem/coup/game/Player.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/game/Alert.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAlert.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupAlert.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/game/BasePlayer.java" />
+        <option value="$PROJECT_DIR$/src/com/neodem/coup/game/Player.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupPlayer.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java" />
       </list>
@@ -729,21 +782,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="24" selection-start="793" selection-end="793" vertical-scroll-proportion="0.0">
+        <state line="34" column="4" selection-start="772" selection-end="807" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/CoupPlayer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="44" selection-start="523" selection-end="523" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="20" column="8" selection-start="373" selection-end="373" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="58" selection-start="2165" selection-end="2165" vertical-scroll-proportion="1.0899653">
+        <state line="209" column="35" selection-start="6021" selection-end="6021" vertical-scroll-proportion="0.49710983">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
