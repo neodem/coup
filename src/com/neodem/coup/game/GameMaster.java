@@ -12,15 +12,18 @@ public interface GameMaster {
      * @param playerName
      * @return
      */
-    PlayerId registerPlayer(String playerName);
+    PlayerId registerPlayerName(String playerName);
 
     /**
-     * must have a valid PlayerId (eg. call registerPlayer)
+     * must have a valid PlayerId (eg. call registerPlayerName)
      *
      * @param player
      * @return
      */
-    GameContext register(Player player);
+    GameContext registerPlayerForNextGame(Player player);
 
+    /**
+     * entry into the main game loop process. This will start the main game loop
+     */
     void startGame();
 }

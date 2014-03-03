@@ -15,7 +15,12 @@ public class CoupGameContext extends GameContext {
     public Map<PlayerId, CoupPlayerInfo> playerInfos;
 
     private Map<PlayerId, CoupPlayerInfo> infos = new HashMap<PlayerId, CoupPlayerInfo>();
+
     public void addInfo(PlayerId id, CoupPlayerInfo coupPlayerInfo) {
         infos.put(id, coupPlayerInfo);
+    }
+
+    public Map<PlayerId, CoupPlayerInfo> getCoupPlayerInfos() {
+        return playerInfos;
     }
 }

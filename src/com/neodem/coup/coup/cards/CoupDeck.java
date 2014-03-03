@@ -27,6 +27,9 @@ public class CoupDeck {
         actualDeck.add(CoupCard.Duke);
         actualDeck.add(CoupCard.Duke);
         actualDeck.add(CoupCard.Duke);
+        actualDeck.add(CoupCard.Ambassador);
+        actualDeck.add(CoupCard.Ambassador);
+        actualDeck.add(CoupCard.Ambassador);
 
         shuffleDeck();
     }

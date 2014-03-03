@@ -2,10 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0329f64b-b029-461c-ab0a-40eebba34407" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/game/Action.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/game/Action.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/game/BaseGameMaster.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/game/BaseGameMaster.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/game/BasePlayer.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/game/BasePlayer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupCard.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupCard.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupDeck.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupDeck.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupGameContext.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupGameContext.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/game/GameContext.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/game/GameContext.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/game/GameMaster.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/game/GameMaster.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/neodem/coup/game/Player.java" afterPath="$PROJECT_DIR$/src/com/neodem/coup/game/Player.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="coup.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -18,18 +26,18 @@
     <file path="/BasePlayer.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393605995408" ignored="false" />
     <file path="/PlayerId.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393606213591" ignored="false" />
     <file path="/ServerSideGameContext.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393606488014" ignored="false" />
-    <file path="/CoupGameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393621814101" ignored="false" />
+    <file path="/CoupGameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393865715998" ignored="false" />
     <file path="/CoupPlayerInfo.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393612185481" ignored="false" />
-    <file path="/CoupCard.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393619364484" ignored="false" />
-    <file path="/BaseGameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393621599799" ignored="false" />
-    <file path="/CoupGameContext.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393609888189" ignored="false" />
-    <file path="/GameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393614948437" ignored="false" />
-    <file path="/CoupDeck.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393619308787" ignored="false" />
+    <file path="/CoupCard.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393864242011" ignored="false" />
+    <file path="/BaseGameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393858372661" ignored="false" />
+    <file path="/CoupGameContext.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393858746684" ignored="false" />
+    <file path="/GameMaster.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393858531097" ignored="false" />
+    <file path="/CoupDeck.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393864260389" ignored="false" />
     <file path="/Player.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393620019655" ignored="false" />
     <file path="/CoupPlayer.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393620294352" ignored="false" />
-    <file path="/Action.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393621942450" ignored="false" />
-    <file path="/Dummy.txt" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393620662496" ignored="false" />
-    <file path="/CoupAction.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393621946678" ignored="false" />
+    <file path="/Action.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393864881301" ignored="false" />
+    <file path="/Dummy.txt" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393864211703" ignored="false" />
+    <file path="/CoupAction.java" changelist="0329f64b-b029-461c-ab0a-40eebba34407" time="1393865021417" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,87 +98,80 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="CoupGameMaster.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="173" column="33" selection-start="4938" selection-end="4938" vertical-scroll-proportion="3.0746446">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CoupAction.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="29" column="61" selection-start="723" selection-end="723" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Action.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/Action.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="17" selection-start="34" selection-end="34" vertical-scroll-proportion="0.0">
+            <state line="9" column="11" selection-start="109" selection-end="109" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BasePlayer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/BasePlayer.java">
+      <file leaf-file-name="CoupDeck.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupDeck.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="3" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameContext.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/GameContext.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="3" selection-start="220" selection-end="220" vertical-scroll-proportion="0.0">
+            <state line="23" column="63" selection-start="600" selection-end="600" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#380#390#0" expanded="true" />
+                <element signature="e#267#277#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GameMaster.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/GameMaster.java">
+      <file leaf-file-name="CoupCard.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupCard.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="3" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
+            <state line="8" column="17" selection-start="115" selection-end="115" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Player.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/Player.java">
+      <file leaf-file-name="CoupGameContext.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/CoupGameContext.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="3" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
+            <state line="26" column="20" selection-start="619" selection-end="619" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PlayerId.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/PlayerId.java">
+      <file leaf-file-name="CoupPlayerInfo.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/CoupPlayerInfo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="3" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
+            <state line="8" column="3" selection-start="120" selection-end="120" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TurnContext.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/TurnContext.java">
+      <file leaf-file-name="CoupPlayer.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/CoupPlayer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="23" selection-start="114" selection-end="114" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CoupGameMaster.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="26" selection-start="740" selection-end="740" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CoupAction.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="27" selection-start="277" selection-end="277" vertical-scroll-proportion="0.26458615">
+            <state line="6" column="8" selection-start="78" selection-end="78" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -179,10 +180,17 @@
       <file leaf-file-name="BaseGameMaster.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/BaseGameMaster.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="52" selection-start="388" selection-end="388" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="60" column="17" selection-start="1540" selection-end="1540" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameContext.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/GameContext.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="22" column="33" selection-start="445" selection-end="445" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -207,28 +215,27 @@
       <list>
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/actions/Counter.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/actions/TakeIncome.java" />
-        <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupCard.java" />
-        <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupDeck.java" />
-        <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupGameContext.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupPlayerInfo.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/game/BasePlayer.java" />
-        <option value="$PROJECT_DIR$/src/com/neodem/coup/game/GameContext.java" />
-        <option value="$PROJECT_DIR$/src/com/neodem/coup/game/GameMaster.java" />
-        <option value="$PROJECT_DIR$/src/com/neodem/coup/game/Player.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/game/PlayerId.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/game/TurnContext.java" />
+        <option value="$PROJECT_DIR$/src/com/neodem/coup/game/GameMaster.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/game/BaseGameMaster.java" />
-        <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java" />
+        <option value="$PROJECT_DIR$/src/com/neodem/coup/game/GameContext.java" />
+        <option value="$PROJECT_DIR$/src/com/neodem/coup/game/Player.java" />
+        <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/CoupGameContext.java" />
+        <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupCard.java" />
+        <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupDeck.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/game/Action.java" />
         <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java" />
+        <option value="$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2" />
     <option name="y" value="22" />
-    <option name="width" value="1756" />
-    <option name="height" value="908" />
+    <option name="width" value="1920" />
+    <option name="height" value="1013" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -256,7 +263,7 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -387,22 +394,22 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="OverrideImplement.combined" value="true" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="OverrideImplement.combined" value="true" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="MemberChooser.sorted" value="false" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -426,6 +433,19 @@
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
@@ -454,19 +474,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -538,32 +545,32 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2" y="22" width="1756" height="908" extended-state="6" />
+    <frame x="0" y="22" width="1920" height="1013" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32867134" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2736842" sideWeight="0.67132866" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.67150396" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32849604" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -627,30 +634,66 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupCard.java">
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="3" selection-start="81" selection-end="81" vertical-scroll-proportion="0.0">
+        <state line="13" column="22" selection-start="295" selection-end="295" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupDeck.java">
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/PlayerId.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="3" selection-start="188" selection-end="188" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#267#277#0" expanded="true" />
-          </folding>
+        <state line="6" column="3" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/BasePlayer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="3" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/GameMaster.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="41" selection-start="472" selection-end="472" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/BaseGameMaster.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="17" selection-start="1540" selection-end="1540" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/GameContext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="33" selection-start="445" selection-end="445" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="22" selection-start="295" selection-end="295" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/PlayerId.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="3" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/CoupGameContext.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="3" selection-start="204" selection-end="204" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#372#398#0" expanded="true" />
-          </folding>
+        <state line="26" column="20" selection-start="619" selection-end="619" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -668,54 +711,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/BasePlayer.java">
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupCard.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="3" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
+        <state line="8" column="17" selection-start="115" selection-end="115" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/GameContext.java">
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/cards/CoupDeck.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="3" selection-start="220" selection-end="220" vertical-scroll-proportion="0.0">
+        <state line="23" column="63" selection-start="600" selection-end="600" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#380#390#0" expanded="true" />
+            <element signature="e#267#277#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/Player.java">
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/Action.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="3" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
+        <state line="9" column="11" selection-start="109" selection-end="109" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/PlayerId.java">
+    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="3" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/TurnContext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="23" selection-start="114" selection-end="114" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/GameMaster.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="3" selection-start="75" selection-end="75" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/BaseGameMaster.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="52" selection-start="388" selection-end="388" vertical-scroll-proportion="0.0">
+        <state line="29" column="61" selection-start="723" selection-end="723" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -724,24 +746,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupGameMaster.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="26" selection-start="740" selection-end="740" vertical-scroll-proportion="0.0">
+        <state line="173" column="33" selection-start="4938" selection-end="4938" vertical-scroll-proportion="3.0746446">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/game/Action.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="17" selection-start="34" selection-end="34" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/neodem/coup/coup/serverside/CoupAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="27" selection-start="277" selection-end="277" vertical-scroll-proportion="0.26458615">
-          <folding />
         </state>
       </provider>
     </entry>

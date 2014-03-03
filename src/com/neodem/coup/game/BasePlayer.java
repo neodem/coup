@@ -18,13 +18,13 @@ public abstract class BasePlayer implements Player {
 
     public void startPlayer() {
 
-        id = s.registerPlayer(playerName);
+        id = s.registerPlayerName(playerName);
         int i = 1;
         while(id == null) {
             playerName = String.format("%s%s", playerName, i++);
         }
 
-        GameContext currentGameContext = s.register(this);
+        GameContext currentGameContext = s.registerPlayerForNextGame(this);
 
         initializePlayer(currentGameContext);
 

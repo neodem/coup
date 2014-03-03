@@ -13,7 +13,6 @@ public interface Player {
      * the client has to do something
      *
      * @param gc
-     * @param tc
      * @return
      */
     public Action yourTurn(GameContext gc);

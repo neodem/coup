@@ -24,7 +24,7 @@ public abstract class BaseGameMaster implements GameMaster {
     }
 
     @Override
-    public PlayerId registerPlayer(String playerName) {
+    public PlayerId registerPlayerName(String playerName) {
         if (usedNames.contains(playerName)) {
             return null;
         }
@@ -35,7 +35,7 @@ public abstract class BaseGameMaster implements GameMaster {
     }
 
     @Override
-    public GameContext register(Player player) {
+    public GameContext registerPlayerForNextGame(Player player) {
         if(registeredPlayers.size() == maxPlayers) {
             throw new IllegalStateException("max players already");
         }
@@ -58,13 +58,12 @@ public abstract class BaseGameMaster implements GameMaster {
     protected abstract void runGameLoop();
 
     protected abstract void initGame();
-    
 
     protected GameContext generateCurrentGameContext() {
         GameContext gc = makeEmptyGameContextObject();
         
-        for(PlayerId pid : registeredPlayers) {
-            gc.addPlayer(pid);
+        for(Player p : registeredPlayers) {
+            gc.addPlayer(p.getPlayerId());
         }
         
         return gc;
