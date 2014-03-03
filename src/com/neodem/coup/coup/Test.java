@@ -1,8 +1,6 @@
 package com.neodem.coup.coup;
 
-import com.neodem.coup.coup.serverside.CoupGameMaster;
 import com.neodem.coup.game.GameMaster;
-import com.neodem.coup.game.Player;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -16,7 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Test {
 
     public static void main(String[] args) {
-        String springContextFile = args[0];
+        String springContextFile = "spring-config.xml";
         System.out.println(springContextFile);
         ApplicationContext context = new ClassPathXmlApplicationContext(springContextFile);
 

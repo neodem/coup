@@ -49,7 +49,7 @@ public class CoupPlayer extends BasePlayer {
 
     @Override
     public Action actionHappened(Player player, Action hisAction, GameContext gc) {
-        String msg = String.format("%s played %s ", player, hisAction);
+        String msg = String.format("%s : %s played %s, and I'm doing nothing ", playerName, player, hisAction);
         System.out.println(msg);
 
         return CoupAction.NoAction;

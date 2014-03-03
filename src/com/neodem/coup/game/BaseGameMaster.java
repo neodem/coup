@@ -38,7 +38,7 @@ public abstract class BaseGameMaster implements GameMaster {
             throw new IllegalStateException("max players already");
         }
 
-        if (!registeredPlayers.contains(player)) throw new IllegalArgumentException("Already registered");
+        if (registeredPlayers.contains(player)) throw new IllegalArgumentException("Already registered");
         registeredPlayers.add(player);
 
         return generateCurrentGameContext();

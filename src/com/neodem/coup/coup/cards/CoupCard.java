@@ -15,8 +15,7 @@ public enum CoupCard {
 
     public boolean faceUp = false;
 
-    @Override
-    public String toString() {
+    public String displayCard() {
 
         StringBuffer b = new StringBuffer();
 

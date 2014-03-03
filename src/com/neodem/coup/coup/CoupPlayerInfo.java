@@ -30,11 +30,11 @@ public class CoupPlayerInfo {
         b.append('\n');
 
         b.append("card1 : ");
-        b.append(cardOne);
+        b.append(cardOne.displayCard());
         b.append('\n');
 
         b.append("card2 : ");
-        b.append(cardTwo);
+        b.append(cardTwo.displayCard());
         b.append('\n');
 
         return b.toString();

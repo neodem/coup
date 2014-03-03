@@ -42,6 +42,11 @@ public class CoupAction extends Action {
         return actionOn;
     }
 
+    @Override
+    public String toString() {
+        return actionType.toString();
+    }
+
     public enum ActionType {
         Income,
         ForeignAid,

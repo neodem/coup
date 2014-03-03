@@ -31,8 +31,14 @@ public class CoupGameContext extends GameContext {
 
         for (Player p : players) {
             b.append(p);
+            b.append(" details:");
             b.append('\n');
-            b.append(playerInfos.get(p));
+
+            CoupPlayerInfo coupPlayerInfo = playerInfos.get(p);
+            if(coupPlayerInfo != null) {
+                b.append(playerInfos.get(p));
+            }
+
             b.append('\n');
         }
 

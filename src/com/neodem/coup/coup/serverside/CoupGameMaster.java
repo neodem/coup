@@ -21,7 +21,7 @@ import java.util.Map;
  * Date: 2/28/14
  */
 public class CoupGameMaster extends BaseGameMaster {
-    private Map<CoupPlayer, CoupSSPlayerInfo> playerInfoMap;
+    private Map<CoupPlayer, CoupSSPlayerInfo> playerInfoMap = new HashMap<CoupPlayer, CoupSSPlayerInfo>();;
     private CoupDeck deck;
 
     public CoupGameMaster() {
@@ -31,10 +31,10 @@ public class CoupGameMaster extends BaseGameMaster {
     @Override
     protected void initGame() {
         deck = new CoupDeck();
-        playerInfoMap = new HashMap<CoupPlayer, CoupSSPlayerInfo>();
+        playerInfoMap.clear();
 
         for (Player p : registeredPlayers) {
-            CoupSSPlayerInfo info = makeNewPlayerInfo();
+            CoupSSPlayerInfo info = makeNewPlayerInfo(p);
             playerInfoMap.put((CoupPlayer) p, info);
         }
     }
@@ -208,7 +208,7 @@ public class CoupGameMaster extends BaseGameMaster {
         }
     }
 
-    private CoupSSPlayerInfo makeNewPlayerInfo() {
+    private CoupSSPlayerInfo makeNewPlayerInfo(Player p) {
         CoupSSPlayerInfo info = new CoupSSPlayerInfo();
 
         info.coins = 2;
@@ -216,6 +216,7 @@ public class CoupGameMaster extends BaseGameMaster {
         info.cardsInHand.add(deck.takeCard());
         info.cardsInHand.add(deck.takeCard());
         info.active = true;
+        info.name = p.getPlayerName();
 
         return info;
     }
@@ -225,9 +226,11 @@ public class CoupGameMaster extends BaseGameMaster {
 
         CoupGameContext gc = (CoupGameContext) super.generateCurrentGameContext();
 
-        for (CoupPlayer p : playerInfoMap.keySet()) {
+        for (Player p : registeredPlayers) {
             CoupSSPlayerInfo pi = playerInfoMap.get(p);
-            gc.addInfo(p, pi.makePlayerInfo());
+            if(pi != null) {
+                gc.addInfo((CoupPlayer)p, pi.makePlayerInfo());
+            }
         }
 
         return gc;
@@ -240,6 +243,23 @@ public class CoupGameMaster extends BaseGameMaster {
         public int coins;
         public Collection<CoupCard> cardsInHand;
         public boolean active;
+        public String name;
+
+        @Override
+        public String toString() {
+            StringBuffer b = new StringBuffer();
+            b.append(name);
+            b.append(" (");
+            b.append(coins);
+            b.append(") : ");
+
+            for(CoupCard c : cardsInHand) {
+                b.append(c);
+                b.append(",");
+            }
+
+            return b.toString();
+        }
 
         public CoupPlayerInfo makePlayerInfo() {
             CoupPlayerInfo pi = new CoupPlayerInfo();
@@ -255,7 +275,7 @@ public class CoupGameMaster extends BaseGameMaster {
         }
 
         public boolean evaluateActive() {
-            short upCount = 0;
+            int upCount = 0;
             for (CoupCard card : cardsInHand) {
                 if (card.faceUp) {
                     upCount++;
