@@ -28,6 +28,13 @@ public interface Player {
     public Action actionHappened(PlayerId playerId, Action hisAction, GameContext gc);
 
     /**
+     * the player is sent a message/alert. Players must always be aware of these.
+     *
+     * @param a
+     */
+    public void alert(Alert a);
+
+    /**
      * get the id of the player
      *
      * @return

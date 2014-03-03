@@ -29,5 +29,10 @@ public class CoupPlayer extends BasePlayer {
         return null;
     }
 
+    @Override
+    public void alert(Alert a) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 
 }

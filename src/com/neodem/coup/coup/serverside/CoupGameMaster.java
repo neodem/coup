@@ -1,5 +1,6 @@
 package com.neodem.coup.coup.serverside;
 
+import com.neodem.coup.coup.CoupAlert;
 import com.neodem.coup.coup.CoupGameContext;
 import com.neodem.coup.coup.CoupPlayerInfo;
 import com.neodem.coup.coup.cards.CoupCard;
@@ -7,7 +8,6 @@ import com.neodem.coup.coup.cards.CoupDeck;
 import com.neodem.coup.game.BaseGameMaster;
 import com.neodem.coup.game.GameContext;
 import com.neodem.coup.game.Player;
-import com.neodem.coup.game.PlayerId;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,7 +18,7 @@ import java.util.Map;
  * Date: 2/28/14
  */
 public class CoupGameMaster extends BaseGameMaster {
-    private Map<PlayerId, CoupSSPlayerInfo> playerInfoMap;
+    private Map<Player, CoupSSPlayerInfo> playerInfoMap;
     private CoupDeck deck;
 
     public CoupGameMaster() {
@@ -33,16 +33,29 @@ public class CoupGameMaster extends BaseGameMaster {
     protected void runGameLoop() {
         while (true) {
 
+
             for (Player p : registeredPlayers) {
-                GameContext gc = generateCurrentGameContext();
+                CoupSSPlayerInfo info =  playerInfoMap.get(p);
+                boolean mustCoup = false;
+
+                // does the player have a manditory action?
+                if(info.coins >= 10) {
+                    // player must coup.
+                    p.alert(CoupAlert.MustCoup);
+                    mustCoup = true;
+                }
 
                 //  let the player take his turn
-                CoupAction a = (CoupAction) p.yourTurn(gc);
+                CoupAction a = (CoupAction) p.yourTurn(generateCurrentGameContext());
+
+                if(mustCoup && a.getActionType() != CoupAction.ActionType.Coup) {
+                       // error
+                }
 
                 // alert other players in sequence
                 for (Player op : registeredPlayers) {
                     if (op == p) continue;
-                    CoupAction opa = (CoupAction) op.actionHappened(p.getPlayerId(), a, gc);
+                    CoupAction opa = (CoupAction) op.actionHappened(p.getPlayerId(), a, generateCurrentGameContext());
                     if (opa.getActionType() == CoupAction.ActionType.NoAction) continue;
                     if (opa.getActionType() == CoupAction.ActionType.Challenge) {
                         // resolve challenge
@@ -53,7 +66,7 @@ public class CoupGameMaster extends BaseGameMaster {
                 }
 
                 // process the action
-                processAction(p, a);
+                processAction(p, info, a);
 
                 // evaluate end game (is there a winner?)
 
@@ -61,8 +74,7 @@ public class CoupGameMaster extends BaseGameMaster {
         }
     }
 
-    private void processAction(Player p, CoupAction a) {
-        CoupSSPlayerInfo info = playerInfoMap.get(p.getPlayerId());
+    private void processAction(Player p, CoupSSPlayerInfo info, CoupAction a) {
 
         switch (a.getActionType()) {
             case Income:
@@ -106,7 +118,7 @@ public class CoupGameMaster extends BaseGameMaster {
         }
 
 
-        playerInfoMap.put(p.getPlayerId(), info);
+        playerInfoMap.put(p, info);
     }
 
     @Override
@@ -115,7 +127,7 @@ public class CoupGameMaster extends BaseGameMaster {
 
         for (Player p : registeredPlayers) {
             CoupSSPlayerInfo info = makeNewPlayerInfo();
-            playerInfoMap.put(p.getPlayerId(), info);
+            playerInfoMap.put(p, info);
         }
     }
 
@@ -135,9 +147,9 @@ public class CoupGameMaster extends BaseGameMaster {
 
         CoupGameContext gc = (CoupGameContext) super.generateCurrentGameContext();
 
-        for (PlayerId id : playerInfoMap.keySet()) {
-            CoupSSPlayerInfo pi = playerInfoMap.get(id);
-            gc.addInfo(id, pi.makePlayerInfo());
+        for (Player p : playerInfoMap.keySet()) {
+            CoupSSPlayerInfo pi = playerInfoMap.get(p);
+            gc.addInfo(p.getPlayerId(), pi.makePlayerInfo());
         }
 
         return gc;
