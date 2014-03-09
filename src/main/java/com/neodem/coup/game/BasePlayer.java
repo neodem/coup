@@ -21,22 +21,7 @@ public abstract class BasePlayer implements Player {
         GameContext currentGameContext = gameMaster.registerPlayerForNextGame(this);
 
         initializePlayer(currentGameContext);
-
-//        Runnable r = new Runnable() {
-//            public void run() {
-//                playerProcess();
-//            }
-//        };
-//
-//        new Thread(r).start();
     }
-
-//    private void playerProcess() {
-//        while(true) {
-//            // wait for turn
-//            // process turn
-//        }
-//    }
 
     protected abstract void initializePlayer(GameContext g);
 

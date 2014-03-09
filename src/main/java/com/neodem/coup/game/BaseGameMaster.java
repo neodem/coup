@@ -1,5 +1,8 @@
 package com.neodem.coup.game;
 
+import com.neodem.common.collections.CircularList;
+import com.neodem.common.collections.DefaultCircularList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,7 +20,7 @@ public abstract class BaseGameMaster implements GameMaster {
 
     public BaseGameMaster(int playersAllowed) {
         usedNames = new HashSet<String>();
-        registeredPlayers = new ArrayList<Player>();
+        registeredPlayers = new ArrayList<>();
         maxPlayers = playersAllowed;
     }
 

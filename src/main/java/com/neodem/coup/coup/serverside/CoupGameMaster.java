@@ -1,5 +1,6 @@
 package com.neodem.coup.coup.serverside;
 
+import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.coup.CoupAction;
 import com.neodem.coup.coup.CoupGameContext;
 import com.neodem.coup.coup.players.CoupPlayer;
@@ -11,10 +12,7 @@ import com.neodem.coup.game.BaseGameMaster;
 import com.neodem.coup.game.GameContext;
 import com.neodem.coup.game.Player;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Author: vfumo
@@ -70,13 +68,14 @@ public class CoupGameMaster extends BaseGameMaster {
     }
 
     /**
-     * TODO need to fix this so we start with the player to thr left of the one who did the action
-     *
+     * *
      * @param p
      * @param a
      */
     private void alertOtherPlayers(Player p, CoupAction a) {
-        for (Player op : registeredPlayers) {
+        List<Player> orderedPlayers = Lists.reorder(registeredPlayers, p);
+
+        for (Player op : orderedPlayers) {
             if (op == p) continue;
             CoupAction opa = (CoupAction) op.actionHappened(p, a, generateCurrentGameContext());
             if (opa.getActionType() == CoupAction.ActionType.NoAction) continue;
