@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/coup.iml" filepath="$PROJECT_DIR$/coup.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../graphics/graphics.iml" filepath="$PROJECT_DIR$/../graphics/graphics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../neodem-common/neodem-common.iml" filepath="$PROJECT_DIR$/../neodem-common/neodem-common.iml" />
     </modules>
   </component>
 </project>
