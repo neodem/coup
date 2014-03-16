@@ -1,4 +1,6 @@
 *.class
+coup.iml
+/.idea
 
 # Package Files #
 *.jar
