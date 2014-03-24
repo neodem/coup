@@ -32,7 +32,12 @@ public class PlayerInfoState {
         return b.toString();
     }
 
-    public CoupPlayerInfo makePlayerInfo() {
+    /**
+     * make a CPI that can be seen by anyone
+     *
+     * @return
+     */
+    public CoupPlayerInfo makePublicPlayerInfo() {
         CoupPlayerInfo pi = new CoupPlayerInfo();
         pi.coins = coins;
 
@@ -43,6 +48,23 @@ public class PlayerInfoState {
         }
 
         return pi;
+    }
+
+    /**
+     * make a CPI for only the actual player
+     *
+     * @return
+     */
+    public CoupPlayerInfo makePrivatePlayerInfo() {
+        CoupPlayerInfo cpi = new CoupPlayerInfo();
+        cpi.coins = coins;
+
+        Iterator<CoupCard> cardIterator = cardsInHand.iterator();
+
+        cpi.cardOne = cardIterator.next();
+        cpi.cardTwo = cardIterator.next();
+
+        return cpi;
     }
 
     public boolean evaluateActive() {
@@ -121,15 +143,5 @@ public class PlayerInfoState {
         }
     }
 
-    public CoupPlayerInfo getPlayerInfo() {
-        CoupPlayerInfo cpi = new CoupPlayerInfo();
-        cpi.coins = coins;
 
-        Iterator<CoupCard> cardIterator = cardsInHand.iterator();
-
-        cpi.cardOne = cardIterator.next();
-        cpi.cardTwo = cardIterator.next();
-
-        return cpi;
-    }
 }

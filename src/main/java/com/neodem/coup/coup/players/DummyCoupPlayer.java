@@ -64,7 +64,7 @@ public class DummyCoupPlayer extends BasePlayer<CoupAction> implements CoupPlaye
         System.out.println("my turn");
         System.out.println(gc);
 
-        return new CoupAction(this, null, CoupAction.ActionType.Income);
+        return new CoupAction(null, CoupAction.ActionType.Income);
     }
 
     @Override

@@ -42,7 +42,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         for (CoupPlayer p : registeredPlayers) {
             PlayerInfoState info = makeNewPlayerInfo(p);
             playerInfoMap.put(p, info);
-            p.updateInfo(info.getPlayerInfo());
+            p.updateInfo(info.makePrivatePlayerInfo());
         }
 
         exchangeActionProcessor = new ExchangeActionProcessor(this);
@@ -238,7 +238,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         for (CoupPlayer p : registeredPlayers) {
             PlayerInfoState pi = playerInfoMap.get(p);
             if (pi != null) {
-                gc.addInfo(p, pi.makePlayerInfo());
+                gc.addInfo(p, pi.makePublicPlayerInfo());
             }
         }
 
