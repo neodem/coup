@@ -18,7 +18,11 @@ import java.util.*;
  * Date: 2/28/14
  */
 public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
-    private Map<CoupPlayer, CoupSSPlayerInfo> playerInfoMap = new HashMap<CoupPlayer, CoupSSPlayerInfo>();;
+
+    // keeps track of the state of the players
+    private Map<CoupPlayer, PlayerInfoState> playerInfoMap = new HashMap<CoupPlayer, PlayerInfoState>();;
+
+    // the deck we are using
     private CoupDeck deck;
 
     public CoupGameMaster() {
@@ -31,7 +35,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         playerInfoMap.clear();
 
         for (CoupPlayer p : registeredPlayers) {
-            CoupSSPlayerInfo info = makeNewPlayerInfo(p);
+            PlayerInfoState info = makeNewPlayerInfo(p);
             playerInfoMap.put(p, info);
         }
     }
@@ -45,17 +49,17 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
     protected void runGameLoop() {
         while (true) {
 
-            for (CoupPlayer p : registeredPlayers) {
-                CoupSSPlayerInfo info = playerInfoMap.get(p);
+            for (CoupPlayer currentPlayer : registeredPlayers) {
+                PlayerInfoState currentPlayerInfo = playerInfoMap.get(currentPlayer);
 
-                if (info.active) {
-                    CoupAction a = getValidCoupAction(p, info);
+                if (currentPlayerInfo.active) {
+                    CoupAction currentAction = getValidCoupAction(currentPlayer, currentPlayerInfo);
 
-                    // alert other players in sequence
-                    alertOtherPlayers(p, a);
+                    // alert other players in sequence (and let them counter or challenge)
+                    alertOtherPlayers(currentPlayer, currentAction);
 
                     // process the action
-                    processAction(p, info, a);
+                    processAction(currentPlayer, currentPlayerInfo, currentAction);
 
                     // evaluate end game (is there a winner?)
                     if (evaluateGame()) {
@@ -89,7 +93,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         }
     }
 
-    private CoupAction getValidCoupAction(CoupPlayer p, CoupSSPlayerInfo info) {
+    private CoupAction getValidCoupAction(CoupPlayer p, PlayerInfoState info) {
         CoupAction a;
         boolean playerCantGetTheirShitTogether = false;
         do {
@@ -116,7 +120,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         int activeCount = 0;
 
         for (CoupPlayer p : registeredPlayers) {
-            CoupSSPlayerInfo info = playerInfoMap.get(p);
+            PlayerInfoState info = playerInfoMap.get(p);
             if (info.evaluateActive()) activeCount++;
         }
 
@@ -125,7 +129,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         return false;
     }
 
-    private void validateAction(CoupSSPlayerInfo info, CoupAction a) throws PlayerError {
+    private void validateAction(PlayerInfoState info, CoupAction a) throws PlayerError {
         if ((info.coins >= 10) && a.getActionType() != CoupAction.ActionType.Coup) {
             // error
             throw new PlayerError("You need to Coup. You have 10 or more coins");
@@ -147,7 +151,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
      * @param a
      * @return true if the action passed
      */
-    private void processAction(CoupPlayer p, CoupSSPlayerInfo info, CoupAction a) {
+    private void processAction(CoupPlayer p, PlayerInfoState info, CoupAction a) {
         switch (a.getActionType()) {
             case Income:
                 info.addCoin();
@@ -174,8 +178,8 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         playerInfoMap.put(p, info);
     }
 
-    private void handleSteal(CoupSSPlayerInfo info, CoupAction a) {
-        CoupSSPlayerInfo oinfo = playerInfoMap.get(a.getActionOn());
+    private void handleSteal(PlayerInfoState info, CoupAction a) {
+        PlayerInfoState oinfo = playerInfoMap.get(a.getActionOn());
 
         // we may also get 0 or 1 coin here
         int coins = oinfo.removeCoins(2);
@@ -183,11 +187,11 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
     }
 
     // TODO finish this method
-    private void handleCoup(CoupSSPlayerInfo info) {
+    private void handleCoup(PlayerInfoState info) {
 
     }
 
-    private void handleExchange(CoupPlayer p, CoupSSPlayerInfo info) {
+    private void handleExchange(CoupPlayer p, PlayerInfoState info) {
         // TODO : deal with the case where 1 card is up!
 
         info.cardsInHand.add(deck.takeCard());
@@ -206,8 +210,8 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         }
     }
 
-    private CoupSSPlayerInfo makeNewPlayerInfo(CoupPlayer p) {
-        CoupSSPlayerInfo info = new CoupSSPlayerInfo();
+    private PlayerInfoState makeNewPlayerInfo(CoupPlayer p) {
+        PlayerInfoState info = new PlayerInfoState();
 
         info.coins = 2;
         info.cardsInHand = new HashSet<CoupCard>();
@@ -225,83 +229,12 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         CoupGameContext gc = (CoupGameContext) super.generateCurrentGameContext();
 
         for (CoupPlayer p : registeredPlayers) {
-            CoupSSPlayerInfo pi = playerInfoMap.get(p);
+            PlayerInfoState pi = playerInfoMap.get(p);
             if(pi != null) {
                 gc.addInfo(p, pi.makePlayerInfo());
             }
         }
 
         return gc;
-    }
-
-    /**
-     * this class is for the servers view of all the users
-     */
-    private class CoupSSPlayerInfo {
-        public int coins;
-        public Collection<CoupCard> cardsInHand;
-        public boolean active;
-        public String name;
-
-        @Override
-        public String toString() {
-            StringBuffer b = new StringBuffer();
-            b.append(name);
-            b.append(" (");
-            b.append(coins);
-            b.append(") : ");
-
-            for(CoupCard c : cardsInHand) {
-                b.append(c);
-                b.append(",");
-            }
-
-            return b.toString();
-        }
-
-        public CoupPlayerInfo makePlayerInfo() {
-            CoupPlayerInfo pi = new CoupPlayerInfo();
-            pi.coins = coins;
-
-            for (CoupCard card : cardsInHand) {
-                if (card.faceUp) {
-                    pi.addUpCard(card);
-                }
-            }
-
-            return pi;
-        }
-
-        public boolean evaluateActive() {
-            int upCount = 0;
-            for (CoupCard card : cardsInHand) {
-                if (card.faceUp) {
-                    upCount++;
-                }
-            }
-
-            if (upCount == 2) active = false;
-
-            return active;
-        }
-
-        public void addCoin() {
-            coins++;
-        }
-
-        public int removeCoins(int i) {
-            if (coins >= i) {
-                coins = coins - i;
-                return i;
-            }
-
-            int avail = coins;
-            coins = 0;
-            return avail;
-        }
-
-        public void addCoins(int i) {
-            coins = coins + i;
-        }
     }
 }
