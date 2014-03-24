@@ -1,7 +1,7 @@
 package com.neodem.coup.coup;
 
-import com.neodem.coup.game.Action;
-import com.neodem.coup.game.Player;
+import com.neodem.bandaid.game.Action;
+import com.neodem.bandaid.game.Player;
 
 /**
  * Created with IntelliJ IDEA.

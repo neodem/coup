@@ -1,8 +1,7 @@
 package com.neodem.coup.coup;
 
 import com.neodem.coup.coup.players.CoupPlayer;
-import com.neodem.coup.game.GameContext;
-import com.neodem.coup.game.Player;
+import com.neodem.bandaid.game.GameContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +28,7 @@ public class CoupGameContext extends GameContext<CoupPlayer> {
         b.append(super.toString());
         b.append('\n');
 
-        for (Player p : players) {
+        for (CoupPlayer p : players) {
             b.append(p);
             b.append(" details:");
             b.append('\n');

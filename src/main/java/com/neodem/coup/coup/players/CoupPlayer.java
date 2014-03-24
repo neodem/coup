@@ -2,10 +2,9 @@ package com.neodem.coup.coup.players;
 
 import com.neodem.coup.coup.CoupAction;
 import com.neodem.coup.coup.cards.CoupCard;
-import com.neodem.coup.game.Action;
-import com.neodem.coup.game.BasePlayer;
-import com.neodem.coup.game.GameContext;
-import com.neodem.coup.game.Player;
+import com.neodem.bandaid.game.BasePlayer;
+import com.neodem.bandaid.game.GameContext;
+import com.neodem.bandaid.game.Player;
 
 import java.util.Collection;
 import java.util.HashSet;

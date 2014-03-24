@@ -1,6 +1,6 @@
 package com.neodem.coup.coup;
 
-import com.neodem.coup.game.GameMaster;
+import com.neodem.bandaid.game.GameMaster;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

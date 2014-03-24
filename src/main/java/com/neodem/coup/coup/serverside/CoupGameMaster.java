@@ -4,12 +4,11 @@ import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.coup.CoupAction;
 import com.neodem.coup.coup.CoupGameContext;
 import com.neodem.coup.coup.players.CoupPlayer;
-import com.neodem.coup.coup.CoupPlayerInfo;
 import com.neodem.coup.coup.PlayerError;
 import com.neodem.coup.coup.cards.CoupCard;
 import com.neodem.coup.coup.cards.CoupDeck;
-import com.neodem.coup.game.BaseGameMaster;
-import com.neodem.coup.game.GameContext;
+import com.neodem.bandaid.game.BaseGameMaster;
+import com.neodem.bandaid.game.GameContext;
 
 import java.util.*;
 

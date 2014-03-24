@@ -1,6 +1,6 @@
 package com.neodem.coup.coup;
 
-import com.neodem.coup.game.Alert;
+import com.neodem.bandaid.game.Alert;
 
 /**
  * Created with IntelliJ IDEA.
