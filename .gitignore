@@ -1,6 +1,8 @@
 *.class
 coup.iml
-/.idea
+.idea/*
+target/
+*.iml
 
 # Package Files #
 *.jar
