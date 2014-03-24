@@ -10,7 +10,6 @@ import com.neodem.coup.coup.cards.CoupCard;
 import com.neodem.coup.coup.cards.CoupDeck;
 import com.neodem.coup.game.BaseGameMaster;
 import com.neodem.coup.game.GameContext;
-import com.neodem.coup.game.Player;
 
 import java.util.*;
 
@@ -18,7 +17,7 @@ import java.util.*;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class CoupGameMaster extends BaseGameMaster {
+public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
     private Map<CoupPlayer, CoupSSPlayerInfo> playerInfoMap = new HashMap<CoupPlayer, CoupSSPlayerInfo>();;
     private CoupDeck deck;
 
@@ -31,9 +30,9 @@ public class CoupGameMaster extends BaseGameMaster {
         deck = new CoupDeck();
         playerInfoMap.clear();
 
-        for (Player p : registeredPlayers) {
+        for (CoupPlayer p : registeredPlayers) {
             CoupSSPlayerInfo info = makeNewPlayerInfo(p);
-            playerInfoMap.put((CoupPlayer) p, info);
+            playerInfoMap.put(p, info);
         }
     }
 
@@ -46,7 +45,7 @@ public class CoupGameMaster extends BaseGameMaster {
     protected void runGameLoop() {
         while (true) {
 
-            for (Player p : registeredPlayers) {
+            for (CoupPlayer p : registeredPlayers) {
                 CoupSSPlayerInfo info = playerInfoMap.get(p);
 
                 if (info.active) {
@@ -56,7 +55,7 @@ public class CoupGameMaster extends BaseGameMaster {
                     alertOtherPlayers(p, a);
 
                     // process the action
-                    processAction((CoupPlayer) p, info, a);
+                    processAction(p, info, a);
 
                     // evaluate end game (is there a winner?)
                     if (evaluateGame()) {
@@ -72,12 +71,12 @@ public class CoupGameMaster extends BaseGameMaster {
      * @param p
      * @param a
      */
-    private void alertOtherPlayers(Player p, CoupAction a) {
-        List<Player> orderedPlayers = Lists.reorder(registeredPlayers, p);
+    private void alertOtherPlayers(CoupPlayer p, CoupAction a) {
+        List<CoupPlayer> orderedPlayers = Lists.reorder(registeredPlayers, p);
 
-        for (Player op : orderedPlayers) {
+        for (CoupPlayer op : orderedPlayers) {
             if (op == p) continue;
-            CoupAction opa = (CoupAction) op.actionHappened(p, a, generateCurrentGameContext());
+            CoupAction opa =  op.actionHappened(p, a, generateCurrentGameContext());
             if (opa.getActionType() == CoupAction.ActionType.NoAction) continue;
             if (opa.getActionType() == CoupAction.ActionType.Challenge) {
                 // resolve challenge
@@ -90,11 +89,11 @@ public class CoupGameMaster extends BaseGameMaster {
         }
     }
 
-    private CoupAction getValidCoupAction(Player p, CoupSSPlayerInfo info) {
+    private CoupAction getValidCoupAction(CoupPlayer p, CoupSSPlayerInfo info) {
         CoupAction a;
         boolean playerCantGetTheirShitTogether = false;
         do {
-            a = (CoupAction) p.yourTurn(generateCurrentGameContext());
+            a = p.yourTurn(generateCurrentGameContext());
 
             try {
                 validateAction(info, a);
@@ -116,7 +115,7 @@ public class CoupGameMaster extends BaseGameMaster {
     private boolean evaluateGame() {
         int activeCount = 0;
 
-        for (Player p : registeredPlayers) {
+        for (CoupPlayer p : registeredPlayers) {
             CoupSSPlayerInfo info = playerInfoMap.get(p);
             if (info.evaluateActive()) activeCount++;
         }
@@ -207,7 +206,7 @@ public class CoupGameMaster extends BaseGameMaster {
         }
     }
 
-    private CoupSSPlayerInfo makeNewPlayerInfo(Player p) {
+    private CoupSSPlayerInfo makeNewPlayerInfo(CoupPlayer p) {
         CoupSSPlayerInfo info = new CoupSSPlayerInfo();
 
         info.coins = 2;
@@ -225,10 +224,10 @@ public class CoupGameMaster extends BaseGameMaster {
 
         CoupGameContext gc = (CoupGameContext) super.generateCurrentGameContext();
 
-        for (Player p : registeredPlayers) {
+        for (CoupPlayer p : registeredPlayers) {
             CoupSSPlayerInfo pi = playerInfoMap.get(p);
             if(pi != null) {
-                gc.addInfo((CoupPlayer)p, pi.makePlayerInfo());
+                gc.addInfo(p, pi.makePlayerInfo());
             }
         }
 

@@ -4,7 +4,7 @@ package com.neodem.coup.game;
  * Author: vfumo
  * Date: 2/28/14
  */
-public interface Player {
+public interface Player<A extends Action> {
 
     /**
      * called by the GameMaster when this Player has a turn to process.
@@ -14,7 +14,7 @@ public interface Player {
      * @param gc the current game context
      * @return
      */
-    public Action yourTurn(GameContext gc);
+    public A yourTurn(GameContext gc);
 
     /**
      * called by the GameMaster to alert other players to an action
@@ -25,7 +25,7 @@ public interface Player {
      * @param gc        the current game context
      * @return
      */
-    public Action actionHappened(Player player, Action hisAction, GameContext gc);
+    public A actionHappened(Player player, A hisAction, GameContext gc);
 
     /**
      * The players action was rejected and they will be called to try again

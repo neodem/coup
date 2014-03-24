@@ -15,7 +15,7 @@ import java.util.Iterator;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class CoupPlayer extends BasePlayer {
+public class CoupPlayer extends BasePlayer<CoupAction> {
 
 
     @Override
@@ -40,7 +40,7 @@ public class CoupPlayer extends BasePlayer {
     }
 
     @Override
-    public Action yourTurn(GameContext gc) {
+    public CoupAction yourTurn(GameContext gc) {
         System.out.println("my turn");
         System.out.println(gc);
 
@@ -48,7 +48,7 @@ public class CoupPlayer extends BasePlayer {
     }
 
     @Override
-    public Action actionHappened(Player player, Action hisAction, GameContext gc) {
+    public CoupAction actionHappened(Player player, CoupAction hisAction, GameContext gc) {
         String msg = String.format("%s : %s played %s, and I'm doing nothing ", playerName, player, hisAction);
         System.out.println(msg);
 
@@ -59,6 +59,4 @@ public class CoupPlayer extends BasePlayer {
     public void tryAgain(String reason) {
         System.out.println("have to try again :" + reason);
     }
-
-
 }

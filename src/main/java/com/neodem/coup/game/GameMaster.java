@@ -5,7 +5,7 @@ package com.neodem.coup.game;
  * Author: vfumo
  * Date: 2/28/14
  */
-public interface GameMaster {
+public interface GameMaster<P extends Player> {
 
     /**
      * must have a valid PlayerId (eg. call registerPlayerName)
@@ -13,7 +13,7 @@ public interface GameMaster {
      * @param player
      * @return
      */
-    GameContext registerPlayerForNextGame(Player player);
+    GameContext registerPlayerForNextGame(P player);
 
     /**
      * entry into the main game loop process. This will start the main game loop

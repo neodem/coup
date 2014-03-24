@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Required;
  * Author: vfumo
  * Date: 2/28/14
  */
-public abstract class BasePlayer implements Player {
+public abstract class BasePlayer<A extends Action> implements Player<A> {
     protected String playerName;
     protected GameMaster gameMaster;
 

@@ -12,9 +12,9 @@ import java.util.List;
  * Author: vfumo
  * Date: 2/28/14
  */
-public abstract class BaseGameMaster implements GameMaster {
+public abstract class BaseGameMaster<P extends Player> implements GameMaster<P> {
 
-    protected List<Player> registeredPlayers;
+    protected List<P> registeredPlayers;
     private Collection<String> usedNames;
     private int maxPlayers;
 
@@ -31,7 +31,7 @@ public abstract class BaseGameMaster implements GameMaster {
     protected abstract GameContext makeEmptyGameContextObject();
 
     @Override
-    public GameContext registerPlayerForNextGame(Player player) {
+    public GameContext registerPlayerForNextGame(P player) {
         String playerName = player.getPlayerName();
 
         if (usedNames.contains(playerName)) throw new IllegalArgumentException("name already used");
@@ -56,7 +56,7 @@ public abstract class BaseGameMaster implements GameMaster {
     protected GameContext generateCurrentGameContext() {
         GameContext gc = makeEmptyGameContextObject();
 
-        for (Player p : registeredPlayers) {
+        for (P p : registeredPlayers) {
             gc.addPlayer(p);
         }
 

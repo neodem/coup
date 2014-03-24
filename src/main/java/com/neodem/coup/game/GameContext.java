@@ -10,16 +10,16 @@ import java.util.List;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class GameContext {
+public class GameContext<P extends Player> {
 
     // a list of the players in the game (ordered by their position in the game)
-    protected List<Player> players = new ArrayList<Player>();
+    protected List<P> players = new ArrayList<P>();
 
-    public void addPlayer(Player p) {
+    public void addPlayer(P p) {
         players.add(p);
     }
 
-    public List<Player> getPlayers() {
+    public List<P> getPlayers() {
         return players;
     }
 
