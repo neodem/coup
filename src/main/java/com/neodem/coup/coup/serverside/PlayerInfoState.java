@@ -4,6 +4,7 @@ import com.neodem.coup.coup.CoupPlayerInfo;
 import com.neodem.coup.coup.cards.CoupCard;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -17,7 +18,7 @@ public class PlayerInfoState {
 
     @Override
     public String toString() {
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         b.append(name);
         b.append(" (");
         b.append(coins);
@@ -89,8 +90,8 @@ public class PlayerInfoState {
     /**
      * return true if the player has this card and it is face down
      *
-     * @param testCard
-     * @return
+     * @param testCard the card we are testing for
+     * @return true if the player has this card and it is face down, false if not or if its null
      */
     public boolean validInfluence(CoupCard testCard) {
         if (testCard == null) return false;
@@ -106,7 +107,8 @@ public class PlayerInfoState {
 
     /**
      * if the player has this card and it's face down, turn it over
-     * @param testCard
+     *
+     * @param testCard the card we are testing for
      */
     public void turnFaceUp(CoupCard testCard) {
         for (CoupCard card : cardsInHand) {
@@ -117,5 +119,17 @@ public class PlayerInfoState {
                 }
             }
         }
+    }
+
+    public CoupPlayerInfo getPlayerInfo() {
+        CoupPlayerInfo cpi = new CoupPlayerInfo();
+        cpi.coins = coins;
+
+        Iterator<CoupCard> cardIterator = cardsInHand.iterator();
+
+        cpi.cardOne = cardIterator.next();
+        cpi.cardTwo = cardIterator.next();
+
+        return cpi;
     }
 }

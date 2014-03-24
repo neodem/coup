@@ -6,7 +6,6 @@ import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.coup.CoupAction;
 import com.neodem.coup.coup.CoupGameContext;
 import com.neodem.coup.coup.PlayerError;
-import com.neodem.coup.coup.cards.CoupCard;
 import com.neodem.coup.coup.cards.CoupDeck;
 import com.neodem.coup.coup.players.CoupPlayer;
 
@@ -29,6 +28,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
     private StealActionProcessor stealActionProcessor;
     private CoupActionProcessor coupActionProcessor;
     private ChallengeResolver challengeResolver;
+    private CounterResolver counterResolver;
 
     public CoupGameMaster() {
         super(4);
@@ -42,12 +42,14 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         for (CoupPlayer p : registeredPlayers) {
             PlayerInfoState info = makeNewPlayerInfo(p);
             playerInfoMap.put(p, info);
+            p.updateInfo(info.getPlayerInfo());
         }
 
         exchangeActionProcessor = new ExchangeActionProcessor(this);
         stealActionProcessor = new StealActionProcessor(this);
         coupActionProcessor = new CoupActionProcessor(this);
         challengeResolver = new ChallengeResolver(this);
+        counterResolver = new CounterResolver(this);
     }
 
     @Override
@@ -57,8 +59,8 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
     @Override
     protected void runGameLoop() {
-        while (true) {
-
+        boolean noWinner = true;
+        while (noWinner) {
             for (CoupPlayer currentPlayer : registeredPlayers) {
                 PlayerInfoState currentPlayerInfo = playerInfoMap.get(currentPlayer);
 
@@ -73,6 +75,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
                     // evaluate end game (is there a winner?)
                     if (evaluateGame()) {
+                        noWinner = false;
                         break;
                     }
                 }
@@ -84,8 +87,8 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
      * Alert the other players in clockwise order and allow each the opportunity to challenge or counter
      * the current action.
      *
-     * @param currentPlayer
-     * @param currentAction
+     * @param currentPlayer the current player (the player whos turn it is)
+     * @param currentAction the action being played
      * @return true if the action succeeds or false if the action is over (challenged or countered)
      */
     private boolean alertOtherPlayers(CoupPlayer currentPlayer, CoupAction currentAction) {
@@ -109,8 +112,13 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
                 }
             }
             if (opa.getActionType() == CoupAction.ActionType.Counter) {
-                // resolve counter
-                // TODO impl this.
+                if (currentAction.isCounterable()) {
+                    // resolve challenge
+                    if (counterResolver.resolveCounter(currentPlayer, op, currentAction)) {
+                        // if we are here, the counter succeeded, thus the action was blocked/failed
+                        return false;
+                    }
+                }
             }
         }
 
@@ -158,9 +166,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
             if (info.evaluateActive()) activeCount++;
         }
 
-        if (activeCount == 1) return true;
-
-        return false;
+        return activeCount == 1;
     }
 
     private void validateAction(PlayerInfoState info, CoupAction a) throws PlayerError {
@@ -180,9 +186,9 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
     }
 
     /**
-     * @param actingPlayer
-     * @param actingPlayerInfo
-     * @param currentAction
+     * @param actingPlayer     the player doing the action
+     * @param actingPlayerInfo the PIS of the acting player
+     * @param currentAction    the current action
      */
     private void processAction(CoupPlayer actingPlayer, PlayerInfoState actingPlayerInfo, CoupAction currentAction) {
         switch (currentAction.getActionType()) {
@@ -215,7 +221,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         PlayerInfoState info = new PlayerInfoState();
 
         info.coins = 2;
-        info.cardsInHand = new HashSet<CoupCard>();
+        info.cardsInHand = new HashSet<>();
         info.cardsInHand.add(deck.takeCard());
         info.cardsInHand.add(deck.takeCard());
         info.active = true;

@@ -17,10 +17,9 @@ public class ChallengeResolver {
     }
 
     /**
-     *
-     * @param actingPlayer
-     * @param challengingPlayer
-     * @param challengedAction
+     * @param actingPlayer      the player who is being challenged
+     * @param challengingPlayer the player doing the challenge
+     * @param challengedAction  the action being challenged
      * @return true if the challenge was successful, false otherwise
      */
     public boolean resolveChallenge(CoupPlayer actingPlayer, CoupPlayer challengingPlayer, CoupAction challengedAction) {
@@ -50,9 +49,9 @@ public class ChallengeResolver {
 
     private void processLoss(CoupPlayer loser) {
         PlayerInfoState playerInfoState = gm.getPlayerInfoMap().get(loser);
-        CoupCard card = null;
+        CoupCard card;
         do {
-            card = loser.looseInfluence();
+            card = loser.looseAnInfluence();
         } while (!playerInfoState.validInfluence(card));
 
         playerInfoState.turnFaceUp(card);

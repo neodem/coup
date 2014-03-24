@@ -8,21 +8,16 @@ import com.neodem.coup.coup.players.CoupPlayer;
 import java.util.Collection;
 
 /**
- * Created with IntelliJ IDEA.
- * User: vfumo
- * Date: 2/28/14
- * Time: 4:11 PM
- * To change this template use File | Settings | File Templates.
+ * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Created Date: 2/28/14
  */
 public class CoupAction extends Action {
 
-    public static CoupAction NoAction = new CoupAction(null, null, ActionType.NoAction);
+    public static CoupAction NoAction = new CoupAction(null, ActionType.NoAction);
     private ActionType actionType;
-    private CoupPlayer actionBy;
     private CoupPlayer actionOn;
 
-    public CoupAction(CoupPlayer actionBy, CoupPlayer actionOn, ActionType actionType) {
-        this.actionBy = actionBy;
+    public CoupAction(CoupPlayer actionOn, ActionType actionType) {
         this.actionOn = actionOn;
         this.actionType = actionType;
     }
@@ -35,10 +30,6 @@ public class CoupAction extends Action {
 
     public ActionType getActionType() {
         return actionType;
-    }
-
-    public CoupPlayer getActionBy() {
-        return actionBy;
     }
 
     public CoupPlayer getActionOn() {
@@ -100,6 +91,17 @@ public class CoupAction extends Action {
         return false;
     }
 
+    public boolean isCounterable() {
+        switch (actionType) {
+            case ForeignAid:
+            case Steal:
+            case Assassinate:
+                return true;
+        }
+
+        return false;
+    }
+
     public enum ActionType {
         Income,
         ForeignAid,
@@ -109,7 +111,7 @@ public class CoupAction extends Action {
         Exchange,
         Steal,
 
-        NoAction, Challenge, Counter;
+        NoAction, Challenge, Counter
     }
 
 }

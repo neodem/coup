@@ -1,10 +1,11 @@
 package com.neodem.coup.coup.players;
 
-import com.neodem.coup.coup.CoupAction;
-import com.neodem.coup.coup.cards.CoupCard;
 import com.neodem.bandaid.game.BasePlayer;
 import com.neodem.bandaid.game.GameContext;
 import com.neodem.bandaid.game.Player;
+import com.neodem.coup.coup.CoupAction;
+import com.neodem.coup.coup.CoupPlayerInfo;
+import com.neodem.coup.coup.cards.CoupCard;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ import java.util.Iterator;
  */
 public class DummyCoupPlayer extends BasePlayer<CoupAction> implements CoupPlayer {
 
+    private CoupPlayerInfo myState = null;
 
     @Override
     protected void initializePlayer(GameContext g) {
@@ -25,17 +27,36 @@ public class DummyCoupPlayer extends BasePlayer<CoupAction> implements CoupPlaye
     /**
      * player must return 2 cards out of the 4 given. (2 they already had)
      *
-     * @param cards
-     * @return
+     * @param cards the given cards to select from
+     * @return the return cards
      */
     public Collection<CoupCard> exchangeCards(Collection<CoupCard> cards) {
-        Collection<CoupCard> returnedCards = new HashSet<CoupCard>(2);
+        Collection<CoupCard> returnedCards = new HashSet<>(2);
 
         Iterator<CoupCard> i = cards.iterator();
         returnedCards.add(i.next());
         returnedCards.add(i.next());
 
         return returnedCards;
+    }
+
+    @Override
+    public boolean proveYouHaveCorrectCard(CoupAction challengedAction) {
+        return false;
+    }
+
+    @Override
+    public CoupCard looseAnInfluence() {
+        if (myState.cardOne.faceUp) {
+            return myState.cardTwo;
+        }
+
+        return myState.cardOne;
+    }
+
+    @Override
+    public void updateInfo(CoupPlayerInfo currentState) {
+        myState = currentState;
     }
 
     @Override
