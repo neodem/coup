@@ -1,7 +1,11 @@
 package com.neodem.coup.coup;
 
+import com.google.common.collect.Sets;
 import com.neodem.bandaid.game.Action;
-import com.neodem.bandaid.game.Player;
+import com.neodem.coup.coup.cards.CoupCard;
+import com.neodem.coup.coup.players.CoupPlayer;
+
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,12 +17,11 @@ import com.neodem.bandaid.game.Player;
 public class CoupAction extends Action {
 
     public static CoupAction NoAction = new CoupAction(null, null, ActionType.NoAction);
-
     private ActionType actionType;
-    private Player actionBy;
-    private Player actionOn;
+    private CoupPlayer actionBy;
+    private CoupPlayer actionOn;
 
-    public CoupAction(Player actionBy, Player actionOn, ActionType actionType) {
+    public CoupAction(CoupPlayer actionBy, CoupPlayer actionOn, ActionType actionType) {
         this.actionBy = actionBy;
         this.actionOn = actionOn;
         this.actionType = actionType;
@@ -34,17 +37,67 @@ public class CoupAction extends Action {
         return actionType;
     }
 
-    public Player getActionBy() {
+    public CoupPlayer getActionBy() {
         return actionBy;
     }
 
-    public Player getActionOn() {
+    public CoupPlayer getActionOn() {
         return actionOn;
     }
 
     @Override
     public String toString() {
         return actionType.toString();
+    }
+
+    /**
+     * @return the card that the player needs to have to play this action or null if none needed
+     */
+    public CoupCard getActionCard() {
+        switch (actionType) {
+            case Tax:
+                return CoupCard.Duke;
+            case Assassinate:
+                return CoupCard.Assasin;
+            case Steal:
+                return CoupCard.Captain;
+            case Exchange:
+                return CoupCard.Ambassador;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return the card(s) that the player needs to have to counter this action or null if not applicable
+     */
+    public Collection<CoupCard> getCounterCard() {
+        switch (actionType) {
+            case ForeignAid:
+                return Sets.newHashSet(CoupCard.Duke);
+            case Steal:
+                return Sets.newHashSet(CoupCard.Ambassador, CoupCard.Captain);
+            case Assassinate:
+                return Sets.newHashSet(CoupCard.Contessa);
+
+        }
+
+        return null;
+    }
+
+    /**
+     * @return true if this action can be challenged
+     */
+    public boolean isChallengeable() {
+        switch (actionType) {
+            case Tax:
+            case Assassinate:
+            case Steal:
+            case Exchange:
+                return true;
+        }
+
+        return false;
     }
 
     public enum ActionType {

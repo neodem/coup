@@ -45,12 +45,7 @@ public class PlayerInfoState {
     }
 
     public boolean evaluateActive() {
-        int upCount = 0;
-        for (CoupCard card : cardsInHand) {
-            if (card.faceUp) {
-                upCount++;
-            }
-        }
+        int upCount = getUpCount();
 
         if (upCount == 2) active = false;
 
@@ -74,5 +69,53 @@ public class PlayerInfoState {
 
     public void addCoins(int i) {
         coins = coins + i;
+    }
+
+    public int getUpCount() {
+        int upCount = 0;
+        for (CoupCard card : cardsInHand) {
+            if (card.faceUp) {
+                upCount++;
+            }
+        }
+
+        return upCount;
+    }
+
+    public boolean hasCard(CoupCard card) {
+        return cardsInHand.contains(card);
+    }
+
+    /**
+     * return true if the player has this card and it is face down
+     *
+     * @param testCard
+     * @return
+     */
+    public boolean validInfluence(CoupCard testCard) {
+        if (testCard == null) return false;
+        for (CoupCard card : cardsInHand) {
+            if (card.equals(testCard)) {
+                if (!card.faceUp) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * if the player has this card and it's face down, turn it over
+     * @param testCard
+     */
+    public void turnFaceUp(CoupCard testCard) {
+        for (CoupCard card : cardsInHand) {
+            if (card.equals(testCard)) {
+                if (!card.faceUp) {
+                    card.faceUp = true;
+                    break;
+                }
+            }
+        }
     }
 }

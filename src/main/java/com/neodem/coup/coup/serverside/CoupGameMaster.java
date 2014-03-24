@@ -1,16 +1,19 @@
 package com.neodem.coup.coup.serverside;
 
+import com.neodem.bandaid.game.BaseGameMaster;
+import com.neodem.bandaid.game.GameContext;
 import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.coup.CoupAction;
 import com.neodem.coup.coup.CoupGameContext;
-import com.neodem.coup.coup.players.CoupPlayer;
 import com.neodem.coup.coup.PlayerError;
 import com.neodem.coup.coup.cards.CoupCard;
 import com.neodem.coup.coup.cards.CoupDeck;
-import com.neodem.bandaid.game.BaseGameMaster;
-import com.neodem.bandaid.game.GameContext;
+import com.neodem.coup.coup.players.CoupPlayer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Author: vfumo
@@ -19,10 +22,13 @@ import java.util.*;
 public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
     // keeps track of the state of the players
-    private Map<CoupPlayer, PlayerInfoState> playerInfoMap = new HashMap<CoupPlayer, PlayerInfoState>();;
-
+    private Map<CoupPlayer, PlayerInfoState> playerInfoMap = new HashMap<>();
     // the deck we are using
     private CoupDeck deck;
+    private ExchangeActionProcessor exchangeActionProcessor;
+    private StealActionProcessor stealActionProcessor;
+    private CoupActionProcessor coupActionProcessor;
+    private ChallengeResolver challengeResolver;
 
     public CoupGameMaster() {
         super(4);
@@ -31,12 +37,17 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
     @Override
     protected void initGame() {
         deck = new CoupDeck();
-        playerInfoMap.clear();
 
+        playerInfoMap.clear();
         for (CoupPlayer p : registeredPlayers) {
             PlayerInfoState info = makeNewPlayerInfo(p);
             playerInfoMap.put(p, info);
         }
+
+        exchangeActionProcessor = new ExchangeActionProcessor(this);
+        stealActionProcessor = new StealActionProcessor(this);
+        coupActionProcessor = new CoupActionProcessor(this);
+        challengeResolver = new ChallengeResolver(this);
     }
 
     @Override
@@ -55,10 +66,10 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
                     CoupAction currentAction = getValidCoupAction(currentPlayer, currentPlayerInfo);
 
                     // alert other players in sequence (and let them counter or challenge)
-                    alertOtherPlayers(currentPlayer, currentAction);
+                    boolean actionSucceeds = alertOtherPlayers(currentPlayer, currentAction);
 
                     // process the action
-                    processAction(currentPlayer, currentPlayerInfo, currentAction);
+                    if (actionSucceeds) processAction(currentPlayer, currentPlayerInfo, currentAction);
 
                     // evaluate end game (is there a winner?)
                     if (evaluateGame()) {
@@ -70,42 +81,66 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
     }
 
     /**
-     * *
-     * @param p
-     * @param a
+     * Alert the other players in clockwise order and allow each the opportunity to challenge or counter
+     * the current action.
+     *
+     * @param currentPlayer
+     * @param currentAction
+     * @return true if the action succeeds or false if the action is over (challenged or countered)
      */
-    private void alertOtherPlayers(CoupPlayer p, CoupAction a) {
-        List<CoupPlayer> orderedPlayers = Lists.reorder(registeredPlayers, p);
+    private boolean alertOtherPlayers(CoupPlayer currentPlayer, CoupAction currentAction) {
 
+
+        // get a list of the players starting with the person taking the turn
+        List<CoupPlayer> orderedPlayers = Lists.reorder(registeredPlayers, currentPlayer);
+
+        // go to each one in turn and let them know of the action and see if they want to challenge or counter it
         for (CoupPlayer op : orderedPlayers) {
-            if (op == p) continue;
-            CoupAction opa =  op.actionHappened(p, a, generateCurrentGameContext());
+            if (op == currentPlayer) continue;
+            CoupAction opa = op.actionHappened(currentPlayer, currentAction, generateCurrentGameContext());
             if (opa.getActionType() == CoupAction.ActionType.NoAction) continue;
             if (opa.getActionType() == CoupAction.ActionType.Challenge) {
-                // resolve challenge
-                //TODO impl this.
+                if (currentAction.isChallengeable()) {
+                    // resolve challenge
+                    if (challengeResolver.resolveChallenge(currentPlayer, op, currentAction)) {
+                        // if we are here, the challenge succeeded, thus the action failed
+                        return false;
+                    }
+                }
             }
             if (opa.getActionType() == CoupAction.ActionType.Counter) {
                 // resolve counter
                 // TODO impl this.
             }
         }
+
+        return true;
     }
 
     private CoupAction getValidCoupAction(CoupPlayer p, PlayerInfoState info) {
+
+        CoupAction a = p.yourTurn(generateCurrentGameContext());
+
+        try {
+            validateAction(info, a);
+        } catch (PlayerError e) {
+            return tryAgain(e, p, info);
+        }
+
+        return a;
+    }
+
+    private CoupAction tryAgain(PlayerError pe, CoupPlayer p, PlayerInfoState info) {
         CoupAction a;
-        boolean playerCantGetTheirShitTogether = false;
-        do {
-            a = p.yourTurn(generateCurrentGameContext());
 
-            try {
-                validateAction(info, a);
-            } catch (PlayerError e) {
-                p.tryAgain(e.getMessage());
-                playerCantGetTheirShitTogether = true;
-            }
-        } while (playerCantGetTheirShitTogether);
+        p.tryAgain(pe.getMessage());
+        a = p.yourTurn(generateCurrentGameContext());
 
+        try {
+            validateAction(info, a);
+        } catch (PlayerError e) {
+            return tryAgain(e, p, info);
+        }
 
         return a;
     }
@@ -145,68 +180,35 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
     }
 
     /**
-     * @param p
-     * @param info
-     * @param a
-     * @return true if the action passed
+     * @param actingPlayer
+     * @param actingPlayerInfo
+     * @param currentAction
      */
-    private void processAction(CoupPlayer p, PlayerInfoState info, CoupAction a) {
-        switch (a.getActionType()) {
+    private void processAction(CoupPlayer actingPlayer, PlayerInfoState actingPlayerInfo, CoupAction currentAction) {
+        switch (currentAction.getActionType()) {
             case Income:
-                info.addCoin();
+                actingPlayerInfo.addCoin();
                 break;
             case ForeignAid:
-                info.addCoins(2);
+                actingPlayerInfo.addCoins(2);
                 break;
             case Coup:
-                handleCoup(info);
+                coupActionProcessor.handleCoup(actingPlayer);
                 break;
             case Tax:
-                info.addCoins(2);
+                actingPlayerInfo.addCoins(2);
                 break;
             case Assassinate:
                 break;
             case Steal:
-                handleSteal(info, a);
+                stealActionProcessor.handleSteal(actingPlayer, currentAction);
                 break;
             case Exchange:
-                handleExchange((CoupPlayer) p, info);
+                exchangeActionProcessor.handleExchange(actingPlayer);
                 break;
         }
 
-        playerInfoMap.put(p, info);
-    }
-
-    private void handleSteal(PlayerInfoState info, CoupAction a) {
-        PlayerInfoState oinfo = playerInfoMap.get(a.getActionOn());
-
-        // we may also get 0 or 1 coin here
-        int coins = oinfo.removeCoins(2);
-        info.addCoins(coins);
-    }
-
-    // TODO finish this method
-    private void handleCoup(PlayerInfoState info) {
-
-    }
-
-    private void handleExchange(CoupPlayer p, PlayerInfoState info) {
-        // TODO : deal with the case where 1 card is up!
-
-        info.cardsInHand.add(deck.takeCard());
-        info.cardsInHand.add(deck.takeCard());
-
-        // deal with exchange  (collection must return 2 cards)
-        Collection<CoupCard> returnedCards = ((CoupPlayer) p).exchangeCards(info.cardsInHand);
-
-        if (returnedCards.size() != 2) {
-            // error..
-        }
-
-        for (CoupCard c : returnedCards) {
-            info.cardsInHand.remove(c);
-            deck.putCard(c);
-        }
+        playerInfoMap.put(actingPlayer, actingPlayerInfo);
     }
 
     private PlayerInfoState makeNewPlayerInfo(CoupPlayer p) {
@@ -229,11 +231,19 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
         for (CoupPlayer p : registeredPlayers) {
             PlayerInfoState pi = playerInfoMap.get(p);
-            if(pi != null) {
+            if (pi != null) {
                 gc.addInfo(p, pi.makePlayerInfo());
             }
         }
 
         return gc;
+    }
+
+    public Map<CoupPlayer, PlayerInfoState> getPlayerInfoMap() {
+        return playerInfoMap;
+    }
+
+    public CoupDeck getDeck() {
+        return deck;
     }
 }

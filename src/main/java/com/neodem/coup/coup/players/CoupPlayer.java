@@ -1,61 +1,46 @@
 package com.neodem.coup.coup.players;
 
+import com.neodem.bandaid.game.Player;
 import com.neodem.coup.coup.CoupAction;
 import com.neodem.coup.coup.cards.CoupCard;
-import com.neodem.bandaid.game.BasePlayer;
-import com.neodem.bandaid.game.GameContext;
-import com.neodem.bandaid.game.Player;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 
 /**
- * Author: vfumo
- * Date: 2/28/14
+ * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Created Date: 3/24/14
  */
-public class CoupPlayer extends BasePlayer<CoupAction> {
-
-
-    @Override
-    protected void initializePlayer(GameContext g) {
-        System.out.println(g);
-    }
+public interface CoupPlayer extends Player<CoupAction> {
 
     /**
-     * player must return 2 cards out of the 4 given. (2 they already had)
+     * this is used in the Exchange action. If the player elects an exchange, the CoupGameMaster
+     * will add 2 cards to the players current face down cards and pass that as a param to this method.
+     * The player must return one or two cards (depending on the number they have down) else
+     * the CoupGameMaster will alert the player and ask to do this again.
      *
      * @param cards
      * @return
      */
-    public Collection<CoupCard> exchangeCards(Collection<CoupCard> cards) {
-        Collection<CoupCard> returnedCards = new HashSet<CoupCard>(2);
+    public Collection<CoupCard> exchangeCards(Collection<CoupCard> cards);
 
-        Iterator<CoupCard> i = cards.iterator();
-        returnedCards.add(i.next());
-        returnedCards.add(i.next());
+    /**
+     * this is used when a player is challenged. the CGM is asking the player if they would like to
+     * prove they have the card. If you return false you will loose the challenge. If you return true
+     * the CGM will determine if you have the card. If you do, you win the challenge. If not you will
+     * loose the challenge.
+     *
+     * @param challengedAction
+     * @return weather you want to proove you have the card
+     */
+    public boolean proveYouHaveCorrectCard(CoupAction challengedAction);
 
-        return returnedCards;
-    }
-
-    @Override
-    public CoupAction yourTurn(GameContext gc) {
-        System.out.println("my turn");
-        System.out.println(gc);
-
-        return new CoupAction(this, null, CoupAction.ActionType.Income);
-    }
-
-    @Override
-    public CoupAction actionHappened(Player player, CoupAction hisAction, GameContext gc) {
-        String msg = String.format("%s : %s played %s, and I'm doing nothing ", playerName, player, hisAction);
-        System.out.println(msg);
-
-        return CoupAction.NoAction;
-    }
-
-    @Override
-    public void tryAgain(String reason) {
-        System.out.println("have to try again :" + reason);
-    }
+    /**
+     * the CGM is telling you that you've lost an influence. You need to choose
+     * one of your face down cards to turn over. If you choose one that is invalid (face up already, or you don't
+     * have it) you will be alerted and asked to do this again
+     *
+     * @return
+     */
+    public CoupCard looseInfluence();
 }
+

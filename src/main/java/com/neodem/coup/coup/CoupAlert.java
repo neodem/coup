@@ -13,7 +13,7 @@ public class CoupAlert extends Alert {
     public static final CoupAlert MustCoup = new CoupAlert(AlertType.MustCoup);
     private final AlertType alertType;
 
-    CoupAlert(AlertType t) {
+    public CoupAlert(AlertType t) {
         this.alertType = t;
     }
 
