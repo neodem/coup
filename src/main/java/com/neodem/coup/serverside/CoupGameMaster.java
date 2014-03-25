@@ -1,18 +1,14 @@
-package com.neodem.coup.coup.serverside;
+package com.neodem.coup.serverside;
 
 import com.neodem.bandaid.game.BaseGameMaster;
 import com.neodem.bandaid.game.GameContext;
 import com.neodem.common.utility.collections.Lists;
-import com.neodem.coup.coup.CoupAction;
-import com.neodem.coup.coup.CoupGameContext;
-import com.neodem.coup.coup.PlayerError;
-import com.neodem.coup.coup.cards.CoupDeck;
-import com.neodem.coup.coup.players.CoupPlayer;
+import com.neodem.coup.CoupAction;
+import com.neodem.coup.CoupGameContext;
+import com.neodem.coup.PlayerError;
+import com.neodem.coup.players.CoupPlayer;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Author: vfumo
@@ -20,10 +16,8 @@ import java.util.Map;
  */
 public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
-    // keeps track of the state of the players
-    private Map<CoupPlayer, PlayerInfoState> playerInfoMap = new HashMap<>();
-    // the deck we are using
-    private CoupDeck deck;
+    private ServerSideGameContext context;
+
     private ExchangeActionProcessor exchangeActionProcessor;
     private StealActionProcessor stealActionProcessor;
     private CoupActionProcessor coupActionProcessor;
@@ -36,20 +30,18 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
     @Override
     protected void initGame() {
-        deck = new CoupDeck();
+        context = new ServerSideGameContext();
 
-        playerInfoMap.clear();
         for (CoupPlayer p : registeredPlayers) {
-            PlayerInfoState info = makeNewPlayerInfo(p);
-            playerInfoMap.put(p, info);
-            p.updateInfo(info.makePrivatePlayerInfo());
+            context.addPlayer(p);
+            p.updateInfo(context.getPlayerInfo(p).makePrivatePlayerInfo());
         }
 
-        exchangeActionProcessor = new ExchangeActionProcessor(this);
-        stealActionProcessor = new StealActionProcessor(this);
-        coupActionProcessor = new CoupActionProcessor(this);
-        challengeResolver = new ChallengeResolver(this);
-        counterResolver = new CounterResolver(this);
+        exchangeActionProcessor = new ExchangeActionProcessor(context);
+        stealActionProcessor = new StealActionProcessor(context);
+        coupActionProcessor = new CoupActionProcessor(context);
+        challengeResolver = new ChallengeResolver(context);
+        counterResolver = new CounterResolver(context);
     }
 
     @Override
@@ -62,7 +54,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         boolean noWinner = true;
         while (noWinner) {
             for (CoupPlayer currentPlayer : registeredPlayers) {
-                PlayerInfoState currentPlayerInfo = playerInfoMap.get(currentPlayer);
+                PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
 
                 if (currentPlayerInfo.active) {
                     CoupAction currentAction = getValidCoupAction(currentPlayer, currentPlayerInfo);
@@ -162,7 +154,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         int activeCount = 0;
 
         for (CoupPlayer p : registeredPlayers) {
-            PlayerInfoState info = playerInfoMap.get(p);
+            PlayerInfoState info = context.getPlayerInfo(p);
             if (info.evaluateActive()) activeCount++;
         }
 
@@ -214,20 +206,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
                 break;
         }
 
-        playerInfoMap.put(actingPlayer, actingPlayerInfo);
-    }
-
-    private PlayerInfoState makeNewPlayerInfo(CoupPlayer p) {
-        PlayerInfoState info = new PlayerInfoState();
-
-        info.coins = 2;
-        info.cardsInHand = new HashSet<>();
-        info.cardsInHand.add(deck.takeCard());
-        info.cardsInHand.add(deck.takeCard());
-        info.active = true;
-        info.name = p.getPlayerName();
-
-        return info;
+        context.updatePlayer(actingPlayer, actingPlayerInfo);
     }
 
     @Override
@@ -236,20 +215,12 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         CoupGameContext gc = (CoupGameContext) super.generateCurrentGameContext();
 
         for (CoupPlayer p : registeredPlayers) {
-            PlayerInfoState pi = playerInfoMap.get(p);
+            PlayerInfoState pi = context.getPlayerInfo(p);
             if (pi != null) {
                 gc.addInfo(p, pi.makePublicPlayerInfo());
             }
         }
 
         return gc;
-    }
-
-    public Map<CoupPlayer, PlayerInfoState> getPlayerInfoMap() {
-        return playerInfoMap;
-    }
-
-    public CoupDeck getDeck() {
-        return deck;
     }
 }

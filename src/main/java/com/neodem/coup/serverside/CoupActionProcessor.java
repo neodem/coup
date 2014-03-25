@@ -1,15 +1,15 @@
-package com.neodem.coup.coup.serverside;
+package com.neodem.coup.serverside;
 
-import com.neodem.coup.coup.players.CoupPlayer;
+import com.neodem.coup.players.CoupPlayer;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/24/14
  */
 public class CoupActionProcessor {
-    private CoupGameMaster gm;
+    private ServerSideGameContext gm;
 
-    public CoupActionProcessor(CoupGameMaster gm) {
+    public CoupActionProcessor(ServerSideGameContext gm) {
         this.gm = gm;
     }
 

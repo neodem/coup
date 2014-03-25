@@ -1,10 +1,8 @@
-package com.neodem.coup.coup;
+package com.neodem.coup;
 
-import com.neodem.coup.coup.cards.CoupCard;
-import com.neodem.bandaid.game.Player;
+import com.neodem.coup.cards.CoupCard;
 
 /**
- *
  * Author: vfumo
  * Date: 2/28/14
  */
@@ -13,8 +11,8 @@ public class CoupPlayerInfo {
     public CoupCard cardOne = CoupCard.Unknown;
     public CoupCard cardTwo = CoupCard.Unknown;
 
-    public void addUpCard(CoupCard card)  {
-        if(cardOne == CoupCard.Unknown) {
+    public void addUpCard(CoupCard card) {
+        if (cardOne == CoupCard.Unknown) {
             cardOne = card;
         }
 

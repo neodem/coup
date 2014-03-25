@@ -1,4 +1,4 @@
-package com.neodem.coup.coup.cards;
+package com.neodem.coup.cards;
 
 /**
  * Author: vfumo

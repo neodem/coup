@@ -1,7 +1,7 @@
-package com.neodem.coup.coup.serverside;
+package com.neodem.coup.serverside;
 
-import com.neodem.coup.coup.cards.CoupCard;
-import com.neodem.coup.coup.players.CoupPlayer;
+import com.neodem.coup.cards.CoupCard;
+import com.neodem.coup.players.CoupPlayer;
 
 import java.util.Collection;
 
@@ -11,34 +11,34 @@ import java.util.Collection;
  */
 public class ExchangeActionProcessor {
 
-    private CoupGameMaster gm;
+    private ServerSideGameContext context;
 
-    public ExchangeActionProcessor(CoupGameMaster gm) {
-        this.gm = gm;
+    public ExchangeActionProcessor(ServerSideGameContext context) {
+        this.context = context;
     }
 
     /**
      * @param currentPlayer
      */
     public void handleExchange(CoupPlayer currentPlayer) {
-        PlayerInfoState currentPlayerInfo = gm.getPlayerInfoMap().get(currentPlayer);
+        PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
 
         int numberOfFaceDownCards = 2 - currentPlayerInfo.getUpCount();
 
-        CoupCard card1 = gm.getDeck().takeCard();
+        CoupCard card1 = context.getDeck().takeCard();
         currentPlayerInfo.cardsInHand.add(card1);
 
-        CoupCard card2 = gm.getDeck().takeCard();
+        CoupCard card2 = context.getDeck().takeCard();
         currentPlayerInfo.cardsInHand.add(card2);
         Collection<CoupCard> returnedCards = getReturnedCards(currentPlayer, currentPlayerInfo, numberOfFaceDownCards, card1, card2);
 
         // if we are cool, we put the cards back into the deck and shuffle it
         for (CoupCard c : returnedCards) {
             currentPlayerInfo.cardsInHand.remove(c);
-            gm.getDeck().putCard(c);
+            context.getDeck().putCard(c);
         }
 
-        gm.getDeck().shuffleDeck();
+        context.getDeck().shuffleDeck();
     }
 
     private Collection<CoupCard> getReturnedCards(CoupPlayer p, PlayerInfoState info, int numberOfFaceDownCards, CoupCard card1, CoupCard card2) {

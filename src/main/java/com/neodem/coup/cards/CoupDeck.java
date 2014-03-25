@@ -1,4 +1,4 @@
-package com.neodem.coup.coup.cards;
+package com.neodem.coup.cards;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Random;
 
 /**
- *
  * Author: vfumo
  * Date: 2/28/14
  */
 public class CoupDeck {
 
-    private List<CoupCard> actualDeck = new ArrayList<CoupCard>();
+    private List<CoupCard> actualDeck = new ArrayList<>();
 
     public CoupDeck() {
         actualDeck.add(CoupCard.Assasin);
@@ -44,6 +43,6 @@ public class CoupDeck {
     }
 
     public void putCard(CoupCard card) {
-         actualDeck.add(card);
+        actualDeck.add(card);
     }
 }

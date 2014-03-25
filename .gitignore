@@ -1,5 +1,4 @@
 *.class
-coup.iml
 .idea/*
 target/
 *.iml

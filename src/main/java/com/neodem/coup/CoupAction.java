@@ -1,9 +1,9 @@
-package com.neodem.coup.coup;
+package com.neodem.coup;
 
 import com.google.common.collect.Sets;
 import com.neodem.bandaid.game.Action;
-import com.neodem.coup.coup.cards.CoupCard;
-import com.neodem.coup.coup.players.CoupPlayer;
+import com.neodem.coup.cards.CoupCard;
+import com.neodem.coup.players.CoupPlayer;
 
 import java.util.Collection;
 

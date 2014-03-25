@@ -1,8 +1,8 @@
-package com.neodem.coup.coup.serverside;
+package com.neodem.coup.serverside;
 
-import com.neodem.coup.coup.CoupAction;
-import com.neodem.coup.coup.cards.CoupCard;
-import com.neodem.coup.coup.players.CoupPlayer;
+import com.neodem.coup.CoupAction;
+import com.neodem.coup.cards.CoupCard;
+import com.neodem.coup.players.CoupPlayer;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -10,10 +10,10 @@ import com.neodem.coup.coup.players.CoupPlayer;
  */
 public class ChallengeResolver {
 
-    private CoupGameMaster gm;
+    private ServerSideGameContext context;
 
-    public ChallengeResolver(CoupGameMaster gm) {
-        this.gm = gm;
+    public ChallengeResolver(ServerSideGameContext context) {
+        this.context = context;
     }
 
     /**
@@ -28,16 +28,16 @@ public class ChallengeResolver {
         if (actingPlayer.proveYouHaveCorrectCard(challengedAction)) {
 
             // 2) does the acting player have the card?
-            PlayerInfoState playerInfoState = gm.getPlayerInfoMap().get(actingPlayer);
+            PlayerInfoState playerInfoState = context.getPlayerInfo(actingPlayer);
             CoupCard actionCard = challengedAction.getActionCard();
             if (playerInfoState.hasCard(actionCard)) {
                 processLoss(challengingPlayer);
 
                 // recycle the card
                 playerInfoState.cardsInHand.remove(actionCard);
-                gm.getDeck().putCard(actionCard);
-                gm.getDeck().shuffleDeck();
-                playerInfoState.cardsInHand.add(gm.getDeck().takeCard());
+                context.getDeck().putCard(actionCard);
+                context.getDeck().shuffleDeck();
+                playerInfoState.cardsInHand.add(context.getDeck().takeCard());
 
                 return false;
             }
@@ -48,7 +48,7 @@ public class ChallengeResolver {
     }
 
     private void processLoss(CoupPlayer loser) {
-        PlayerInfoState playerInfoState = gm.getPlayerInfoMap().get(loser);
+        PlayerInfoState playerInfoState = context.getPlayerInfo(loser);
         CoupCard card;
         do {
             card = loser.looseAnInfluence();

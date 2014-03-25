@@ -1,7 +1,7 @@
-package com.neodem.coup.coup.serverside;
+package com.neodem.coup.serverside;
 
-import com.neodem.coup.coup.CoupAction;
-import com.neodem.coup.coup.players.CoupPlayer;
+import com.neodem.coup.CoupAction;
+import com.neodem.coup.players.CoupPlayer;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -9,10 +9,10 @@ import com.neodem.coup.coup.players.CoupPlayer;
  */
 public class CounterResolver {
 
-    private CoupGameMaster gm;
+    private ServerSideGameContext context;
 
-    public CounterResolver(CoupGameMaster gm) {
-        this.gm = gm;
+    public CounterResolver(ServerSideGameContext context) {
+        this.context = context;
     }
 
     /**

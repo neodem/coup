@@ -1,4 +1,4 @@
-package com.neodem.coup.coup;
+package com.neodem.coup;
 
 import com.neodem.bandaid.game.Alert;
 

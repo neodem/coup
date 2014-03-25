@@ -3,25 +3,25 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="coupGameMaster" class="com.neodem.coup.coup.serverside.CoupGameMaster">
+    <bean id="coupGameMaster" class="com.neodem.coup.serverside.CoupGameMaster">
 
 
     </bean>
 
 
-    <bean id="player1" class="com.neodem.coup.coup.players.DummyCoupPlayer" init-method="startPlayer">
+    <bean id="player1" class="com.neodem.coup.players.DummyCoupPlayer" init-method="startPlayer">
         <property name="playerName" value="player1"/>
         <property name="gameMaster" ref="coupGameMaster"/>
     </bean>
-    <bean id="player2" class="com.neodem.coup.coup.players.DummyCoupPlayer" init-method="startPlayer">
+    <bean id="player2" class="com.neodem.coup.players.DummyCoupPlayer" init-method="startPlayer">
         <property name="playerName" value="player2"/>
         <property name="gameMaster" ref="coupGameMaster"/>
     </bean>
-    <bean id="player3" class="com.neodem.coup.coup.players.DummyCoupPlayer" init-method="startPlayer">
+    <bean id="player3" class="com.neodem.coup.players.DummyCoupPlayer" init-method="startPlayer">
         <property name="playerName" value="player3"/>
         <property name="gameMaster" ref="coupGameMaster"/>
     </bean>
-    <bean id="player4" class="com.neodem.coup.coup.players.DummyCoupPlayer" init-method="startPlayer">
+    <bean id="player4" class="com.neodem.coup.players.DummyCoupPlayer" init-method="startPlayer">
         <property name="playerName" value="player4"/>
         <property name="gameMaster" ref="coupGameMaster"/>
     </bean>
