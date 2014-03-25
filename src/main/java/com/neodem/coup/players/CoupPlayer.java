@@ -1,5 +1,6 @@
 package com.neodem.coup.players;
 
+import com.neodem.bandaid.game.GameContext;
 import com.neodem.bandaid.game.Player;
 import com.neodem.coup.CoupAction;
 import com.neodem.coup.CoupPlayerInfo;
@@ -12,6 +13,27 @@ import java.util.Collection;
  * Created Date: 3/24/14
  */
 public interface CoupPlayer extends Player<CoupAction> {
+
+
+    /**
+     * Called to ask the player if they want to counter the current action
+     *
+     * @param player    the player who initiated the action
+     * @param hisAction the action initiated
+     * @param gc        the current game context
+     * @return true if the payer wants to counter the current action
+     */
+    public boolean counterAction(CoupPlayer player, CoupAction hisAction, GameContext gc);
+
+    /**
+     * Called to ask the player if they want to challenge the current action
+     *
+     * @param player    the player who initiated the action
+     * @param hisAction the action initiated
+     * @param gc        the current game context
+     * @return true if the payer wants to challenge the current action
+     */
+    public boolean challengeAction(CoupPlayer player, CoupAction hisAction, GameContext gc);
 
     /**
      * this is used in the Exchange action. If the player elects an exchange, the CoupGameMaster

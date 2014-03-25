@@ -9,20 +9,20 @@
     </bean>
 
 
-    <bean id="player1" class="com.neodem.coup.players.DummyCoupPlayer" init-method="startPlayer">
-        <property name="playerName" value="player1"/>
+    <bean id="player1" class="com.neodem.coup.players.RandomCoupPlayer" init-method="startPlayer">
+        <property name="myName" value="player1"/>
         <property name="gameMaster" ref="coupGameMaster"/>
     </bean>
-    <bean id="player2" class="com.neodem.coup.players.DummyCoupPlayer" init-method="startPlayer">
-        <property name="playerName" value="player2"/>
+    <bean id="player2" class="com.neodem.coup.players.RandomCoupPlayer" init-method="startPlayer">
+        <property name="myName" value="player2"/>
         <property name="gameMaster" ref="coupGameMaster"/>
     </bean>
-    <bean id="player3" class="com.neodem.coup.players.DummyCoupPlayer" init-method="startPlayer">
-        <property name="playerName" value="player3"/>
+    <bean id="player3" class="com.neodem.coup.players.RandomCoupPlayer" init-method="startPlayer">
+        <property name="myName" value="player3"/>
         <property name="gameMaster" ref="coupGameMaster"/>
     </bean>
-    <bean id="player4" class="com.neodem.coup.players.DummyCoupPlayer" init-method="startPlayer">
-        <property name="playerName" value="player4"/>
+    <bean id="player4" class="com.neodem.coup.players.RandomCoupPlayer" init-method="startPlayer">
+        <property name="myName" value="player4"/>
         <property name="gameMaster" ref="coupGameMaster"/>
     </bean>
 </beans>

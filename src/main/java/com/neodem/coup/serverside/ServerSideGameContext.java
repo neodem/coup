@@ -2,9 +2,11 @@ package com.neodem.coup.serverside;
 
 import com.neodem.coup.cards.CoupDeck;
 import com.neodem.coup.players.CoupPlayer;
+import org.apache.commons.collections.bag.HashBag;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -12,7 +14,7 @@ import java.util.Map;
  * Created Date: 3/25/14
  */
 public class ServerSideGameContext {
-
+    private static Log log = LogFactory.getLog(ServerSideGameContext.class.getName());
     // keeps track of the state of the players
     private Map<CoupPlayer, PlayerInfoState> playerInfoMap;
     // the deck we are using
@@ -34,6 +36,7 @@ public class ServerSideGameContext {
     }
 
     public void updatePlayer(CoupPlayer p, PlayerInfoState info) {
+        // update our internal map
         playerInfoMap.put(p, info);
     }
 
@@ -41,11 +44,11 @@ public class ServerSideGameContext {
         PlayerInfoState info = new PlayerInfoState();
 
         info.coins = 2;
-        info.cardsInHand = new HashSet<>();
+        info.cardsInHand = new HashBag();
         info.cardsInHand.add(deck.takeCard());
         info.cardsInHand.add(deck.takeCard());
         info.active = true;
-        info.name = p.getPlayerName();
+        info.name = p.getMyName();
 
         return info;
     }

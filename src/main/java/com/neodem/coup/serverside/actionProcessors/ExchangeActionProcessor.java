@@ -1,7 +1,11 @@
-package com.neodem.coup.serverside;
+package com.neodem.coup.serverside.actionProcessors;
 
 import com.neodem.coup.cards.CoupCard;
 import com.neodem.coup.players.CoupPlayer;
+import com.neodem.coup.serverside.PlayerInfoState;
+import com.neodem.coup.serverside.ServerSideGameContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
 
@@ -10,7 +14,7 @@ import java.util.Collection;
  * Created Date: 3/24/14
  */
 public class ExchangeActionProcessor {
-
+    private static Log log = LogFactory.getLog(ExchangeActionProcessor.class.getName());
     private ServerSideGameContext context;
 
     public ExchangeActionProcessor(ServerSideGameContext context) {

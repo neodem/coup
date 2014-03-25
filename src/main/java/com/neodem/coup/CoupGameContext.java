@@ -2,6 +2,8 @@ package com.neodem.coup;
 
 import com.neodem.bandaid.game.GameContext;
 import com.neodem.coup.players.CoupPlayer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +13,14 @@ import java.util.Map;
  * Date: 2/28/14
  */
 public class CoupGameContext extends GameContext<CoupPlayer> {
+
+    private static Log log = LogFactory.getLog(CoupGameContext.class.getName());
+
+    @Override
+    protected Log getLog() {
+        return log;
+    }
+
     public Map<CoupPlayer, CoupPlayerInfo> playerInfos = new HashMap<CoupPlayer, CoupPlayerInfo>();
 
     public void addInfo(CoupPlayer p, CoupPlayerInfo coupPlayerInfo) {

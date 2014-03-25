@@ -4,6 +4,8 @@ import com.google.common.collect.Sets;
 import com.neodem.bandaid.game.Action;
 import com.neodem.coup.cards.CoupCard;
 import com.neodem.coup.players.CoupPlayer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
 
@@ -14,6 +16,7 @@ import java.util.Collection;
 public class CoupAction extends Action {
 
     public static CoupAction NoAction = new CoupAction(null, ActionType.NoAction);
+    private static Log log = LogFactory.getLog(CoupAction.class.getName());
     private ActionType actionType;
     private CoupPlayer actionOn;
 
@@ -26,6 +29,11 @@ public class CoupAction extends Action {
         return actionType != ActionType.NoAction &&
                 actionType != ActionType.Challenge &&
                 actionType != ActionType.Counter;
+    }
+
+    @Override
+    protected Log getLog() {
+        return log;
     }
 
     public ActionType getActionType() {
@@ -101,6 +109,7 @@ public class CoupAction extends Action {
 
         return false;
     }
+
 
     public enum ActionType {
         Income,

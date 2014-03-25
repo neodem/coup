@@ -8,6 +8,8 @@ import com.neodem.coup.CoupAction;
 import com.neodem.coup.CoupAction.ActionType;
 import com.neodem.coup.CoupPlayerInfo;
 import com.neodem.coup.cards.CoupCard;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,15 +25,48 @@ import static com.neodem.coup.CoupAction.ActionType.Steal;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class DummyCoupPlayer extends BasePlayer<CoupAction> implements CoupPlayer {
-
+public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlayer {
+    private static Log log = LogFactory.getLog(RandomCoupPlayer.class.getName());
     private CoupPlayerInfo myState = null;
-
     private Random r = new Random(System.currentTimeMillis());
 
     @Override
+    protected Log getLog() {
+        return log;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     protected void initializePlayer(GameContext g) {
-        System.out.println(g);
+    }
+
+    @Override
+    public boolean counterAction(CoupPlayer actingPlayer, CoupAction hisAction, GameContext gc) {
+        int rand = r.nextInt(100);
+
+        if (rand < 40) {
+            String msg = String.format("%s : %s played %s on %s, and I'm Countering Them!", myName, actingPlayer, hisAction, hisAction.getActionOn());
+            log.debug(msg);
+            return true;
+        }
+
+        String msg = String.format("%s : %s played %s on %s, and I'm not Countering her.", myName, actingPlayer, hisAction, hisAction.getActionOn());
+        log.debug(msg);
+        return false;
+    }
+
+    @Override
+    public boolean challengeAction(CoupPlayer actingPlayer, CoupAction hisAction, GameContext gc) {
+        int rand = r.nextInt(100);
+
+        if (rand < 20) {
+            String msg = String.format("%s : %s played %s on %s, and I'm Challenging Them!", myName, actingPlayer, hisAction, hisAction.getActionOn());
+            log.debug(msg);
+            return true;
+        }
+
+        String msg = String.format("%s : %s played %s on %s, and I'm not Challenging him", myName, actingPlayer, hisAction, hisAction.getActionOn());
+        log.debug(msg);
+        return false;
     }
 
     /**
@@ -66,14 +101,14 @@ public class DummyCoupPlayer extends BasePlayer<CoupAction> implements CoupPlaye
 
     @Override
     public void updateInfo(CoupPlayerInfo currentState) {
-        System.out.println(currentState);
         myState = currentState;
+        getLog().debug(myName + "\nprivate state::\n" + currentState);
     }
 
     @Override
     public CoupAction yourTurn(GameContext gc) {
-        System.out.println("my turn");
-        System.out.println(gc);
+        getLog().debug(myName + " : my turn");
+        getLog().debug(gc);
 
         CoupPlayer actionOn = null;
         ActionType actionType = ActionType.values()[r.nextInt(ActionType.values().length)];
@@ -87,25 +122,13 @@ public class DummyCoupPlayer extends BasePlayer<CoupAction> implements CoupPlaye
     }
 
     @Override
-    public CoupAction actionHappened(Player player, CoupAction hisAction, GameContext gc) {
-        String msg = String.format("%s : %s played %s, and I'm doing nothing ", playerName, player, hisAction);
-        System.out.println(msg);
-
-        int rand = r.nextInt(100);
-
-        if (rand < 20) {
-            return new CoupAction(null, CoupAction.ActionType.Challenge);
-        }
-
-        if (rand < 40) {
-            return new CoupAction(null, CoupAction.ActionType.Counter);
-        }
-
-        return CoupAction.NoAction;
+    public void actionHappened(Player player, CoupAction hisAction, GameContext gc) {
+        String msg = String.format("%s : %s played %s on %s", myName, player, hisAction, hisAction.getActionOn());
+        getLog().debug(msg);
     }
 
     @Override
     public void tryAgain(String reason) {
-        System.out.println("have to try again :" + reason);
+        getLog().info("have to try again :" + reason);
     }
 }

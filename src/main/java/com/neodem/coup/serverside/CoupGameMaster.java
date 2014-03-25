@@ -7,6 +7,13 @@ import com.neodem.coup.CoupAction;
 import com.neodem.coup.CoupGameContext;
 import com.neodem.coup.PlayerError;
 import com.neodem.coup.players.CoupPlayer;
+import com.neodem.coup.serverside.actionProcessors.ChallengeResolver;
+import com.neodem.coup.serverside.actionProcessors.CounterResolver;
+import com.neodem.coup.serverside.actionProcessors.CoupActionProcessor;
+import com.neodem.coup.serverside.actionProcessors.ExchangeActionProcessor;
+import com.neodem.coup.serverside.actionProcessors.StealActionProcessor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.List;
 
@@ -16,8 +23,9 @@ import java.util.List;
  */
 public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
-    private ServerSideGameContext context;
+    private static Log log = LogFactory.getLog(CoupGameMaster.class.getName());
 
+    private ServerSideGameContext context;
     private ExchangeActionProcessor exchangeActionProcessor;
     private StealActionProcessor stealActionProcessor;
     private CoupActionProcessor coupActionProcessor;
@@ -26,27 +34,44 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
     public CoupGameMaster() {
         super(4);
+        context = new ServerSideGameContext();
     }
 
     @Override
     protected void initGame() {
-        context = new ServerSideGameContext();
 
+        // add players to context (this will set them up)
         for (CoupPlayer p : registeredPlayers) {
             context.addPlayer(p);
-            p.updateInfo(context.getPlayerInfo(p).makePrivatePlayerInfo());
         }
 
+        // setup processors
         exchangeActionProcessor = new ExchangeActionProcessor(context);
         stealActionProcessor = new StealActionProcessor(context);
         coupActionProcessor = new CoupActionProcessor(context);
         challengeResolver = new ChallengeResolver(context);
         counterResolver = new CounterResolver(context);
+
+        updatePlayers();
+    }
+
+    private void updatePlayers() {
+        // alert players of current game context and their specific context
+        GameContext gc = generateCurrentGameContext();
+        for (CoupPlayer p : registeredPlayers) {
+            p.updateContext(gc);
+            p.updateInfo(context.getPlayerInfo(p).makePrivatePlayerInfo());
+        }
     }
 
     @Override
     protected GameContext makeEmptyGameContextObject() {
         return new CoupGameContext();
+    }
+
+    @Override
+    protected Log getLog() {
+        return log;
     }
 
     @Override
@@ -85,26 +110,30 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
      */
     private boolean alertOtherPlayers(CoupPlayer currentPlayer, CoupAction currentAction) {
 
-
         // get a list of the players starting with the person taking the turn
         List<CoupPlayer> orderedPlayers = Lists.reorder(registeredPlayers, currentPlayer);
 
-        // go to each one in turn and let them know of the action and see if they want to challenge or counter it
+        // let all players know of the action
         for (CoupPlayer op : orderedPlayers) {
             if (op == currentPlayer) continue;
-            CoupAction opa = op.actionHappened(currentPlayer, currentAction, generateCurrentGameContext());
-            if (opa.getActionType() == CoupAction.ActionType.NoAction) continue;
-            if (opa.getActionType() == CoupAction.ActionType.Challenge) {
-                if (currentAction.isChallengeable()) {
-                    // resolve challenge
+            op.actionHappened(currentPlayer, currentAction, generateCurrentGameContext());
+        }
+
+        // go to each one in turn and see if they want to challenge or counter it
+        for (CoupPlayer op : orderedPlayers) {
+            if (op == currentPlayer) continue;
+
+            if (currentAction.isChallengeable()) {
+                if (op.challengeAction(currentPlayer, currentAction, generateCurrentGameContext())) {
                     if (challengeResolver.resolveChallenge(currentPlayer, op, currentAction)) {
                         // if we are here, the challenge succeeded, thus the action failed
                         return false;
                     }
                 }
             }
-            if (opa.getActionType() == CoupAction.ActionType.Counter) {
-                if (currentAction.isCounterable()) {
+
+            if (currentAction.isCounterable()) {
+                if (op.counterAction(currentPlayer, currentAction, generateCurrentGameContext())) {
                     // resolve challenge
                     if (counterResolver.resolveCounter(currentPlayer, op, currentAction)) {
                         // if we are here, the counter succeeded, thus the action was blocked/failed
@@ -207,6 +236,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         }
 
         context.updatePlayer(actingPlayer, actingPlayerInfo);
+        updatePlayers();
     }
 
     @Override
