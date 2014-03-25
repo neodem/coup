@@ -229,6 +229,12 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
             throw new PlayerError(msg);
         }
 
+        if (info.coins < 3 && a.getActionType() == CoupAction.ActionType.Assassinate) {
+            String msg = "Player has attempted an Assasination but they only have " + info.coins + " coins (they need 3).";
+            getLog().error(msg);
+            throw new PlayerError(msg);
+        }
+
         if (!CoupAction.isValidPlayableAction(a.getActionType())) {
             String msg = "Player has attempted an non playable action : " + a.getActionType();
             getLog().error(msg);
@@ -252,14 +258,14 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
                 actingPlayerInfo.addCoins(2);
                 break;
             case Coup:
-                coupActionProcessor.handleCoup(actingPlayer);
+                coupActionProcessor.handleCoup(actingPlayer, currentAction.getActionOn());
                 break;
             case Tax:
                 getLog().info(actingPlayer + " gets two coins");
                 actingPlayerInfo.addCoins(2);
                 break;
             case Assassinate:
-                assasianationProcessor.handleAssasinate(actingPlayer, currentAction);
+                assasianationProcessor.handleAssasinate(actingPlayer, currentAction.getActionOn());
                 break;
             case Steal:
                 stealActionProcessor.handleSteal(actingPlayer, currentAction);

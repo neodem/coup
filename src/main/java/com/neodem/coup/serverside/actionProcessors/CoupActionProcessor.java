@@ -9,15 +9,20 @@ import org.apache.commons.logging.LogFactory;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/24/14
  */
-public class CoupActionProcessor {
+public class CoupActionProcessor extends DamagingActionProcessor {
     private static Log log = LogFactory.getLog(CoupActionProcessor.class.getName());
-    private ServerSideGameContext gm;
 
-    public CoupActionProcessor(ServerSideGameContext gm) {
-        this.gm = gm;
+    public CoupActionProcessor(ServerSideGameContext context) {
+        super(context);
     }
 
-    public void handleCoup(CoupPlayer actingPlayer) {
+    @Override
+    protected Log getLog() {
+        return log;
+    }
 
+    public void handleCoup(CoupPlayer actingPlayer, CoupPlayer targetPlayer) {
+        log.debug(String.format("%s is launching a coup on %s", actingPlayer, targetPlayer));
+        processLoss(targetPlayer);
     }
 }

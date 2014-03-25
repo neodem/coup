@@ -13,12 +13,16 @@ import java.util.Collection;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/24/14
  */
-public class ChallengeResolver {
+public class ChallengeResolver extends DamagingActionProcessor {
     private static Log log = LogFactory.getLog(ChallengeResolver.class.getName());
-    private ServerSideGameContext context;
 
     public ChallengeResolver(ServerSideGameContext context) {
-        this.context = context;
+        super(context);
+    }
+
+    @Override
+    protected Log getLog() {
+        return log;
     }
 
     /**
@@ -73,16 +77,5 @@ public class ChallengeResolver {
         return false;
     }
 
-    private void processLoss(CoupPlayer loser) {
-        log.info(loser.getMyName() + " has to loose an influence..");
 
-        PlayerInfoState playerInfoState = context.getPlayerInfo(loser);
-        CoupCard card;
-        do {
-            card = loser.looseAnInfluence();
-        } while (!playerInfoState.validInfluence(card));
-
-        log.info(loser.getMyName() + " turns over the " + card + " card.");
-        playerInfoState.turnFaceUp(card);
-    }
 }

@@ -3,6 +3,8 @@
 target/*
 *.iml
 
+coup.log*
+
 *.class
 
 # Package Files #
