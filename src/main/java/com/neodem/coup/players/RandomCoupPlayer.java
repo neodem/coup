@@ -118,7 +118,7 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
     @Override
     public void updateInfo(CoupPlayerInfo currentState) {
         myState = currentState;
-        getLog().debug(myName + "\nprivate state::\n" + currentState);
+        // getLog().debug(myName + "\nprivate state::\n" + currentState);
     }
 
     @Override

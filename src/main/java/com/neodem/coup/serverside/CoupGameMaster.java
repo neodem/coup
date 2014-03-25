@@ -83,6 +83,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         while (noWinner) {
             for (CoupPlayer currentPlayer : registeredPlayers) {
                 getLog().info("It is " + currentPlayer.getMyName() + "'s turn");
+                getLog().info(generateCurrentGameContext());
 
                 PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
 
@@ -128,12 +129,12 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
             op.actionHappened(currentPlayer, currentAction, generateCurrentGameContext());
         }
 
-        // go to each one in turn and see if they want to challenge or counter it
-        getLog().debug("determining counter/challenge");
-        for (CoupPlayer op : orderedPlayers) {
-            if (op == currentPlayer) continue;
+        // go to each one in turn and see if they want to challenge it
+        if (currentAction.isChallengeable()) {
+            getLog().debug("determining if players want to challenge this action...");
+            for (CoupPlayer op : orderedPlayers) {
+                if (op == currentPlayer) continue;
 
-            if (currentAction.isChallengeable()) {
                 if (op.doYouWantToChallengeThisAction(currentAction, currentPlayer, generateCurrentGameContext())) {
                     if (challengeResolver.resolveChallenge(op, currentPlayer, currentAction.getActionCard())) {
                         // if we are here, the challenge succeeded, thus the action failed
@@ -141,22 +142,28 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
                         return false;
                     }
                 }
-            } else {
-                getLog().debug(currentAction + " is not Challengeable");
             }
+        } else {
+            getLog().debug(currentAction + " is not Challengeable");
+        }
 
-            if (currentAction.isCounterable()) {
+        // go to each one in turn and see if they want to counter it
+        if (currentAction.isCounterable()) {
+            getLog().debug("determining if players want to counter this action...");
+            for (CoupPlayer op : orderedPlayers) {
+                if (op == currentPlayer) continue;
+
                 if (op.doYouWantToCounterThisAction(currentAction, currentPlayer, generateCurrentGameContext())) {
-                    // resolve challenge
                     if (counterResolver.resolveCounter(currentPlayer, op, currentAction)) {
                         // if we are here, the counter succeeded, thus the action was blocked/failed
                         getLog().info("Action Failed.");
                         return false;
                     }
                 }
-            } else {
-                getLog().debug(currentAction + " is not Counterable");
+
             }
+        } else {
+            getLog().debug(currentAction + " is not Counterable");
         }
 
         getLog().info("Action succeeds.");

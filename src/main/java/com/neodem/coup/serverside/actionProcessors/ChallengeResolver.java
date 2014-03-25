@@ -51,6 +51,8 @@ public class ChallengeResolver {
 
                 return false;
             }
+        } else {
+            log.debug(String.format("%s is refusing to prove they have the %s card.", challengedPlayer.getMyName(), challengedCard));
         }
 
         log.debug(String.format("%s did not prove they had the %s card. Challenge succeeded!", challengedPlayer.getMyName(), challengedCard));

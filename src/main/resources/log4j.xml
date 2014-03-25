@@ -9,9 +9,20 @@
         </layout>
     </appender>
 
+    <appender name="R" class="org.apache.log4j.RollingFileAppender">
+        <param name="file" value="coup.log"/>
+        <param name="MaxFileSize" value="1000KB"/>
+        <!-- Keep one backup file -->
+        <param name="MaxBackupIndex" value="1"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%p %t %c - %m%n"/>
+        </layout>
+    </appender>
+
     <root>
         <priority value="debug"/>
         <appender-ref ref="console"/>
+        <appender-ref ref="R"/>
     </root>
 
 </log4j:configuration>
