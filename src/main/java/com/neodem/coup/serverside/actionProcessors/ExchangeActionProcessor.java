@@ -1,13 +1,14 @@
 package com.neodem.coup.serverside.actionProcessors;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
+import com.google.common.collect.Multisets;
 import com.neodem.coup.cards.CoupCard;
 import com.neodem.coup.players.CoupPlayer;
 import com.neodem.coup.serverside.PlayerInfoState;
 import com.neodem.coup.serverside.ServerSideGameContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import java.util.Collection;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -22,40 +23,61 @@ public class ExchangeActionProcessor {
     }
 
     /**
-     * @param currentPlayer
+     * @param actingPlayer
      */
-    public void handleExchange(CoupPlayer currentPlayer) {
-        PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
+    public void handleExchange(CoupPlayer actingPlayer) {
+        log.debug(String.format("%s is doing an exchange...", actingPlayer));
 
-        int numberOfFaceDownCards = 2 - currentPlayerInfo.getUpCount();
+        PlayerInfoState currentPlayerInfo = context.getPlayerInfo(actingPlayer);
 
         CoupCard card1 = context.getDeck().takeCard();
-        currentPlayerInfo.cardsInHand.add(card1);
-
         CoupCard card2 = context.getDeck().takeCard();
-        currentPlayerInfo.cardsInHand.add(card2);
-        Collection<CoupCard> returnedCards = getReturnedCards(currentPlayer, currentPlayerInfo, numberOfFaceDownCards, card1, card2);
 
-        // if we are cool, we put the cards back into the deck and shuffle it
+        Multiset<CoupCard> handCards = HashMultiset.create();
+        handCards.add(card1);
+        handCards.add(card2);
+        handCards.addAll(currentPlayerInfo.getDownCards());
+
+        Multiset<CoupCard> returnedCards = getReturnedCards(actingPlayer, currentPlayerInfo, handCards);
+
+        log.debug(String.format("%s is putting back 2 cards", actingPlayer));
+
+        // TODO update the info object!!!
+
+        // put the cards back into the deck and shuffle it
         for (CoupCard c : returnedCards) {
-            currentPlayerInfo.cardsInHand.remove(c);
             context.getDeck().putCard(c);
         }
 
         context.getDeck().shuffleDeck();
     }
 
-    private Collection<CoupCard> getReturnedCards(CoupPlayer p, PlayerInfoState info, int numberOfFaceDownCards, CoupCard card1, CoupCard card2) {
+    private Multiset<CoupCard> getReturnedCards(CoupPlayer p, PlayerInfoState info, Multiset<CoupCard> handCards) {
+
         // deal with exchange
-        Collection<CoupCard> returnedCards = p.exchangeCards(info.cardsInHand);
+        Multiset<CoupCard> returnedCards = p.exchangeCards(handCards);
 
-        // collection must return the number of face down cards the player has
-        if (returnedCards.size() != numberOfFaceDownCards) {
-
-            p.tryAgain("You need to return " + numberOfFaceDownCards + " cards");
-
-            return getReturnedCards(p, info, numberOfFaceDownCards, card1, card2);
+        // collection must return 2 cards
+        if (returnedCards.size() != 2) {
+            p.tryAgain("You need to return " + 2 + " cards");
+            return getReturnedCards(p, info, handCards);
         }
+
+        // the returned collection must have come from the handCards. (eg. all returned cards must be in handCards)
+        if (isReturnedCollectionOk(handCards, returnedCards)) {
+            p.tryAgain("The returned cards need to come from the given hand cards");
+
+            return getReturnedCards(p, info, handCards);
+        }
+
         return returnedCards;
+    }
+
+    protected boolean isReturnedCollectionOk(Multiset<CoupCard> handCards, Multiset<CoupCard> returnedCards) {
+        Multiset<CoupCard> result = Multisets.difference(handCards, returnedCards);
+        if (result.size() != 0) {
+            return false;
+        }
+        return true;
     }
 }

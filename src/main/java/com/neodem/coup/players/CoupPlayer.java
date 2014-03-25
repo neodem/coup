@@ -1,12 +1,11 @@
 package com.neodem.coup.players;
 
+import com.google.common.collect.Multiset;
 import com.neodem.bandaid.game.GameContext;
 import com.neodem.bandaid.game.Player;
 import com.neodem.coup.CoupAction;
 import com.neodem.coup.CoupPlayerInfo;
 import com.neodem.coup.cards.CoupCard;
-
-import java.util.Collection;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -57,13 +56,13 @@ public interface CoupPlayer extends Player<CoupAction> {
     /**
      * this is used in the Exchange action. If the player elects an exchange, the CoupGameMaster
      * will add 2 cards to the players current face down cards and pass that as a param to this method.
-     * The player must return one or two cards (depending on the number they have down) else
+     * The player must return two cards from his ffa else
      * the CoupGameMaster will alert the player and ask to do this again.
      *
-     * @param cards the entire 'hand' of cards the player has to choose from
+     * @param cards the new cards and the face downn cards from the players deck that he has to choose to discard from
      * @return the cards they are returning to the deck
      */
-    public Collection<CoupCard> exchangeCards(Collection<CoupCard> cards);
+    public Multiset<CoupCard> exchangeCards(Multiset<CoupCard> cards);
 
     /**
      * the CGM is telling you that you've lost an influence. You need to choose

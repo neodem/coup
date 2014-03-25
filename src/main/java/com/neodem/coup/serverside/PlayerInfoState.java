@@ -3,8 +3,8 @@ package com.neodem.coup.serverside;
 import com.neodem.coup.CoupPlayerInfo;
 import com.neodem.coup.cards.CoupCard;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -12,7 +12,8 @@ import java.util.Iterator;
  */
 public class PlayerInfoState {
     public int coins;
-    public Collection<CoupCard> cardsInHand;
+    public CoupCard card1;
+    public CoupCard card2;
     public boolean active;
     public String name;
 
@@ -24,10 +25,9 @@ public class PlayerInfoState {
         b.append(coins);
         b.append(") : ");
 
-        for (CoupCard c : cardsInHand) {
-            b.append(c);
-            b.append(",");
-        }
+        b.append(card1);
+        b.append(",");
+        b.append(card2);
 
         return b.toString();
     }
@@ -41,11 +41,8 @@ public class PlayerInfoState {
         CoupPlayerInfo pi = new CoupPlayerInfo();
         pi.coins = coins;
 
-        for (CoupCard card : cardsInHand) {
-            if (card.faceUp) {
-                pi.addUpCard(card);
-            }
-        }
+        if (card1.faceUp) pi.addUpCard(card1);
+        if (card2.faceUp) pi.addUpCard(card2);
 
         return pi;
     }
@@ -59,20 +56,19 @@ public class PlayerInfoState {
         CoupPlayerInfo cpi = new CoupPlayerInfo();
         cpi.coins = coins;
 
-        Iterator<CoupCard> cardIterator = cardsInHand.iterator();
-
-        cpi.cardOne = cardIterator.next();
-        cpi.cardTwo = cardIterator.next();
+        cpi.cardOne = card1;
+        cpi.cardTwo = card2;
 
         return cpi;
     }
 
+    /**
+     * @return true if this player has at least one card face down, false if otherwise
+     */
     public boolean evaluateActive() {
-        int upCount = getUpCount();
-
-        if (upCount == 2) active = false;
-
-        return active;
+        if (!card1.faceUp) return true;
+        if (!card2.faceUp) return true;
+        return false;
     }
 
     public void addCoin() {
@@ -94,19 +90,23 @@ public class PlayerInfoState {
         coins = coins + i;
     }
 
-    public int getUpCount() {
-        int upCount = 0;
-        for (CoupCard card : cardsInHand) {
-            if (card.faceUp) {
-                upCount++;
-            }
-        }
+    public boolean handHasTwoOfTheSameCard() {
+        return card1.equals(card2);
+    }
 
-        return upCount;
+    /**
+     * return the face up card the player has (if any)
+     *
+     * @return the face up card the player has (if any) or null if none
+     */
+    public CoupCard getUpCard() {
+        if (card1.faceUp) return card1;
+        if (card2.faceUp) return card2;
+        return null;
     }
 
     public boolean hasCard(CoupCard card) {
-        return cardsInHand.contains(card);
+        return card1.equals(card) || card2.equals(card);
     }
 
     /**
@@ -117,13 +117,8 @@ public class PlayerInfoState {
      */
     public boolean validInfluence(CoupCard testCard) {
         if (testCard == null) return false;
-        for (CoupCard card : cardsInHand) {
-            if (card.equals(testCard)) {
-                if (!card.faceUp) {
-                    return true;
-                }
-            }
-        }
+        if (card1.equals(testCard) && !card1.faceUp) return true;
+        if (card2.equals(testCard) && !card2.faceUp) return true;
         return false;
     }
 
@@ -133,15 +128,37 @@ public class PlayerInfoState {
      * @param testCard the card we are testing for
      */
     public void turnFaceUp(CoupCard testCard) {
-        for (CoupCard card : cardsInHand) {
-            if (card.equals(testCard)) {
-                if (!card.faceUp) {
-                    card.faceUp = true;
-                    break;
-                }
-            }
-        }
+        if (testCard == null) return;
+        if (card1.equals(testCard)) card1.faceUp = true;
+        else if (card2.equals(testCard)) card2.faceUp = true;
     }
 
+    public Collection<CoupCard> getDownCards() {
+        Collection<CoupCard> downCards = new ArrayList<>();
+        if (!card1.faceUp) downCards.add(card1);
+        if (!card2.faceUp) downCards.add(card2);
+        return downCards;
+    }
 
+    /**
+     * if this card exists in the hand, remove it (set to null)
+     *
+     * @param card
+     */
+    public void removeCard(CoupCard card) {
+        if (card == null) return;
+        if (card1.equals(card)) card1 = null;
+        else if (card2.equals(card)) card2 = null;
+    }
+
+    /**
+     * if there is an empty (null) spot, add this card else do nothing
+     *
+     * @param card
+     */
+    public void addCard(CoupCard card) {
+        if (card == null) return;
+        if (card1 == null) card1 = card;
+        else if (card2 == null) card2 = card;
+    }
 }

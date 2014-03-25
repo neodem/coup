@@ -48,10 +48,10 @@ public class ChallengeResolver extends DamagingActionProcessor {
                 // recycle the card
 
                 log.debug(String.format("%s has to recycle their %s card.", challengedPlayer.getMyName(), challengedCard));
-                playerInfoState.cardsInHand.remove(challengedCard);
+                playerInfoState.removeCard(challengedCard);
                 context.getDeck().putCard(challengedCard);
                 context.getDeck().shuffleDeck();
-                playerInfoState.cardsInHand.add(context.getDeck().takeCard());
+                playerInfoState.addCard(context.getDeck().takeCard());
 
                 return false;
             }

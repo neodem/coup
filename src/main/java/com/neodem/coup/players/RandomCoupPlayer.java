@@ -1,5 +1,7 @@
 package com.neodem.coup.players;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import com.neodem.bandaid.game.BasePlayer;
 import com.neodem.bandaid.game.GameContext;
 import com.neodem.bandaid.game.Player;
@@ -12,8 +14,6 @@ import com.neodem.coup.util.DisplayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -96,8 +96,10 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
      * @param cards the given cards to select from
      * @return the return cards
      */
-    public Collection<CoupCard> exchangeCards(Collection<CoupCard> cards) {
-        Collection<CoupCard> returnedCards = new HashSet<>(2);
+    public Multiset<CoupCard> exchangeCards(Multiset<CoupCard> cards) {
+        //TODO deal with 1 card situation
+
+        Multiset<CoupCard> returnedCards = HashMultiset.create();
 
         Iterator<CoupCard> i = cards.iterator();
         returnedCards.add(i.next());

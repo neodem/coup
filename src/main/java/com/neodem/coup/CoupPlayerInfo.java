@@ -14,9 +14,9 @@ public class CoupPlayerInfo {
     public void addUpCard(CoupCard card) {
         if (cardOne == CoupCard.Unknown) {
             cardOne = card;
+        } else {
+            cardTwo = card;
         }
-
-        cardTwo = card;
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.neodem.coup.serverside;
 
 import com.neodem.coup.cards.CoupDeck;
 import com.neodem.coup.players.CoupPlayer;
-import org.apache.commons.collections.bag.HashBag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,9 +43,8 @@ public class ServerSideGameContext {
         PlayerInfoState info = new PlayerInfoState();
 
         info.coins = 2;
-        info.cardsInHand = new HashBag();
-        info.cardsInHand.add(deck.takeCard());
-        info.cardsInHand.add(deck.takeCard());
+        info.card1 = deck.takeCard();
+        info.card2 = deck.takeCard();
         info.active = true;
         info.name = p.getMyName();
 
