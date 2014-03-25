@@ -13,12 +13,7 @@ public class DisplayUtils {
         StringBuilder b = new StringBuilder();
         b.append(doneBy.getMyName());
         b.append(" is doing ");
-        b.append(a.getActionType());
-
-        if (a.getActionOn() != null) {
-            b.append(" on ");
-            b.append(a.getActionOn());
-        }
+        b.append(a);
 
         return b.toString();
     }

@@ -18,22 +18,41 @@ public interface CoupPlayer extends Player<CoupAction> {
     /**
      * Called to ask the player if they want to counter the current action
      *
-     * @param player    the player who initiated the action
-     * @param hisAction the action initiated
+     * @param theAction the action initiated
+     * @param thePlayer the player who initiated the action
      * @param gc        the current game context
-     * @return true if the payer wants to counter the current action
+     * @return true if the player wants to counter the current action
      */
-    public boolean counterAction(CoupPlayer player, CoupAction hisAction, GameContext gc);
+    public boolean doYouWantToCounterThisAction(CoupAction theAction, CoupPlayer thePlayer, GameContext gc);
 
     /**
      * Called to ask the player if they want to challenge the current action
      *
-     * @param player    the player who initiated the action
-     * @param hisAction the action initiated
+     * @param theAction the action initiated
+     * @param thePlayer the player who initiated the action
      * @param gc        the current game context
-     * @return true if the payer wants to challenge the current action
+     * @return true if the player wants to challenge the current action
      */
-    public boolean challengeAction(CoupPlayer player, CoupAction hisAction, GameContext gc);
+    public boolean doYouWantToChallengeThisAction(CoupAction theAction, CoupPlayer thePlayer, GameContext gc);
+
+    /**
+     * Called to ask the player if he/she wants to challenge the counter that is being played against them
+     *
+     * @param playerCountering the player countering
+     * @return true if the player wants to challenge this counter
+     */
+    public boolean doYouWantToChallengeThisCounter(CoupPlayer playerCountering);
+
+    /**
+     * this is called when a player is challenged. the CGM is asking the player if they would like to
+     * prove they have the card. If you return false you will loose the challenge. If you return true
+     * the CGM will determine if you have the card. If you do, you win the challenge. If not you will
+     * loose the challenge.
+     *
+     * @param challengedCard the card you are being asked to prove you have
+     * @return weather you want to prove you have the card
+     */
+    public boolean doYouWantToProveYouHaveThisCard(CoupCard challengedCard);
 
     /**
      * this is used in the Exchange action. If the player elects an exchange, the CoupGameMaster
@@ -45,17 +64,6 @@ public interface CoupPlayer extends Player<CoupAction> {
      * @return the cards they are returning to the deck
      */
     public Collection<CoupCard> exchangeCards(Collection<CoupCard> cards);
-
-    /**
-     * this is used when a player is challenged. the CGM is asking the player if they would like to
-     * prove they have the card. If you return false you will loose the challenge. If you return true
-     * the CGM will determine if you have the card. If you do, you win the challenge. If not you will
-     * loose the challenge.
-     *
-     * @param challengedAction the action that you initiated that is being challenged
-     * @return weather you want to prove you have the card
-     */
-    public boolean proveYouHaveCorrectCard(CoupAction challengedAction);
 
     /**
      * the CGM is telling you that you've lost an influence. You need to choose
@@ -72,6 +80,5 @@ public interface CoupPlayer extends Player<CoupAction> {
      * @param currentState the current state of your hand/coins
      */
     public void updateInfo(CoupPlayerInfo currentState);
-
 }
 

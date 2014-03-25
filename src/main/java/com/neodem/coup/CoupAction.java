@@ -25,10 +25,8 @@ public class CoupAction extends Action {
         this.actionType = actionType;
     }
 
-    public static boolean validPlayableAction(ActionType actionType) {
-        return actionType != ActionType.NoAction &&
-                actionType != ActionType.Challenge &&
-                actionType != ActionType.Counter;
+    public static boolean isValidPlayableAction(ActionType actionType) {
+        return actionType != ActionType.NoAction;
     }
 
     @Override
@@ -46,7 +44,10 @@ public class CoupAction extends Action {
 
     @Override
     public String toString() {
-        return actionType.toString();
+        if (actionOn == null)
+            return actionType.toString();
+
+        return actionType.toString() + " on " + actionOn.getMyName();
     }
 
     /**
@@ -120,7 +121,7 @@ public class CoupAction extends Action {
         Exchange,
         Steal,
 
-        NoAction, Challenge, Counter
+        NoAction
     }
 
 }

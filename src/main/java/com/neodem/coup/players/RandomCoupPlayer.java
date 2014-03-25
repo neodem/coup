@@ -41,7 +41,7 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
     }
 
     @Override
-    public boolean counterAction(CoupPlayer actingPlayer, CoupAction hisAction, GameContext gc) {
+    public boolean doYouWantToCounterThisAction(CoupAction hisAction, CoupPlayer actingPlayer, GameContext gc) {
         int rand = r.nextInt(100);
 
         if (rand < 40) {
@@ -56,7 +56,7 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
     }
 
     @Override
-    public boolean challengeAction(CoupPlayer actingPlayer, CoupAction hisAction, GameContext gc) {
+    public boolean doYouWantToChallengeThisAction(CoupAction hisAction, CoupPlayer actingPlayer, GameContext gc) {
         int rand = r.nextInt(100);
 
         if (rand < 20) {
@@ -68,6 +68,26 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
         String msg = String.format("%s : %s, and I'm not Challenging him", myName, DisplayUtils.formatAction(hisAction, actingPlayer));
         log.debug(msg);
         return false;
+    }
+
+    @Override
+    public boolean doYouWantToChallengeThisCounter(CoupPlayer playerCountering) {
+        int rand = r.nextInt(100);
+
+        if (rand < 70) {
+            String msg = String.format("%s : %s is trying to counter me, and I'm Challenging Them!", myName, playerCountering.getMyName());
+            log.debug(msg);
+            return true;
+        }
+
+        String msg = String.format("%s : %s is trying to counter me, and I'm not going to challenge them.", myName, playerCountering.getMyName());
+        log.debug(msg);
+        return false;
+    }
+
+    @Override
+    public boolean doYouWantToProveYouHaveThisCard(CoupCard challengedCard) {
+        return r.nextBoolean();
     }
 
     /**
@@ -84,11 +104,6 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
         returnedCards.add(i.next());
 
         return returnedCards;
-    }
-
-    @Override
-    public boolean proveYouHaveCorrectCard(CoupAction challengedAction) {
-        return r.nextBoolean();
     }
 
     @Override
@@ -109,7 +124,7 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
     @Override
     public CoupAction yourTurn(GameContext gc) {
         getLog().debug(myName + " : my turn");
-        getLog().debug(gc);
+        //getLog().debug(gc);
 
         CoupPlayer actionOn = null;
         ActionType actionType = ActionType.values()[r.nextInt(ActionType.values().length)];
@@ -119,7 +134,10 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
             actionOn = Lists.getRandomElement(players, this);
         }
 
-        return new CoupAction(actionOn, actionType);
+        CoupAction action = new CoupAction(actionOn, actionType);
+        getLog().debug("I will try : " + action);
+
+        return action;
     }
 
     @Override

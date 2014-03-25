@@ -7,11 +7,13 @@ import com.neodem.coup.CoupAction;
 import com.neodem.coup.CoupGameContext;
 import com.neodem.coup.PlayerError;
 import com.neodem.coup.players.CoupPlayer;
+import com.neodem.coup.serverside.actionProcessors.AssasinationProcessor;
 import com.neodem.coup.serverside.actionProcessors.ChallengeResolver;
 import com.neodem.coup.serverside.actionProcessors.CounterResolver;
 import com.neodem.coup.serverside.actionProcessors.CoupActionProcessor;
 import com.neodem.coup.serverside.actionProcessors.ExchangeActionProcessor;
 import com.neodem.coup.serverside.actionProcessors.StealActionProcessor;
+import com.neodem.coup.util.DisplayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -24,13 +26,13 @@ import java.util.List;
 public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
     private static Log log = LogFactory.getLog(CoupGameMaster.class.getName());
-
     private ServerSideGameContext context;
     private ExchangeActionProcessor exchangeActionProcessor;
     private StealActionProcessor stealActionProcessor;
     private CoupActionProcessor coupActionProcessor;
     private ChallengeResolver challengeResolver;
     private CounterResolver counterResolver;
+    private AssasinationProcessor assasianationProcessor;
 
     public CoupGameMaster() {
         super(4);
@@ -50,7 +52,8 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         stealActionProcessor = new StealActionProcessor(context);
         coupActionProcessor = new CoupActionProcessor(context);
         challengeResolver = new ChallengeResolver(context);
-        counterResolver = new CounterResolver(context);
+        counterResolver = new CounterResolver(context, challengeResolver);
+        assasianationProcessor = new AssasinationProcessor(context);
 
         updatePlayers();
     }
@@ -79,6 +82,8 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         boolean noWinner = true;
         while (noWinner) {
             for (CoupPlayer currentPlayer : registeredPlayers) {
+                getLog().info("It is " + currentPlayer.getMyName() + "'s turn");
+
                 PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
 
                 if (currentPlayerInfo.active) {
@@ -95,6 +100,8 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
                         noWinner = false;
                         break;
                     }
+                } else {
+                    getLog().info(currentPlayer.getMyName() + " is not active.");
                 }
             }
         }
@@ -109,46 +116,58 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
      * @return true if the action succeeds or false if the action is over (challenged or countered)
      */
     private boolean alertOtherPlayers(CoupPlayer currentPlayer, CoupAction currentAction) {
+        getLog().debug("alertOtherPlayers()");
 
         // get a list of the players starting with the person taking the turn
         List<CoupPlayer> orderedPlayers = Lists.reorder(registeredPlayers, currentPlayer);
 
         // let all players know of the action
+        getLog().debug("alerting other players of the action...");
         for (CoupPlayer op : orderedPlayers) {
             if (op == currentPlayer) continue;
             op.actionHappened(currentPlayer, currentAction, generateCurrentGameContext());
         }
 
         // go to each one in turn and see if they want to challenge or counter it
+        getLog().debug("determining counter/challenge");
         for (CoupPlayer op : orderedPlayers) {
             if (op == currentPlayer) continue;
 
             if (currentAction.isChallengeable()) {
-                if (op.challengeAction(currentPlayer, currentAction, generateCurrentGameContext())) {
-                    if (challengeResolver.resolveChallenge(currentPlayer, op, currentAction)) {
+                if (op.doYouWantToChallengeThisAction(currentAction, currentPlayer, generateCurrentGameContext())) {
+                    if (challengeResolver.resolveChallenge(op, currentPlayer, currentAction.getActionCard())) {
                         // if we are here, the challenge succeeded, thus the action failed
+                        getLog().info("Action Failed.");
                         return false;
                     }
                 }
+            } else {
+                getLog().debug(currentAction + " is not Challengeable");
             }
 
             if (currentAction.isCounterable()) {
-                if (op.counterAction(currentPlayer, currentAction, generateCurrentGameContext())) {
+                if (op.doYouWantToCounterThisAction(currentAction, currentPlayer, generateCurrentGameContext())) {
                     // resolve challenge
                     if (counterResolver.resolveCounter(currentPlayer, op, currentAction)) {
                         // if we are here, the counter succeeded, thus the action was blocked/failed
+                        getLog().info("Action Failed.");
                         return false;
                     }
                 }
+            } else {
+                getLog().debug(currentAction + " is not Counterable");
             }
         }
 
+        getLog().info("Action succeeds.");
         return true;
     }
 
     private CoupAction getValidCoupAction(CoupPlayer p, PlayerInfoState info) {
 
         CoupAction a = p.yourTurn(generateCurrentGameContext());
+
+        getLog().info(DisplayUtils.formatAction(a, p));
 
         try {
             validateAction(info, a);
@@ -192,17 +211,21 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
     private void validateAction(PlayerInfoState info, CoupAction a) throws PlayerError {
         if ((info.coins >= 10) && a.getActionType() != CoupAction.ActionType.Coup) {
-            // error
-            throw new PlayerError("You need to Coup. You have 10 or more coins");
+            String msg = "Player has more than 10 coins and they need to Coup someone. Yet they didn't";
+            getLog().error(msg);
+            throw new PlayerError(msg);
         }
 
         if (info.coins < 7 && a.getActionType() == CoupAction.ActionType.Coup) {
-            // not enough money
-            throw new PlayerError("Player doesn't have enough coins to Coup : " + info.coins);
+            String msg = "Player has attempted a Coup but they only have " + info.coins + " coins (they need 7).";
+            getLog().error(msg);
+            throw new PlayerError(msg);
         }
 
-        if (!CoupAction.validPlayableAction(a.getActionType())) {
-            throw new PlayerError("You need to perform a valid action on your turn");
+        if (!CoupAction.isValidPlayableAction(a.getActionType())) {
+            String msg = "Player has attempted an non playable action : " + a.getActionType();
+            getLog().error(msg);
+            throw new PlayerError(msg);
         }
     }
 
@@ -214,18 +237,22 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
     private void processAction(CoupPlayer actingPlayer, PlayerInfoState actingPlayerInfo, CoupAction currentAction) {
         switch (currentAction.getActionType()) {
             case Income:
+                getLog().info(actingPlayer + " gets one coin");
                 actingPlayerInfo.addCoin();
                 break;
             case ForeignAid:
+                getLog().info(actingPlayer + " gets two coins");
                 actingPlayerInfo.addCoins(2);
                 break;
             case Coup:
                 coupActionProcessor.handleCoup(actingPlayer);
                 break;
             case Tax:
+                getLog().info(actingPlayer + " gets two coins");
                 actingPlayerInfo.addCoins(2);
                 break;
             case Assassinate:
+                assasianationProcessor.handleAssasinate(actingPlayer, currentAction);
                 break;
             case Steal:
                 stealActionProcessor.handleSteal(actingPlayer, currentAction);
