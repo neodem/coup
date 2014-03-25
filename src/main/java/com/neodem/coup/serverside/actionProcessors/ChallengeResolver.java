@@ -27,6 +27,7 @@ public class ChallengeResolver {
      * @return true if the challenge was successful, false otherwise
      */
     public boolean resolveChallenge(CoupPlayer actingPlayer, CoupPlayer challengingPlayer, CoupAction challengedAction) {
+        log.debug("resolveChallenge()");
 
         // 1) acting player can decide to prove they have the card
         if (actingPlayer.proveYouHaveCorrectCard(challengedAction)) {

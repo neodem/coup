@@ -8,6 +8,7 @@ import com.neodem.coup.CoupAction;
 import com.neodem.coup.CoupAction.ActionType;
 import com.neodem.coup.CoupPlayerInfo;
 import com.neodem.coup.cards.CoupCard;
+import com.neodem.coup.util.DisplayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,12 +45,12 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
         int rand = r.nextInt(100);
 
         if (rand < 40) {
-            String msg = String.format("%s : %s played %s on %s, and I'm Countering Them!", myName, actingPlayer, hisAction, hisAction.getActionOn());
+            String msg = String.format("%s : %s, and I'm Countering Them!", myName, DisplayUtils.formatAction(hisAction, actingPlayer));
             log.debug(msg);
             return true;
         }
 
-        String msg = String.format("%s : %s played %s on %s, and I'm not Countering her.", myName, actingPlayer, hisAction, hisAction.getActionOn());
+        String msg = String.format("%s : %s, and I'm not Countering her.", myName, DisplayUtils.formatAction(hisAction, actingPlayer));
         log.debug(msg);
         return false;
     }
@@ -59,12 +60,12 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
         int rand = r.nextInt(100);
 
         if (rand < 20) {
-            String msg = String.format("%s : %s played %s on %s, and I'm Challenging Them!", myName, actingPlayer, hisAction, hisAction.getActionOn());
+            String msg = String.format("%s : %s, and I'm Challenging Them!", myName, DisplayUtils.formatAction(hisAction, actingPlayer));
             log.debug(msg);
             return true;
         }
 
-        String msg = String.format("%s : %s played %s on %s, and I'm not Challenging him", myName, actingPlayer, hisAction, hisAction.getActionOn());
+        String msg = String.format("%s : %s, and I'm not Challenging him", myName, DisplayUtils.formatAction(hisAction, actingPlayer));
         log.debug(msg);
         return false;
     }
@@ -123,7 +124,7 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
 
     @Override
     public void actionHappened(Player player, CoupAction hisAction, GameContext gc) {
-        String msg = String.format("%s : %s played %s on %s", myName, player, hisAction, hisAction.getActionOn());
+        String msg = String.format("%s : %s", myName, DisplayUtils.formatAction(hisAction, player));
         getLog().debug(msg);
     }
 
