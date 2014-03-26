@@ -137,7 +137,7 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
         }
 
         CoupAction action = new CoupAction(actionOn, actionType);
-        getLog().debug("I will try : " + action);
+        getLog().debug(myName + " : I will try : " + action);
 
         return action;
     }
@@ -150,6 +150,6 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
 
     @Override
     public void tryAgain(String reason) {
-        getLog().info("have to try again :" + reason);
+        getLog().info(String.format("%s : I have to try again because : %s", myName, reason));
     }
 }

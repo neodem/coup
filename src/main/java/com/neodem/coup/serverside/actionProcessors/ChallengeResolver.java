@@ -41,7 +41,7 @@ public class ChallengeResolver extends DamagingActionProcessor {
             PlayerInfoState playerInfoState = context.getPlayerInfo(challengedPlayer);
 
             if (playerInfoState.hasCard(challengedCard)) {
-                log.debug(String.format("%s has the %s card. Challenge failed :(", challengedPlayer.getMyName(), challengedCard));
+                log.debug(String.format("%s does indeed have the %s card. Challenge failed :(", challengedPlayer.getMyName(), challengedCard));
 
                 processLoss(challengingPlayer);
 

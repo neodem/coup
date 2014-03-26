@@ -28,7 +28,7 @@ public abstract class DamagingActionProcessor {
             card = loser.looseAnInfluence();
         } while (!playerInfoState.validInfluence(card));
 
-        getLog().info(loser.getMyName() + " turns over the " + card + " card.");
+        getLog().info(loser.getMyName() + " turns over their " + card + " card.");
         playerInfoState.turnFaceUp(card);
     }
 }

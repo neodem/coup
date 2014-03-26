@@ -82,8 +82,8 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         boolean noWinner = true;
         while (noWinner) {
             for (CoupPlayer currentPlayer : registeredPlayers) {
-                getLog().info("It is " + currentPlayer.getMyName() + "'s turn");
                 getLog().info(generateCurrentGameContext());
+                getLog().info("It is " + currentPlayer.getMyName() + "'s turn");
 
                 PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
 
@@ -140,6 +140,9 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
                         // if we are here, the challenge succeeded, thus the action failed
                         getLog().info("Action Failed.");
                         return false;
+                    } else {
+                        // no more challenges (?? is this a rule?)
+                        break;
                     }
                 }
             }
@@ -158,9 +161,11 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
                         // if we are here, the counter succeeded, thus the action was blocked/failed
                         getLog().info("Action Failed.");
                         return false;
+                    } else {
+                        // no more counters (?? is this a rule?)
+                        break;
                     }
                 }
-
             }
         } else {
             getLog().debug(currentAction + " is not Counterable");
