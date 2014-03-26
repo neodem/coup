@@ -3,6 +3,7 @@ package com.neodem.coup.common;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Map;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class CoupGameContext {
+public class CoupGameContext implements Serializable {
 
     private static Log log = LogFactory.getLog(CoupGameContext.class.getName());
     public Map<CoupPlayer, CoupPlayerInfo> playerInfos = new HashMap<>();
@@ -33,6 +34,26 @@ public class CoupGameContext {
 
     public List<CoupPlayer> getPlayers() {
         return players;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CoupGameContext)) return false;
+
+        CoupGameContext that = (CoupGameContext) o;
+
+        if (playerInfos != null ? !playerInfos.equals(that.playerInfos) : that.playerInfos != null) return false;
+        if (players != null ? !players.equals(that.players) : that.players != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = playerInfos != null ? playerInfos.hashCode() : 0;
+        result = 31 * result + (players != null ? players.hashCode() : 0);
+        return result;
     }
 
     @Override

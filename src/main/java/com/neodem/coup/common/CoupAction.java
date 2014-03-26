@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import static com.neodem.coup.common.CoupCardType.Ambassador;
@@ -16,12 +17,32 @@ import static com.neodem.coup.common.CoupCardType.Duke;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 2/28/14
  */
-public class CoupAction {
+public class CoupAction implements Serializable {
 
     public static CoupAction NoAction = new CoupAction(null, ActionType.NoAction);
     private static Log log = LogFactory.getLog(CoupAction.class.getName());
     private ActionType actionType;
     private CoupPlayer actionOn;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CoupAction)) return false;
+
+        CoupAction that = (CoupAction) o;
+
+        if (actionOn != null ? !actionOn.equals(that.actionOn) : that.actionOn != null) return false;
+        if (actionType != that.actionType) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = actionType != null ? actionType.hashCode() : 0;
+        result = 31 * result + (actionOn != null ? actionOn.hashCode() : 0);
+        return result;
+    }
 
     public CoupAction(CoupPlayer actionOn, ActionType actionType) {
         this.actionOn = actionOn;

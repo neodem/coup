@@ -1,10 +1,12 @@
 package com.neodem.coup.common;
 
+import java.io.Serializable;
+
 /**
  * Author: vfumo
  * Date: 2/28/14
  */
-public class CoupCard {
+public class CoupCard implements Serializable {
 
     public CoupCardType type = CoupCardType.Unknown;
     public boolean faceUp = false;

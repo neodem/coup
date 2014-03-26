@@ -1,10 +1,12 @@
 package com.neodem.coup.common;
 
+import java.io.Serializable;
+
 /**
  * Author: vfumo
  * Date: 2/28/14
  */
-public class CoupPlayerInfo {
+public class CoupPlayerInfo implements Serializable {
     public boolean active = true;
     public int coins = 0;
     public CoupCard cardOne = new CoupCard(CoupCardType.Unknown);
@@ -16,6 +18,30 @@ public class CoupPlayerInfo {
         } else {
             cardTwo = card;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CoupPlayerInfo)) return false;
+
+        CoupPlayerInfo that = (CoupPlayerInfo) o;
+
+        if (active != that.active) return false;
+        if (coins != that.coins) return false;
+        if (cardOne != null ? !cardOne.equals(that.cardOne) : that.cardOne != null) return false;
+        if (cardTwo != null ? !cardTwo.equals(that.cardTwo) : that.cardTwo != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (active ? 1 : 0);
+        result = 31 * result + coins;
+        result = 31 * result + (cardOne != null ? cardOne.hashCode() : 0);
+        result = 31 * result + (cardTwo != null ? cardTwo.hashCode() : 0);
+        return result;
     }
 
     @Override
