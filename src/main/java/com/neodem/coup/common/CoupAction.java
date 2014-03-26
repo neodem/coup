@@ -1,19 +1,17 @@
-package com.neodem.coup;
+package com.neodem.coup.common;
 
 import com.google.common.collect.Sets;
 import com.neodem.bandaid.game.Action;
-import com.neodem.coup.cards.CoupCardType;
-import com.neodem.coup.players.CoupPlayer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
 
-import static com.neodem.coup.cards.CoupCardType.Ambassador;
-import static com.neodem.coup.cards.CoupCardType.Assasin;
-import static com.neodem.coup.cards.CoupCardType.Captain;
-import static com.neodem.coup.cards.CoupCardType.Contessa;
-import static com.neodem.coup.cards.CoupCardType.Duke;
+import static com.neodem.coup.common.CoupCardType.Ambassador;
+import static com.neodem.coup.common.CoupCardType.Assasin;
+import static com.neodem.coup.common.CoupCardType.Captain;
+import static com.neodem.coup.common.CoupCardType.Contessa;
+import static com.neodem.coup.common.CoupCardType.Duke;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com

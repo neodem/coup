@@ -1,7 +1,6 @@
-package com.neodem.coup.util;
+package com.neodem.coup.common;
 
 import com.neodem.bandaid.game.Player;
-import com.neodem.coup.CoupAction;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com

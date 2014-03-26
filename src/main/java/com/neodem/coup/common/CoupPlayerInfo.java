@@ -1,7 +1,4 @@
-package com.neodem.coup;
-
-import com.neodem.coup.cards.CoupCard;
-import com.neodem.coup.cards.CoupCardType;
+package com.neodem.coup.common;
 
 /**
  * Author: vfumo

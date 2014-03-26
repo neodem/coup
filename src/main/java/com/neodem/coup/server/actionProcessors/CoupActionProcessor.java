@@ -1,7 +1,7 @@
-package com.neodem.coup.serverside.actionProcessors;
+package com.neodem.coup.server.actionProcessors;
 
-import com.neodem.coup.players.CoupPlayer;
-import com.neodem.coup.serverside.ServerSideGameContext;
+import com.neodem.coup.common.CoupPlayer;
+import com.neodem.coup.server.ServerSideGameContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

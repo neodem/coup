@@ -1,4 +1,4 @@
-package com.neodem.coup.players;
+package com.neodem.coup.client;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -6,12 +6,13 @@ import com.neodem.bandaid.game.BasePlayer;
 import com.neodem.bandaid.game.GameContext;
 import com.neodem.bandaid.game.Player;
 import com.neodem.common.utility.collections.Lists;
-import com.neodem.coup.CoupAction;
-import com.neodem.coup.CoupAction.ActionType;
-import com.neodem.coup.CoupPlayerInfo;
-import com.neodem.coup.cards.CoupCard;
-import com.neodem.coup.cards.CoupCardType;
-import com.neodem.coup.util.DisplayUtils;
+import com.neodem.coup.common.CoupAction;
+import com.neodem.coup.common.CoupAction.ActionType;
+import com.neodem.coup.common.CoupCard;
+import com.neodem.coup.common.CoupCardType;
+import com.neodem.coup.common.CoupPlayer;
+import com.neodem.coup.common.CoupPlayerInfo;
+import com.neodem.coup.common.DisplayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -19,9 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import static com.neodem.coup.CoupAction.ActionType.Assassinate;
-import static com.neodem.coup.CoupAction.ActionType.Coup;
-import static com.neodem.coup.CoupAction.ActionType.Steal;
+import static com.neodem.coup.common.CoupAction.ActionType.Assassinate;
+import static com.neodem.coup.common.CoupAction.ActionType.Coup;
+import static com.neodem.coup.common.CoupAction.ActionType.Steal;
 
 /**
  * Author: vfumo

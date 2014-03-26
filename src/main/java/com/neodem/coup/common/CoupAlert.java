@@ -1,4 +1,4 @@
-package com.neodem.coup;
+package com.neodem.coup.common;
 
 import com.neodem.bandaid.game.Alert;
 import org.apache.commons.logging.Log;

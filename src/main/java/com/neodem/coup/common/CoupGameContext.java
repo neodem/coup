@@ -1,7 +1,6 @@
-package com.neodem.coup;
+package com.neodem.coup.common;
 
 import com.neodem.bandaid.game.GameContext;
-import com.neodem.coup.players.CoupPlayer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

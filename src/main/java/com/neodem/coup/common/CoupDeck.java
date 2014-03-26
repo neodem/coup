@@ -1,15 +1,15 @@
-package com.neodem.coup.cards;
+package com.neodem.coup.common;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static com.neodem.coup.cards.CoupCardType.Ambassador;
-import static com.neodem.coup.cards.CoupCardType.Assasin;
-import static com.neodem.coup.cards.CoupCardType.Captain;
-import static com.neodem.coup.cards.CoupCardType.Contessa;
-import static com.neodem.coup.cards.CoupCardType.Duke;
+import static com.neodem.coup.common.CoupCardType.Ambassador;
+import static com.neodem.coup.common.CoupCardType.Assasin;
+import static com.neodem.coup.common.CoupCardType.Captain;
+import static com.neodem.coup.common.CoupCardType.Contessa;
+import static com.neodem.coup.common.CoupCardType.Duke;
 
 /**
  * Author: vfumo

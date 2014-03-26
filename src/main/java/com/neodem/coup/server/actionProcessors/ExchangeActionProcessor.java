@@ -1,12 +1,12 @@
-package com.neodem.coup.serverside.actionProcessors;
+package com.neodem.coup.server.actionProcessors;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
-import com.neodem.coup.cards.CoupCard;
-import com.neodem.coup.players.CoupPlayer;
-import com.neodem.coup.serverside.PlayerInfoState;
-import com.neodem.coup.serverside.ServerSideGameContext;
+import com.neodem.coup.common.CoupCard;
+import com.neodem.coup.common.CoupPlayer;
+import com.neodem.coup.server.PlayerInfoState;
+import com.neodem.coup.server.ServerSideGameContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

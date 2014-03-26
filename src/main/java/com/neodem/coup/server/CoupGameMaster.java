@@ -1,19 +1,19 @@
-package com.neodem.coup.serverside;
+package com.neodem.coup.server;
 
 import com.neodem.bandaid.game.BaseGameMaster;
 import com.neodem.bandaid.game.GameContext;
 import com.neodem.common.utility.collections.Lists;
-import com.neodem.coup.CoupAction;
-import com.neodem.coup.CoupGameContext;
-import com.neodem.coup.PlayerError;
-import com.neodem.coup.players.CoupPlayer;
-import com.neodem.coup.serverside.actionProcessors.AssasinationProcessor;
-import com.neodem.coup.serverside.actionProcessors.ChallengeResolver;
-import com.neodem.coup.serverside.actionProcessors.CounterResolver;
-import com.neodem.coup.serverside.actionProcessors.CoupActionProcessor;
-import com.neodem.coup.serverside.actionProcessors.ExchangeActionProcessor;
-import com.neodem.coup.serverside.actionProcessors.StealActionProcessor;
-import com.neodem.coup.util.DisplayUtils;
+import com.neodem.coup.common.CoupAction;
+import com.neodem.coup.common.CoupGameContext;
+import com.neodem.coup.common.CoupPlayer;
+import com.neodem.coup.common.DisplayUtils;
+import com.neodem.coup.common.PlayerError;
+import com.neodem.coup.server.actionProcessors.AssasinationProcessor;
+import com.neodem.coup.server.actionProcessors.ChallengeResolver;
+import com.neodem.coup.server.actionProcessors.CounterResolver;
+import com.neodem.coup.server.actionProcessors.CoupActionProcessor;
+import com.neodem.coup.server.actionProcessors.ExchangeActionProcessor;
+import com.neodem.coup.server.actionProcessors.StealActionProcessor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

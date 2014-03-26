@@ -1,7 +1,7 @@
-package com.neodem.coup.serverside;
+package com.neodem.coup.server;
 
-import com.neodem.coup.cards.CoupDeck;
-import com.neodem.coup.players.CoupPlayer;
+import com.neodem.coup.common.CoupDeck;
+import com.neodem.coup.common.CoupPlayer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

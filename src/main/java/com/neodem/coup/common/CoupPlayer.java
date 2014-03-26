@@ -1,12 +1,8 @@
-package com.neodem.coup.players;
+package com.neodem.coup.common;
 
 import com.google.common.collect.Multiset;
 import com.neodem.bandaid.game.GameContext;
 import com.neodem.bandaid.game.Player;
-import com.neodem.coup.CoupAction;
-import com.neodem.coup.CoupPlayerInfo;
-import com.neodem.coup.cards.CoupCard;
-import com.neodem.coup.cards.CoupCardType;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com

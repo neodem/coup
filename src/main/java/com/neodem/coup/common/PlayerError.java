@@ -1,4 +1,4 @@
-package com.neodem.coup;
+package com.neodem.coup.common;
 
 /**
  * Created with IntelliJ IDEA.

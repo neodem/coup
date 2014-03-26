@@ -1,19 +1,19 @@
-package com.neodem.coup.serverside.actionProcessors;
+package com.neodem.coup.server.actionProcessors;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import com.neodem.coup.cards.CoupCard;
-import com.neodem.coup.players.CoupPlayer;
-import com.neodem.coup.serverside.ServerSideGameContext;
+import com.neodem.coup.common.CoupCard;
+import com.neodem.coup.common.CoupPlayer;
+import com.neodem.coup.server.ServerSideGameContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.neodem.coup.cards.CoupCardType.Ambassador;
-import static com.neodem.coup.cards.CoupCardType.Assasin;
-import static com.neodem.coup.cards.CoupCardType.Captain;
-import static com.neodem.coup.cards.CoupCardType.Contessa;
-import static com.neodem.coup.cards.CoupCardType.Duke;
+import static com.neodem.coup.common.CoupCardType.Ambassador;
+import static com.neodem.coup.common.CoupCardType.Assasin;
+import static com.neodem.coup.common.CoupCardType.Captain;
+import static com.neodem.coup.common.CoupCardType.Contessa;
+import static com.neodem.coup.common.CoupCardType.Duke;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
