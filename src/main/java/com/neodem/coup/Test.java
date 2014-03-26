@@ -1,6 +1,7 @@
 package com.neodem.coup;
 
-import com.neodem.bandaid.game.GameMaster;
+import com.neodem.coup.client.RandomCoupPlayer;
+import com.neodem.coup.common.CoupPlayer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -18,9 +19,21 @@ public class Test {
         System.out.println(springContextFile);
         ApplicationContext context = new ClassPathXmlApplicationContext(springContextFile);
 
-        GameMaster gm = (GameMaster) context.getBean("coupGameMaster");
+        CoupServer s = (CoupServer) context.getBean("coupServer");
 
-        gm.startGame();
+        CoupPlayer p1 = new RandomCoupPlayer("player1");
+        s.registerPlayer(p1);
+
+        CoupPlayer p2 = new RandomCoupPlayer("player2");
+        s.registerPlayer(p2);
+
+        CoupPlayer p3 = new RandomCoupPlayer("player3");
+        s.registerPlayer(p3);
+
+        CoupPlayer p4 = new RandomCoupPlayer("player4");
+        s.registerPlayer(p4);
+
+        s.triggerGameStart();
     }
 
 }

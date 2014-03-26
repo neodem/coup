@@ -33,13 +33,13 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
     private CoupPlayerInfo myState = null;
     private Random r = new Random(System.currentTimeMillis());
 
-    @Override
-    protected Log getLog() {
-        return log;
+    public RandomCoupPlayer(String name) {
+        super(name);
     }
 
     @Override
-    protected void initializePlayer(GameContext g) {
+    protected Log getLog() {
+        return log;
     }
 
     @Override

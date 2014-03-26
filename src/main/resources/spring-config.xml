@@ -8,21 +8,9 @@
 
     </bean>
 
+    <bean id="coupServer" class="com.neodem.coup.RmiCoupServer">
+        <property name="coupGameMaster" ref="coupGameMaster"/>
+    </bean>
 
-    <bean id="player1" class="com.neodem.coup.client.RandomCoupPlayer" init-method="startPlayer">
-        <property name="myName" value="player1"/>
-        <property name="gameMaster" ref="coupGameMaster"/>
-    </bean>
-    <bean id="player2" class="com.neodem.coup.client.RandomCoupPlayer" init-method="startPlayer">
-        <property name="myName" value="player2"/>
-        <property name="gameMaster" ref="coupGameMaster"/>
-    </bean>
-    <bean id="player3" class="com.neodem.coup.client.RandomCoupPlayer" init-method="startPlayer">
-        <property name="myName" value="player3"/>
-        <property name="gameMaster" ref="coupGameMaster"/>
-    </bean>
-    <bean id="player4" class="com.neodem.coup.client.RandomCoupPlayer" init-method="startPlayer">
-        <property name="myName" value="player4"/>
-        <property name="gameMaster" ref="coupGameMaster"/>
-    </bean>
+
 </beans>
