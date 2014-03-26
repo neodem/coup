@@ -10,6 +10,8 @@ import com.neodem.coup.serverside.ServerSideGameContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.Iterator;
+
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/24/14
@@ -76,6 +78,17 @@ public class ExchangeActionProcessor {
     }
 
     protected boolean isReturnedCollectionOk(Multiset<CoupCard> handCards, Multiset<CoupCard> returnedCards) {
+        Iterator<CoupCard> i = returnedCards.iterator();
+        CoupCard card1 = i.next();
+        CoupCard card2 = i.next();
+        if (card1.equals(card2)) {
+            // this is a special case. We need to see if we have 2 of this card in the handCards set
+            if (handCards.count(card1) == 2) {
+                return true;
+            }
+            return false;
+        }
+
         Multiset<CoupCard> intersection = Multisets.intersection(handCards, returnedCards);
         if (intersection.equals(returnedCards)) {
             return true;

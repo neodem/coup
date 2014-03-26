@@ -35,8 +35,6 @@ public class ExchangeActionProcessorTest {
         context.addPlayer(mockPlayer);
 
         processor = new ExchangeActionProcessor(context);
-
-
     }
 
     @After
@@ -88,8 +86,21 @@ public class ExchangeActionProcessorTest {
         returnedCards.add(new CoupCard(Ambassador));
         returnedCards.add(new CoupCard(Ambassador));
 
-        assertThat(processor.isReturnedCollectionOk(handCards, returnedCards), is(true));
+        assertThat(processor.isReturnedCollectionOk(handCards, returnedCards), is(false));
     }
 
+    @Test
+    public void isReturnedCollectionOkShouldPassIfWeReturnDupsAndDupsAreIn() {
+        Multiset<CoupCard> handCards = HashMultiset.create();
+        handCards.add(new CoupCard(Ambassador));
+        handCards.add(new CoupCard(Ambassador));
+        handCards.add(new CoupCard(Assasin));
+        handCards.add(new CoupCard(Contessa));
 
+        Multiset<CoupCard> returnedCards = HashMultiset.create();
+        returnedCards.add(new CoupCard(Ambassador));
+        returnedCards.add(new CoupCard(Ambassador));
+
+        assertThat(processor.isReturnedCollectionOk(handCards, returnedCards), is(true));
+    }
 }
