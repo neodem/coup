@@ -10,6 +10,7 @@ import com.neodem.coup.CoupAction;
 import com.neodem.coup.CoupAction.ActionType;
 import com.neodem.coup.CoupPlayerInfo;
 import com.neodem.coup.cards.CoupCard;
+import com.neodem.coup.cards.CoupCardType;
 import com.neodem.coup.util.DisplayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -86,7 +87,7 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
     }
 
     @Override
-    public boolean doYouWantToProveYouHaveThisCard(CoupCard challengedCard) {
+    public boolean doYouWantToProveYouHaveACardOfThisType(CoupCardType challengedCard) {
         return r.nextBoolean();
     }
 

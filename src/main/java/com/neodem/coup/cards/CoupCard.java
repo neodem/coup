@@ -4,23 +4,27 @@ package com.neodem.coup.cards;
  * Author: vfumo
  * Date: 2/28/14
  */
-public enum CoupCard {
+public class CoupCard {
 
-    Captain,
-    Contessa,
-    Assasin,
-    Ambassador,
-    Duke,
-    Unknown;
-
+    public CoupCardType type;
     public boolean faceUp = false;
+
+    public CoupCard(CoupCardType type) {
+        this.type = type;
+        faceUp = false;
+    }
+
+    @Override
+    public String toString() {
+        return type.name();
+    }
 
     public String displayCard() {
 
         StringBuffer b = new StringBuffer();
 
         if (faceUp) {
-            b.append(name());
+            b.append(type.name());
         } else {
             b.append("(FACE DOWN)");
         }

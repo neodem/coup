@@ -2,9 +2,11 @@ package com.neodem.coup.serverside;
 
 import com.neodem.coup.CoupPlayerInfo;
 import com.neodem.coup.cards.CoupCard;
+import com.neodem.coup.cards.CoupCardType;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -39,6 +41,7 @@ public class PlayerInfoState {
      */
     public CoupPlayerInfo makePublicPlayerInfo() {
         CoupPlayerInfo pi = new CoupPlayerInfo();
+        pi.active = active;
         pi.coins = coins;
 
         if (card1.faceUp) pi.addUpCard(card1);
@@ -54,6 +57,7 @@ public class PlayerInfoState {
      */
     public CoupPlayerInfo makePrivatePlayerInfo() {
         CoupPlayerInfo cpi = new CoupPlayerInfo();
+        cpi.active = active;
         cpi.coins = coins;
 
         cpi.cardOne = card1;
@@ -66,8 +70,11 @@ public class PlayerInfoState {
      * @return true if this player has at least one card face down, false if otherwise
      */
     public boolean evaluateActive() {
+        if (!active) return false;
+
         if (!card1.faceUp) return true;
         if (!card2.faceUp) return true;
+
         return false;
     }
 
@@ -90,23 +97,22 @@ public class PlayerInfoState {
         coins = coins + i;
     }
 
-    public boolean handHasTwoOfTheSameCard() {
-        return card1.equals(card2);
-    }
+//    public boolean handHasTwoOfTheSameCard() {
+//        return card1.equals(card2);
+//    }
 
     /**
      * return the face up card the player has (if any)
      *
      * @return the face up card the player has (if any) or null if none
      */
-    public CoupCard getUpCard() {
-        if (card1.faceUp) return card1;
-        if (card2.faceUp) return card2;
-        return null;
-    }
-
-    public boolean hasCard(CoupCard card) {
-        return card1.equals(card) || card2.equals(card);
+//    public CoupCard getUpCard() {
+//        if (card1.faceUp) return card1;
+//        if (card2.faceUp) return card2;
+//        return null;
+//    }
+    public boolean hasCard(CoupCardType card) {
+        return card1.type.equals(card) || card2.type.equals(card);
     }
 
     /**
@@ -141,14 +147,49 @@ public class PlayerInfoState {
     }
 
     /**
+     * reset the hand to these cards
+     *
+     * @param newDownCards
+     */
+    public void setDownCards(Collection<CoupCard> newDownCards) {
+        if (newDownCards.size() != 2 && newDownCards.size() != 1)
+            throw new IllegalArgumentException("new down cards must be 1 or 2 cards");
+
+        Iterator<CoupCard> i = newDownCards.iterator();
+
+        if (newDownCards.size() == 1) {
+            if (card1.faceUp) card2 = i.next();
+            else if (card2.faceUp) card1 = i.next();
+            else
+                throw new IllegalArgumentException("There are 2 face down cards and only 1 in the new down cards collection");
+        } else {
+            if (card1.faceUp || card2.faceUp)
+                throw new IllegalArgumentException("There is at least 1 face up cards and 2 in the new down cards collection");
+
+            card1 = i.next();
+            card2 = i.next();
+        }
+    }
+
+    /**
      * if this card exists in the hand, remove it (set to null)
      *
      * @param card
      */
-    public void removeCard(CoupCard card) {
-        if (card == null) return;
-        if (card1.equals(card)) card1 = null;
-        else if (card2.equals(card)) card2 = null;
+    public CoupCard removeCardOfType(CoupCardType card) {
+        CoupCard cardToReturn = null;
+
+        if (card != null) {
+            if (card1.type.equals(card)) {
+                cardToReturn = card1;
+                card1 = null;
+            } else if (card2.type.equals(card)) {
+                cardToReturn = card2;
+                card2 = null;
+            }
+        }
+
+        return cardToReturn;
     }
 
     /**
@@ -161,4 +202,6 @@ public class PlayerInfoState {
         if (card1 == null) card1 = card;
         else if (card2 == null) card2 = card;
     }
+
+
 }

@@ -5,6 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static com.neodem.coup.cards.CoupCardType.Ambassador;
+import static com.neodem.coup.cards.CoupCardType.Assasin;
+import static com.neodem.coup.cards.CoupCardType.Captain;
+import static com.neodem.coup.cards.CoupCardType.Contessa;
+import static com.neodem.coup.cards.CoupCardType.Duke;
+
 /**
  * Author: vfumo
  * Date: 2/28/14
@@ -14,21 +20,21 @@ public class CoupDeck {
     private List<CoupCard> actualDeck = new ArrayList<>();
 
     public CoupDeck() {
-        actualDeck.add(CoupCard.Assasin);
-        actualDeck.add(CoupCard.Assasin);
-        actualDeck.add(CoupCard.Assasin);
-        actualDeck.add(CoupCard.Captain);
-        actualDeck.add(CoupCard.Captain);
-        actualDeck.add(CoupCard.Captain);
-        actualDeck.add(CoupCard.Contessa);
-        actualDeck.add(CoupCard.Contessa);
-        actualDeck.add(CoupCard.Contessa);
-        actualDeck.add(CoupCard.Duke);
-        actualDeck.add(CoupCard.Duke);
-        actualDeck.add(CoupCard.Duke);
-        actualDeck.add(CoupCard.Ambassador);
-        actualDeck.add(CoupCard.Ambassador);
-        actualDeck.add(CoupCard.Ambassador);
+        actualDeck.add(new CoupCard(Assasin));
+        actualDeck.add(new CoupCard(Assasin));
+        actualDeck.add(new CoupCard(Assasin));
+        actualDeck.add(new CoupCard(Captain));
+        actualDeck.add(new CoupCard(Captain));
+        actualDeck.add(new CoupCard(Captain));
+        actualDeck.add(new CoupCard(Contessa));
+        actualDeck.add(new CoupCard(Contessa));
+        actualDeck.add(new CoupCard(Contessa));
+        actualDeck.add(new CoupCard(Duke));
+        actualDeck.add(new CoupCard(Duke));
+        actualDeck.add(new CoupCard(Duke));
+        actualDeck.add(new CoupCard(Ambassador));
+        actualDeck.add(new CoupCard(Ambassador));
+        actualDeck.add(new CoupCard(Ambassador));
 
         shuffleDeck();
     }

@@ -9,6 +9,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.neodem.coup.cards.CoupCardType.Ambassador;
+import static com.neodem.coup.cards.CoupCardType.Assasin;
+import static com.neodem.coup.cards.CoupCardType.Captain;
+import static com.neodem.coup.cards.CoupCardType.Contessa;
+import static com.neodem.coup.cards.CoupCardType.Duke;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
@@ -44,14 +49,14 @@ public class ExchangeActionProcessorTest {
     @Test
     public void isReturnedCollectionOkShouldFailIfWeTryToReturnSomethingThatWasntInTheHand() {
         Multiset<CoupCard> handCards = HashMultiset.create();
-        handCards.add(CoupCard.Ambassador);
-        handCards.add(CoupCard.Captain);
-        handCards.add(CoupCard.Assasin);
-        handCards.add(CoupCard.Contessa);
+        handCards.add(new CoupCard(Ambassador));
+        handCards.add(new CoupCard(Captain));
+        handCards.add(new CoupCard(Assasin));
+        handCards.add(new CoupCard(Contessa));
 
         Multiset<CoupCard> returnedCards = HashMultiset.create();
-        returnedCards.add(CoupCard.Ambassador);
-        returnedCards.add(CoupCard.Duke);
+        returnedCards.add(new CoupCard(Ambassador));
+        returnedCards.add(new CoupCard(Duke));
 
         assertThat(processor.isReturnedCollectionOk(handCards, returnedCards), is(false));
     }
@@ -59,14 +64,14 @@ public class ExchangeActionProcessorTest {
     @Test
     public void isReturnedCollectionOkShouldPassIfWeTryToReturnSomethingThatIsInTheHand() {
         Multiset<CoupCard> handCards = HashMultiset.create();
-        handCards.add(CoupCard.Ambassador);
-        handCards.add(CoupCard.Captain);
-        handCards.add(CoupCard.Assasin);
-        handCards.add(CoupCard.Contessa);
+        handCards.add(new CoupCard(Ambassador));
+        handCards.add(new CoupCard(Captain));
+        handCards.add(new CoupCard(Assasin));
+        handCards.add(new CoupCard(Contessa));
 
         Multiset<CoupCard> returnedCards = HashMultiset.create();
-        returnedCards.add(CoupCard.Ambassador);
-        returnedCards.add(CoupCard.Assasin);
+        returnedCards.add(new CoupCard(Ambassador));
+        returnedCards.add(new CoupCard(Assasin));
 
         assertThat(processor.isReturnedCollectionOk(handCards, returnedCards), is(true));
     }
@@ -74,14 +79,14 @@ public class ExchangeActionProcessorTest {
     @Test
     public void isReturnedCollectionOkShouldFailIfWeReturnDups() {
         Multiset<CoupCard> handCards = HashMultiset.create();
-        handCards.add(CoupCard.Ambassador);
-        handCards.add(CoupCard.Captain);
-        handCards.add(CoupCard.Assasin);
-        handCards.add(CoupCard.Contessa);
+        handCards.add(new CoupCard(Ambassador));
+        handCards.add(new CoupCard(Captain));
+        handCards.add(new CoupCard(Assasin));
+        handCards.add(new CoupCard(Contessa));
 
         Multiset<CoupCard> returnedCards = HashMultiset.create();
-        returnedCards.add(CoupCard.Ambassador);
-        returnedCards.add(CoupCard.Ambassador);
+        returnedCards.add(new CoupCard(Ambassador));
+        returnedCards.add(new CoupCard(Ambassador));
 
         assertThat(processor.isReturnedCollectionOk(handCards, returnedCards), is(true));
     }

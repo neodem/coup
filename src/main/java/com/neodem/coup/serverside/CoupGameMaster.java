@@ -17,6 +17,7 @@ import com.neodem.coup.util.DisplayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -122,19 +123,27 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         // get a list of the players starting with the person taking the turn
         List<CoupPlayer> orderedPlayers = Lists.reorder(registeredPlayers, currentPlayer);
 
+        // remove the currentPlayer
+        orderedPlayers.remove(currentPlayer);
+
         // let all players know of the action
         getLog().debug("alerting other players of the action...");
         for (CoupPlayer op : orderedPlayers) {
-            if (op == currentPlayer) continue;
             op.actionHappened(currentPlayer, currentAction, generateCurrentGameContext());
+        }
+
+        // remove inactive players
+        for (Iterator<CoupPlayer> i = orderedPlayers.iterator(); i.hasNext(); ) {
+            CoupPlayer p = i.next();
+            if (!context.getPlayerInfo(p).active) {
+                i.remove();
+            }
         }
 
         // go to each one in turn and see if they want to challenge it
         if (currentAction.isChallengeable()) {
             getLog().debug("determining if players want to challenge this action...");
             for (CoupPlayer op : orderedPlayers) {
-                if (op == currentPlayer) continue;
-
                 if (op.doYouWantToChallengeThisAction(currentAction, currentPlayer, generateCurrentGameContext())) {
                     if (challengeResolver.resolveChallenge(op, currentPlayer, currentAction.getActionCard())) {
                         // if we are here, the challenge succeeded, thus the action failed
@@ -154,8 +163,6 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
         if (currentAction.isCounterable()) {
             getLog().debug("determining if players want to counter this action...");
             for (CoupPlayer op : orderedPlayers) {
-                if (op == currentPlayer) continue;
-
                 if (op.doYouWantToCounterThisAction(currentAction, currentPlayer, generateCurrentGameContext())) {
                     if (counterResolver.resolveCounter(currentPlayer, op, currentAction)) {
                         // if we are here, the counter succeeded, thus the action was blocked/failed
@@ -215,7 +222,12 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
         for (CoupPlayer p : registeredPlayers) {
             PlayerInfoState info = context.getPlayerInfo(p);
-            if (info.evaluateActive()) activeCount++;
+            if (info.evaluateActive()) {
+                activeCount++;
+            } else {
+                info.active = false;
+                p.updateInfo(info.makePrivatePlayerInfo());
+            }
         }
 
         return activeCount == 1;

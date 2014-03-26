@@ -42,7 +42,9 @@ public class ExchangeActionProcessor {
 
         log.debug(String.format("%s is putting back 2 cards", actingPlayer));
 
-        // TODO update the info object!!!
+        // update the info object
+        Multiset<CoupCard> newHand = Multisets.difference(handCards, returnedCards);
+        currentPlayerInfo.setDownCards(newHand);
 
         // put the cards back into the deck and shuffle it
         for (CoupCard c : returnedCards) {
@@ -64,7 +66,7 @@ public class ExchangeActionProcessor {
         }
 
         // the returned collection must have come from the handCards. (eg. all returned cards must be in handCards)
-        if (isReturnedCollectionOk(handCards, returnedCards)) {
+        if (!isReturnedCollectionOk(handCards, returnedCards)) {
             p.tryAgain("The returned cards need to come from the given hand cards");
 
             return getReturnedCards(p, info, handCards);

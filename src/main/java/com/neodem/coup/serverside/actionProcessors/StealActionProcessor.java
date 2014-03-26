@@ -25,7 +25,7 @@ public class StealActionProcessor {
 
         // we may also get 0 or 1 coin here
         int coins = oInfo.removeCoins(2);
-        log.debug(actingPlayer.getMyName() + " steals " + coins + " from " + a.getActionOn().getMyName());
+        log.debug(actingPlayer.getMyName() + " steals " + coins + " coins from " + a.getActionOn().getMyName());
         aInfo.addCoins(coins);
     }
 }

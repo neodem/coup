@@ -1,7 +1,7 @@
 package com.neodem.coup.serverside.actionProcessors;
 
 import com.neodem.coup.CoupAction;
-import com.neodem.coup.cards.CoupCard;
+import com.neodem.coup.cards.CoupCardType;
 import com.neodem.coup.players.CoupPlayer;
 import com.neodem.coup.serverside.ServerSideGameContext;
 import org.apache.commons.logging.Log;
@@ -31,7 +31,7 @@ public class CounterResolver {
      */
     public boolean resolveCounter(CoupPlayer actingPlayer, CoupPlayer counteringPlayer, CoupAction counteredAction) {
         if (actingPlayer.doYouWantToChallengeThisCounter(counteringPlayer)) {
-            Collection<CoupCard> cardsNeededToCounter = counteredAction.getCounterCard();
+            Collection<CoupCardType> cardsNeededToCounter = counteredAction.getCounterCard();
 
             if (challengeResolver.resolveChallenge(actingPlayer, counteringPlayer, cardsNeededToCounter)) {
                 // if we are here, the challenge succeeded and the counter failed

@@ -2,12 +2,18 @@ package com.neodem.coup;
 
 import com.google.common.collect.Sets;
 import com.neodem.bandaid.game.Action;
-import com.neodem.coup.cards.CoupCard;
+import com.neodem.coup.cards.CoupCardType;
 import com.neodem.coup.players.CoupPlayer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
+
+import static com.neodem.coup.cards.CoupCardType.Ambassador;
+import static com.neodem.coup.cards.CoupCardType.Assasin;
+import static com.neodem.coup.cards.CoupCardType.Captain;
+import static com.neodem.coup.cards.CoupCardType.Contessa;
+import static com.neodem.coup.cards.CoupCardType.Duke;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -53,16 +59,16 @@ public class CoupAction extends Action {
     /**
      * @return the card that the player needs to have to play this action or null if none needed
      */
-    public CoupCard getActionCard() {
+    public CoupCardType getActionCard() {
         switch (actionType) {
             case Tax:
-                return CoupCard.Duke;
+                return Duke;
             case Assassinate:
-                return CoupCard.Assasin;
+                return Assasin;
             case Steal:
-                return CoupCard.Captain;
+                return Captain;
             case Exchange:
-                return CoupCard.Ambassador;
+                return Ambassador;
         }
 
         return null;
@@ -71,14 +77,14 @@ public class CoupAction extends Action {
     /**
      * @return the card(s) that the player needs to have to counter this action or null if not applicable
      */
-    public Collection<CoupCard> getCounterCard() {
+    public Collection<CoupCardType> getCounterCard() {
         switch (actionType) {
             case ForeignAid:
-                return Sets.newHashSet(CoupCard.Duke);
+                return Sets.newHashSet(Duke);
             case Steal:
-                return Sets.newHashSet(CoupCard.Ambassador, CoupCard.Captain);
+                return Sets.newHashSet(Ambassador, Captain);
             case Assassinate:
-                return Sets.newHashSet(CoupCard.Contessa);
+                return Sets.newHashSet(Contessa);
 
         }
 
@@ -110,7 +116,6 @@ public class CoupAction extends Action {
 
         return false;
     }
-
 
     public enum ActionType {
         Income,

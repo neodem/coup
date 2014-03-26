@@ -6,6 +6,7 @@ import com.neodem.bandaid.game.Player;
 import com.neodem.coup.CoupAction;
 import com.neodem.coup.CoupPlayerInfo;
 import com.neodem.coup.cards.CoupCard;
+import com.neodem.coup.cards.CoupCardType;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -48,10 +49,10 @@ public interface CoupPlayer extends Player<CoupAction> {
      * the CGM will determine if you have the card. If you do, you win the challenge. If not you will
      * loose the challenge.
      *
-     * @param challengedCard the card you are being asked to prove you have
+     * @param challengedCardType the type of card you are being asked to prove you have
      * @return weather you want to prove you have the card
      */
-    public boolean doYouWantToProveYouHaveThisCard(CoupCard challengedCard);
+    public boolean doYouWantToProveYouHaveACardOfThisType(CoupCardType challengedCardType);
 
     /**
      * this is used in the Exchange action. If the player elects an exchange, the CoupGameMaster

@@ -1,6 +1,7 @@
 package com.neodem.coup.serverside.actionProcessors;
 
 import com.neodem.coup.cards.CoupCard;
+import com.neodem.coup.cards.CoupCardType;
 import com.neodem.coup.players.CoupPlayer;
 import com.neodem.coup.serverside.PlayerInfoState;
 import com.neodem.coup.serverside.ServerSideGameContext;
@@ -8,6 +9,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -31,11 +34,11 @@ public class ChallengeResolver extends DamagingActionProcessor {
      * @param challengedCard    the card being challenged
      * @return true if the challenge was successful, false otherwise
      */
-    public boolean resolveChallenge(CoupPlayer challengingPlayer, CoupPlayer challengedPlayer, CoupCard challengedCard) {
+    public boolean resolveChallenge(CoupPlayer challengingPlayer, CoupPlayer challengedPlayer, CoupCardType challengedCard) {
         log.debug(String.format("resolveChallenge() : %s is challenging that %s has the %s card.", challengingPlayer.getMyName(), challengedPlayer.getMyName(), challengedCard));
 
         // 1) acting player can decide to prove they have the card
-        if (challengedPlayer.doYouWantToProveYouHaveThisCard(challengedCard)) {
+        if (challengedPlayer.doYouWantToProveYouHaveACardOfThisType(challengedCard)) {
 
             // 2) does the acting player have the card?
             PlayerInfoState playerInfoState = context.getPlayerInfo(challengedPlayer);
@@ -48,8 +51,8 @@ public class ChallengeResolver extends DamagingActionProcessor {
                 // recycle the card
 
                 log.debug(String.format("%s has to recycle their %s card.", challengedPlayer.getMyName(), challengedCard));
-                playerInfoState.removeCard(challengedCard);
-                context.getDeck().putCard(challengedCard);
+                CoupCard actualCard = playerInfoState.removeCardOfType(challengedCard);
+                context.getDeck().putCard(actualCard);
                 context.getDeck().shuffleDeck();
                 playerInfoState.addCard(context.getDeck().takeCard());
 
@@ -70,10 +73,13 @@ public class ChallengeResolver extends DamagingActionProcessor {
      * @param challengedCards   the cards being challenged. The challenged player has to have at least one of them
      * @return true if the challenge was successful, false otherwise
      */
-    public boolean resolveChallenge(CoupPlayer challengingPlayer, CoupPlayer challengedPlayer, Collection<CoupCard> challengedCards) {
-        for (CoupCard card : challengedCards) {
+    public boolean resolveChallenge(CoupPlayer challengingPlayer, CoupPlayer challengedPlayer, Collection<CoupCardType> challengedCards) {
+        Set<CoupCardType> uniqueTypes = new HashSet<>(challengedCards);
+
+        for (CoupCardType card : uniqueTypes) {
             if (resolveChallenge(challengingPlayer, challengedPlayer, card)) return true;
         }
+
         return false;
     }
 

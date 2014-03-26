@@ -97,7 +97,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
+                    <artifactId>hamcrest-all</artifactId>
                 </exclusion>
             </exclusions>
             <scope>test</scope>

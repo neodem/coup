@@ -1,18 +1,20 @@
 package com.neodem.coup;
 
 import com.neodem.coup.cards.CoupCard;
+import com.neodem.coup.cards.CoupCardType;
 
 /**
  * Author: vfumo
  * Date: 2/28/14
  */
 public class CoupPlayerInfo {
-    public int coins;
-    public CoupCard cardOne = CoupCard.Unknown;
-    public CoupCard cardTwo = CoupCard.Unknown;
+    public boolean active = true;
+    public int coins = 0;
+    public CoupCard cardOne = new CoupCard(CoupCardType.Unknown);
+    public CoupCard cardTwo = new CoupCard(CoupCardType.Unknown);
 
     public void addUpCard(CoupCard card) {
-        if (cardOne == CoupCard.Unknown) {
+        if (cardOne.type == CoupCardType.Unknown) {
             cardOne = card;
         } else {
             cardTwo = card;
@@ -23,9 +25,15 @@ public class CoupPlayerInfo {
     public String toString() {
 
         StringBuffer b = new StringBuffer();
-        b.append("coins : ");
-        b.append(coins);
-        b.append('\n');
+
+        if (!active) {
+            b.append("This player is not active");
+            b.append('\n');
+        } else {
+            b.append("coins : ");
+            b.append(coins);
+            b.append('\n');
+        }
 
         b.append("card1 : ");
         b.append(cardOne.displayCard());
