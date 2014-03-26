@@ -11,22 +11,32 @@ import org.apache.commons.logging.Log;
  * Created Date: 3/25/14
  */
 public abstract class DamagingActionProcessor {
-    protected abstract Log getLog();
-
     protected ServerSideGameContext context;
 
     public DamagingActionProcessor(ServerSideGameContext context) {
         this.context = context;
     }
 
+    protected abstract Log getLog();
+
     protected void processLoss(CoupPlayer loser) {
-        getLog().info(loser.getMyName() + " has to loose an influence..");
+        String playerName = loser.getMyName();
+
+        getLog().info(playerName + " has to loose an influence..");
 
         PlayerInfoState playerInfoState = context.getPlayerInfo(loser);
+
         CoupCard card;
-        do {
-            card = loser.looseAnInfluence();
-        } while (!playerInfoState.validInfluence(card));
+
+        if (playerInfoState.hasOneInfluenceLeft()) {
+            getLog().info(playerName + " has only one down card left so they are forced to turn it over and become inactive. :-(");
+            card = playerInfoState.getDownCards().iterator().next();
+        } else {
+            // let them choose the card to turn over.
+            do {
+                card = loser.looseAnInfluence();
+            } while (!playerInfoState.validInfluence(card));
+        }
 
         getLog().info(loser.getMyName() + " turns over their " + card + " card.");
         playerInfoState.turnFaceUp(card);

@@ -82,6 +82,4 @@ public class ChallengeResolver extends DamagingActionProcessor {
 
         return false;
     }
-
-
 }

@@ -115,6 +115,16 @@ public class CoupAction extends Action {
         return false;
     }
 
+    /**
+     * Steal and Assasinate can only be countered by the individiual. Foreign Aid can be
+     * countered by anyone
+     *
+     * @return
+     */
+    public boolean isCounterableByGroup() {
+        return actionType == ActionType.ForeignAid;
+    }
+
     public enum ActionType {
         Income,
         ForeignAid,

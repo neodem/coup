@@ -147,7 +147,7 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
                 if (op.doYouWantToChallengeThisAction(currentAction, currentPlayer, generateCurrentGameContext())) {
                     if (challengeResolver.resolveChallenge(op, currentPlayer, currentAction.getActionCard())) {
                         // if we are here, the challenge succeeded, thus the action failed
-                        getLog().info("Action Failed.");
+                        getLog().info("Challenge Succeeded thus the Action Failed.");
                         return false;
                     } else {
                         // no more challenges (?? is this a rule?)
@@ -161,16 +161,26 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
         // go to each one in turn and see if they want to counter it
         if (currentAction.isCounterable()) {
-            getLog().debug("determining if players want to counter this action...");
-            for (CoupPlayer op : orderedPlayers) {
-                if (op.doYouWantToCounterThisAction(currentAction, currentPlayer, generateCurrentGameContext())) {
-                    if (counterResolver.resolveCounter(currentPlayer, op, currentAction)) {
+
+            if (currentAction.isCounterableByGroup()) {
+                getLog().debug("determining if players want to counter this action...");
+                for (CoupPlayer op : orderedPlayers) {
+                    if (op.doYouWantToCounterThisAction(currentAction, currentPlayer, generateCurrentGameContext())) {
+                        if (counterResolver.resolveCounter(currentPlayer, op, currentAction)) {
+                            // if we are here, the counter succeeded, thus the action was blocked/failed
+                            getLog().info("Counter Succeeded thus the Action Failed.");
+                            return false;
+                        }
+                    }
+                }
+            } else {
+                CoupPlayer actionOn = currentAction.getActionOn();
+                getLog().debug("seeing if " + actionOn.getMyName() + " wants to counter this action...");
+                if (actionOn.doYouWantToCounterThisAction(currentAction, currentPlayer, generateCurrentGameContext())) {
+                    if (counterResolver.resolveCounter(currentPlayer, actionOn, currentAction)) {
                         // if we are here, the counter succeeded, thus the action was blocked/failed
-                        getLog().info("Action Failed.");
+                        getLog().info("Counter Succeeded thus the Action Failed.");
                         return false;
-                    } else {
-                        // no more counters (?? is this a rule?)
-                        break;
                     }
                 }
             }

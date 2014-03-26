@@ -37,15 +37,9 @@ public class CoupCard {
     }
 
     public String displayCard() {
-
-        StringBuffer b = new StringBuffer();
-
         if (faceUp) {
-            b.append(type.name());
-        } else {
-            b.append("(FACE DOWN)");
+            return type.name();
         }
-
-        return b.toString();
+        return "(FACE DOWN)";
     }
 }

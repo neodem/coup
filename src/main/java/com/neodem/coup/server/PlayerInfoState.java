@@ -190,4 +190,8 @@ public class PlayerInfoState {
         if (card1 == null) card1 = card;
         else if (card2 == null) card2 = card;
     }
+
+    public boolean hasOneInfluenceLeft() {
+        return card1.faceUp || card2.faceUp;
+    }
 }
