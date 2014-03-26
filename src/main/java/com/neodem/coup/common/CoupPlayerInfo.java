@@ -50,7 +50,7 @@ public class CoupPlayerInfo implements Serializable {
         StringBuffer b = new StringBuffer();
 
         if (!active) {
-            b.append("This player is not active");
+            b.append(">>> This player is not active <<<");
             b.append('\n');
         } else {
             b.append("coins : ");

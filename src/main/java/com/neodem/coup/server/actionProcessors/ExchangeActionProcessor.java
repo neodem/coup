@@ -3,6 +3,7 @@ package com.neodem.coup.server.actionProcessors;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
+import com.neodem.coup.common.CoupAction;
 import com.neodem.coup.common.CoupCard;
 import com.neodem.coup.common.CoupPlayer;
 import com.neodem.coup.server.PlayerInfoState;
@@ -16,19 +17,21 @@ import java.util.Iterator;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/24/14
  */
-public class ExchangeActionProcessor {
+public class ExchangeActionProcessor extends BaseActionProcessor implements ActionProcessor {
     private static Log log = LogFactory.getLog(ExchangeActionProcessor.class.getName());
-    private ServerSideGameContext context;
 
     public ExchangeActionProcessor(ServerSideGameContext context) {
-        this.context = context;
+        super(context);
     }
 
-    /**
-     * @param actingPlayer
-     */
-    public void handleExchange(CoupPlayer actingPlayer) {
-        log.debug(String.format("%s is doing an exchange...", actingPlayer));
+    @Override
+    protected Log getLog() {
+        return log;
+    }
+
+    @Override
+    public void process(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) {
+        getLog().debug(String.format("%s is doing an exchange...", actingPlayer));
 
         PlayerInfoState currentPlayerInfo = context.getPlayerInfo(actingPlayer);
 
@@ -42,7 +45,7 @@ public class ExchangeActionProcessor {
 
         Multiset<CoupCard> returnedCards = getReturnedCards(actingPlayer, currentPlayerInfo, handCards);
 
-        log.debug(String.format("%s is putting back 2 cards", actingPlayer));
+        getLog().debug(String.format("%s is putting back 2 cards", actingPlayer));
 
         // update the info object
         Multiset<CoupCard> newHand = Multisets.difference(handCards, returnedCards);

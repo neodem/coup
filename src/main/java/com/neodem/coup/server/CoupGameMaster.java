@@ -2,23 +2,34 @@ package com.neodem.coup.server;
 
 import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.common.CoupAction;
+import com.neodem.coup.common.CoupAction.ActionType;
 import com.neodem.coup.common.CoupGameContext;
 import com.neodem.coup.common.CoupPlayer;
 import com.neodem.coup.common.DisplayUtils;
 import com.neodem.coup.common.PlayerError;
+import com.neodem.coup.server.actionProcessors.ActionProcessor;
 import com.neodem.coup.server.actionProcessors.AssasinationProcessor;
-import com.neodem.coup.server.actionProcessors.ChallengeResolver;
-import com.neodem.coup.server.actionProcessors.CounterResolver;
 import com.neodem.coup.server.actionProcessors.CoupActionProcessor;
 import com.neodem.coup.server.actionProcessors.ExchangeActionProcessor;
+import com.neodem.coup.server.actionProcessors.IncomeProcessor;
 import com.neodem.coup.server.actionProcessors.StealActionProcessor;
+import com.neodem.coup.server.resolvers.ChallengeResolver;
+import com.neodem.coup.server.resolvers.CounterResolver;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static com.neodem.coup.common.CoupAction.ActionType.Assassinate;
+import static com.neodem.coup.common.CoupAction.ActionType.Coup;
+import static com.neodem.coup.common.CoupAction.ActionType.Exchange;
+import static com.neodem.coup.common.CoupAction.ActionType.ForeignAid;
+import static com.neodem.coup.common.CoupAction.ActionType.Income;
+import static com.neodem.coup.common.CoupAction.ActionType.Steal;
+import static com.neodem.coup.common.CoupAction.ActionType.Tax;
 
 /**
  * Author: vfumo
@@ -28,12 +39,10 @@ public class CoupGameMaster {
 
     private static Log log = LogFactory.getLog(CoupGameMaster.class.getName());
     private ServerSideGameContext context;
-    private ExchangeActionProcessor exchangeActionProcessor;
-    private StealActionProcessor stealActionProcessor;
-    private CoupActionProcessor coupActionProcessor;
+    private Map<ActionType, ActionProcessor> actionProcessors;
     private ChallengeResolver challengeResolver;
     private CounterResolver counterResolver;
-    private AssasinationProcessor assasianationProcessor;
+    private AssasinationProcessor assasinationProcessor;
 
     public void initGame(List<CoupPlayer> registeredPlayers) {
 
@@ -45,17 +54,23 @@ public class CoupGameMaster {
         }
 
         // setup processors
-        exchangeActionProcessor = new ExchangeActionProcessor(context);
-        stealActionProcessor = new StealActionProcessor(context);
-        coupActionProcessor = new CoupActionProcessor(context);
+        actionProcessors = new HashMap<>();
+        IncomeProcessor ip = new IncomeProcessor(context);
+        actionProcessors.put(Income, ip);
+        actionProcessors.put(ForeignAid, ip);
+        actionProcessors.put(Tax, ip);
+        actionProcessors.put(Coup, new CoupActionProcessor(context));
+
+        assasinationProcessor = new AssasinationProcessor(context);
+        actionProcessors.put(Assassinate, assasinationProcessor);
+        actionProcessors.put(Exchange, new ExchangeActionProcessor(context));
+        actionProcessors.put(Steal, new StealActionProcessor(context));
+
+        // setup resolvers
         challengeResolver = new ChallengeResolver(context);
         counterResolver = new CounterResolver(context, challengeResolver);
-        assasianationProcessor = new AssasinationProcessor(context);
 
-        initPlayers();
-    }
-
-    private void initPlayers() {
+        // initialize players
         for (CoupPlayer p : context.getPlayerList()) {
             p.initializePlayer(getCurrentGameContext(p));
         }
@@ -72,7 +87,7 @@ public class CoupGameMaster {
                     log.info(context.generateCurrentPublicGameContext());
                     log.info("It is " + currentPlayer.getMyName() + "'s turn");
 
-                    CoupAction currentAction = getValidCoupAction(currentPlayer, currentPlayerInfo);
+                    CoupAction currentAction = getValidCoupAction(currentPlayer);
 
                     // alert other players in sequence (and let them counter or challenge)
                     boolean actionSucceeds = alertOtherPlayers(currentPlayer, currentAction);
@@ -180,7 +195,7 @@ public class CoupGameMaster {
 
                         if (currentAction.getActionType() == Assassinate) {
                             log.info(currentPlayer.getMyName() + " still has to pay for his/her assasination attempt!");
-                            assasianationProcessor.handlePayment(currentPlayer);
+                            assasinationProcessor.handlePayment(currentPlayer);
                         }
 
                         return false;
@@ -195,31 +210,31 @@ public class CoupGameMaster {
         return true;
     }
 
-    private CoupAction getValidCoupAction(CoupPlayer p, PlayerInfoState info) {
+    private CoupAction getValidCoupAction(CoupPlayer p) {
 
         CoupAction a = p.yourTurn(getCurrentGameContext(p));
 
         log.info(DisplayUtils.formatAction(a, p));
 
         try {
-            validateAction(info, a);
+            validateAction(p, a);
         } catch (PlayerError e) {
-            return tryAgain(e, p, info);
+            return tryAgain(e, p);
         }
 
         return a;
     }
 
-    private CoupAction tryAgain(PlayerError pe, CoupPlayer p, PlayerInfoState info) {
+    private CoupAction tryAgain(PlayerError pe, CoupPlayer p) {
         CoupAction a;
 
         p.tryAgain(pe.getMessage());
         a = p.yourTurn(getCurrentGameContext(p));
 
         try {
-            validateAction(info, a);
+            validateAction(p, a);
         } catch (PlayerError e) {
-            return tryAgain(e, p, info);
+            return tryAgain(e, p);
         }
 
         return a;
@@ -246,35 +261,15 @@ public class CoupGameMaster {
         return null;
     }
 
-    private void validateAction(PlayerInfoState info, CoupAction a) throws PlayerError {
-        if ((info.getCoinCount() >= 10) && a.getActionType() != CoupAction.ActionType.Coup) {
-            String msg = "Player has more than 10 coins and they need to Coup someone. Yet they didn't";
-            log.error(msg);
-            throw new PlayerError(msg);
-        }
-
-        if (info.getCoinCount() < 7 && a.getActionType() == CoupAction.ActionType.Coup) {
-            String msg = "Player has attempted a Coup but they only have " + info.getCoinCount() + " coins (they need 7).";
-            log.error(msg);
-            throw new PlayerError(msg);
-        }
-
-        if (info.getCoinCount() < 3 && a.getActionType() == CoupAction.ActionType.Assassinate) {
-            String msg = "Player has attempted an Assasination but they only have " + info.getCoinCount() + " coins (they need 3).";
-            log.error(msg);
-            throw new PlayerError(msg);
-        }
-
+    private void validateAction(CoupPlayer actingPlayer, CoupAction a) throws PlayerError {
         if (!CoupAction.isValidPlayableAction(a.getActionType())) {
             String msg = "Player has attempted an non playable action : " + a.getActionType();
             log.error(msg);
             throw new PlayerError(msg);
         }
 
-        if (a.getActionOn() != null && !context.isPlayerActive(a.getActionOn())) {
-            String msg = "Player has attempted to act upon a player that is already inactive : " + a.getActionOn();
-            log.error(msg);
-            throw new PlayerError(msg);
+        for (ActionProcessor ap : actionProcessors.values()) {
+            ap.validate(actingPlayer, a.getActionOn(), a);
         }
     }
 
@@ -283,33 +278,8 @@ public class CoupGameMaster {
      * @param currentAction the current action
      */
     private void processAction(CoupPlayer actingPlayer, CoupAction currentAction) {
-        switch (currentAction.getActionType()) {
-            case Income:
-                log.info(actingPlayer + " gets one coin");
-                context.addCoinsToPlayer(1, actingPlayer);
-                break;
-            case ForeignAid:
-                log.info(actingPlayer + " gets two coins");
-                context.addCoinsToPlayer(2, actingPlayer);
-                break;
-            case Coup:
-                coupActionProcessor.handleCoup(actingPlayer, currentAction.getActionOn());
-                break;
-            case Tax:
-                log.info(actingPlayer + " gets two coins");
-                context.addCoinsToPlayer(2, actingPlayer);
-                break;
-            case Assassinate:
-                assasianationProcessor.handleAssasinate(actingPlayer, currentAction.getActionOn());
-                break;
-            case Steal:
-                stealActionProcessor.handleSteal(actingPlayer, currentAction);
-                break;
-            case Exchange:
-                exchangeActionProcessor.handleExchange(actingPlayer);
-                break;
-        }
-
+        ActionProcessor ap = actionProcessors.get(currentAction.getActionType());
+        ap.process(actingPlayer, currentAction.getActionOn(), currentAction);
         updatePlayers();
     }
 }

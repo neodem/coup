@@ -1,10 +1,12 @@
-package com.neodem.coup.server.actionProcessors;
+package com.neodem.coup.server.resolvers;
 
+import com.neodem.coup.common.CoupAction;
 import com.neodem.coup.common.CoupCard;
 import com.neodem.coup.common.CoupCardType;
 import com.neodem.coup.common.CoupPlayer;
 import com.neodem.coup.server.PlayerInfoState;
 import com.neodem.coup.server.ServerSideGameContext;
+import com.neodem.coup.server.actionProcessors.DamagingActionProcessor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -81,5 +83,10 @@ public class ChallengeResolver extends DamagingActionProcessor {
         }
 
         return false;
+    }
+
+    @Override
+    public void process(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) {
+        //noop : this should never be called
     }
 }

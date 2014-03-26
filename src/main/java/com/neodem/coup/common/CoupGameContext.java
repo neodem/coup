@@ -60,12 +60,17 @@ public class CoupGameContext implements Serializable {
     public String toString() {
 
         StringBuffer b = new StringBuffer();
-        b.append(super.toString());
+        b.append('\n');
+        b.append('\n');
+        b.append("Game Context\n");
+        b.append("------------");
+        b.append('\n');
         b.append('\n');
 
         for (CoupPlayer p : players) {
             b.append(p);
-            b.append(" details:");
+            b.append('\n');
+            b.append("===============");
             b.append('\n');
 
             CoupPlayerInfo coupPlayerInfo = playerInfos.get(p);
@@ -75,8 +80,6 @@ public class CoupGameContext implements Serializable {
 
             b.append('\n');
         }
-
-        b.append('\n');
 
         return b.toString();
     }

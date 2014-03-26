@@ -1,4 +1,4 @@
-package com.neodem.coup.server.actionProcessors;
+package com.neodem.coup.server.resolvers;
 
 import com.neodem.coup.common.CoupAction;
 import com.neodem.coup.common.CoupCardType;

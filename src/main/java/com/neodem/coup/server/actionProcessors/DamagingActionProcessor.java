@@ -4,20 +4,16 @@ import com.neodem.coup.common.CoupCard;
 import com.neodem.coup.common.CoupPlayer;
 import com.neodem.coup.server.PlayerInfoState;
 import com.neodem.coup.server.ServerSideGameContext;
-import org.apache.commons.logging.Log;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/25/14
  */
-public abstract class DamagingActionProcessor {
-    protected ServerSideGameContext context;
+public abstract class DamagingActionProcessor extends BaseActionProcessor {
 
-    public DamagingActionProcessor(ServerSideGameContext context) {
-        this.context = context;
+    protected DamagingActionProcessor(ServerSideGameContext context) {
+        super(context);
     }
-
-    protected abstract Log getLog();
 
     protected void processLoss(CoupPlayer loser) {
         String playerName = loser.getMyName();
