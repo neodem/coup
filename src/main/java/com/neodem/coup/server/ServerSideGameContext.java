@@ -17,7 +17,6 @@ import java.util.Map;
  */
 public class ServerSideGameContext {
     private static Log log = LogFactory.getLog(ServerSideGameContext.class.getName());
-
     // the players in the game (in play order)
     private List<CoupPlayer> playerList;
     // keeps track of the state of the players
@@ -41,25 +40,28 @@ public class ServerSideGameContext {
         playerList.add(p);
     }
 
-//    public void updatePlayer(CoupPlayer p, PlayerInfoState info) {
-//        // update our internal map
-//        playerInfoMap.put(p, info);
-//    }
-
     private PlayerInfoState makeNewPlayerInfo(CoupPlayer p) {
         return new PlayerInfoState(2, deck.takeCard(), deck.takeCard(), p.getMyName());
     }
 
     public CoupGameContext generateCurrentPublicGameContext() {
+        return generatePrivateGameContext(null);
+    }
+
+    public CoupGameContext generatePrivateGameContext(CoupPlayer privPlayer) {
+
         CoupGameContext gc = new CoupGameContext();
 
         for (CoupPlayer p : playerList) {
             gc.addPlayer(p);
             PlayerInfoState pi = getPlayerInfo(p);
             if (pi != null) {
-                gc.addInfo(p, pi.makePublicPlayerInfo());
+                if (p.equals(privPlayer)) {
+                    gc.addInfo(p, pi.makePrivatePlayerInfo());
+                } else {
+                    gc.addInfo(p, pi.makePublicPlayerInfo());
+                }
             }
-
         }
 
         return gc;
@@ -84,4 +86,6 @@ public class ServerSideGameContext {
     public void addCoinsToPlayer(int coins, CoupPlayer p) {
         playerInfoMap.get(p).addCoins(coins);
     }
+
+
 }

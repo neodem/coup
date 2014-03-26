@@ -3,6 +3,8 @@ package com.neodem.coup.common;
 import com.google.common.collect.Multiset;
 
 /**
+ * note : Any time you get a CoupGameContext, it will show you the current game context and your specific info.
+ * <p/>
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/24/14
  */
@@ -114,13 +116,6 @@ public interface CoupPlayer {
      *
      * @return the card you want to turn face up
      */
-    public CoupCard looseAnInfluence();
-
-    /**
-     * whenever the CGM feels like updating you on your current state in the game you will get this call.
-     *
-     * @param currentState the current state of your hand/coins
-     */
-    public void updateInfo(CoupPlayerInfo currentState);
+    public CoupCard youMustLooseAnInfluence();
 }
 

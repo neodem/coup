@@ -2,14 +2,12 @@ package com.neodem.coup.client;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import com.neodem.bandaid.game.BasePlayer;
-import com.neodem.bandaid.game.GameContext;
-import com.neodem.bandaid.game.Player;
 import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.common.CoupAction;
 import com.neodem.coup.common.CoupAction.ActionType;
 import com.neodem.coup.common.CoupCard;
 import com.neodem.coup.common.CoupCardType;
+import com.neodem.coup.common.CoupGameContext;
 import com.neodem.coup.common.CoupPlayer;
 import com.neodem.coup.common.CoupPlayerInfo;
 import com.neodem.coup.common.DisplayUtils;
@@ -28,22 +26,42 @@ import static com.neodem.coup.common.CoupAction.ActionType.Steal;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlayer {
+public class RandomCoupPlayer implements CoupPlayer {
     private static Log log = LogFactory.getLog(RandomCoupPlayer.class.getName());
+    protected String myName;
+    protected CoupGameContext currentGameContext;
     private CoupPlayerInfo myState = null;
     private Random r = new Random(System.currentTimeMillis());
 
+
     public RandomCoupPlayer(String name) {
-        super(name);
+        myName = name;
     }
 
     @Override
+    public String toString() {
+        return myName;
+    }
+
+    @Override
+    public void updateContext(CoupGameContext gc) {
+        currentGameContext = gc;
+        myState = gc.playerInfos.get(this);
+    }
+
+    @Override
+    public void initializePlayer(CoupGameContext g) {
+        currentGameContext = g;
+        myState = g.playerInfos.get(this);
+    }
+
     protected Log getLog() {
         return log;
     }
 
     @Override
-    public boolean doYouWantToCounterThisAction(CoupAction hisAction, CoupPlayer actingPlayer, GameContext gc) {
+    public boolean doYouWantToCounterThisAction(CoupAction hisAction, CoupPlayer actingPlayer, CoupGameContext gc) {
+        updateContext(gc);
         int rand = r.nextInt(100);
 
         if (rand < 40) {
@@ -58,7 +76,8 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
     }
 
     @Override
-    public boolean doYouWantToChallengeThisAction(CoupAction hisAction, CoupPlayer actingPlayer, GameContext gc) {
+    public boolean doYouWantToChallengeThisAction(CoupAction hisAction, CoupPlayer actingPlayer, CoupGameContext gc) {
+        updateContext(gc);
         int rand = r.nextInt(100);
 
         if (rand < 20) {
@@ -110,7 +129,7 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
     }
 
     @Override
-    public CoupCard looseAnInfluence() {
+    public CoupCard youMustLooseAnInfluence() {
         if (myState.cardOne.faceUp) {
             return myState.cardTwo;
         }
@@ -119,13 +138,9 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
     }
 
     @Override
-    public void updateInfo(CoupPlayerInfo currentState) {
-        myState = currentState;
-        // getLog().debug(myName + "\nprivate state::\n" + currentState);
-    }
+    public CoupAction yourTurn(CoupGameContext gc) {
+        updateContext(gc);
 
-    @Override
-    public CoupAction yourTurn(GameContext gc) {
         getLog().debug(myName + " : my turn");
         //getLog().debug(gc);
 
@@ -144,7 +159,8 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
     }
 
     @Override
-    public void actionHappened(Player player, CoupAction hisAction, GameContext gc) {
+    public void actionHappened(CoupPlayer player, CoupAction hisAction, CoupGameContext gc) {
+        updateContext(gc);
         String msg = String.format("%s : %s", myName, DisplayUtils.formatAction(hisAction, player));
         getLog().debug(msg);
     }
@@ -152,5 +168,9 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
     @Override
     public void tryAgain(String reason) {
         getLog().info(String.format("%s : I have to try again because : %s", myName, reason));
+    }
+
+    public String getMyName() {
+        return myName;
     }
 }

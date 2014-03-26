@@ -34,7 +34,7 @@ public abstract class DamagingActionProcessor {
         } else {
             // let them choose the card to turn over.
             do {
-                card = loser.looseAnInfluence();
+                card = loser.youMustLooseAnInfluence();
             } while (!playerInfoState.validInfluence(card));
         }
 
