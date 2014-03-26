@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
+ * The internal player state held by the server
+ * <p/>
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/24/14
  */
@@ -97,20 +99,6 @@ public class PlayerInfoState {
         coins = coins + i;
     }
 
-//    public boolean handHasTwoOfTheSameCard() {
-//        return card1.equals(card2);
-//    }
-
-    /**
-     * return the face up card the player has (if any)
-     *
-     * @return the face up card the player has (if any) or null if none
-     */
-//    public CoupCard getUpCard() {
-//        if (card1.faceUp) return card1;
-//        if (card2.faceUp) return card2;
-//        return null;
-//    }
     public boolean hasCard(CoupCardType card) {
         return card1.type.equals(card) || card2.type.equals(card);
     }
@@ -202,6 +190,4 @@ public class PlayerInfoState {
         if (card1 == null) card1 = card;
         else if (card2 == null) card2 = card;
     }
-
-
 }

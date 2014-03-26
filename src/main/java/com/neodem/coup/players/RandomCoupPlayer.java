@@ -34,7 +34,7 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
 
     @Override
     protected Log getLog() {
-        return log;  //To change body of implemented methods use File | Settings | File Templates.
+        return log;
     }
 
     @Override

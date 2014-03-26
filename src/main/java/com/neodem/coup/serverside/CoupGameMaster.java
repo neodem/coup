@@ -80,15 +80,16 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
 
     @Override
     protected void runGameLoop() {
-        boolean noWinner = true;
-        while (noWinner) {
+        CoupPlayer winningPlayer = null;
+        while (winningPlayer == null) {
             for (CoupPlayer currentPlayer : registeredPlayers) {
-                getLog().info(generateCurrentGameContext());
-                getLog().info("It is " + currentPlayer.getMyName() + "'s turn");
-
                 PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
 
                 if (currentPlayerInfo.active) {
+
+                    getLog().info(generateCurrentGameContext());
+                    getLog().info("It is " + currentPlayer.getMyName() + "'s turn");
+
                     CoupAction currentAction = getValidCoupAction(currentPlayer, currentPlayerInfo);
 
                     // alert other players in sequence (and let them counter or challenge)
@@ -98,15 +99,14 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
                     if (actionSucceeds) processAction(currentPlayer, currentPlayerInfo, currentAction);
 
                     // evaluate end game (is there a winner?)
-                    if (evaluateGame()) {
-                        noWinner = false;
-                        break;
-                    }
+                    winningPlayer = evaluateGame();
                 } else {
                     getLog().info(currentPlayer.getMyName() + " is not active.");
                 }
             }
         }
+
+        getLog().info("The game is over : " + winningPlayer.getMyName() + " was the winner!");
     }
 
     /**
@@ -215,22 +215,25 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
     /**
      * determine who may still have a turn
      *
-     * @return true if there is a winner
+     * @return null if no winner, the player that won if there was
      */
-    private boolean evaluateGame() {
+    private CoupPlayer evaluateGame() {
         int activeCount = 0;
-
+        CoupPlayer possibleWinner = null;
         for (CoupPlayer p : registeredPlayers) {
             PlayerInfoState info = context.getPlayerInfo(p);
             if (info.evaluateActive()) {
                 activeCount++;
+                possibleWinner = p;
             } else {
                 info.active = false;
                 p.updateInfo(info.makePrivatePlayerInfo());
             }
         }
 
-        return activeCount == 1;
+        if (activeCount == 1) return possibleWinner;
+
+        return null;
     }
 
     private void validateAction(PlayerInfoState info, CoupAction a) throws PlayerError {
