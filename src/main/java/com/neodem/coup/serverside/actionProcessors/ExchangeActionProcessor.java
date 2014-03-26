@@ -74,10 +74,10 @@ public class ExchangeActionProcessor {
     }
 
     protected boolean isReturnedCollectionOk(Multiset<CoupCard> handCards, Multiset<CoupCard> returnedCards) {
-        Multiset<CoupCard> result = Multisets.difference(handCards, returnedCards);
-        if (result.size() != 0) {
-            return false;
+        Multiset<CoupCard> intersection = Multisets.intersection(handCards, returnedCards);
+        if (intersection.equals(returnedCards)) {
+            return true;
         }
-        return true;
+        return false;
     }
 }

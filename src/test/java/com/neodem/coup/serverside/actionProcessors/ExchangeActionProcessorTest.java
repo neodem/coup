@@ -50,8 +50,8 @@ public class ExchangeActionProcessorTest {
         handCards.add(CoupCard.Contessa);
 
         Multiset<CoupCard> returnedCards = HashMultiset.create();
-        handCards.add(CoupCard.Ambassador);
-        handCards.add(CoupCard.Duke);
+        returnedCards.add(CoupCard.Ambassador);
+        returnedCards.add(CoupCard.Duke);
 
         assertThat(processor.isReturnedCollectionOk(handCards, returnedCards), is(false));
     }
@@ -65,8 +65,23 @@ public class ExchangeActionProcessorTest {
         handCards.add(CoupCard.Contessa);
 
         Multiset<CoupCard> returnedCards = HashMultiset.create();
+        returnedCards.add(CoupCard.Ambassador);
+        returnedCards.add(CoupCard.Assasin);
+
+        assertThat(processor.isReturnedCollectionOk(handCards, returnedCards), is(true));
+    }
+
+    @Test
+    public void isReturnedCollectionOkShouldFailIfWeReturnDups() {
+        Multiset<CoupCard> handCards = HashMultiset.create();
         handCards.add(CoupCard.Ambassador);
+        handCards.add(CoupCard.Captain);
         handCards.add(CoupCard.Assasin);
+        handCards.add(CoupCard.Contessa);
+
+        Multiset<CoupCard> returnedCards = HashMultiset.create();
+        returnedCards.add(CoupCard.Ambassador);
+        returnedCards.add(CoupCard.Ambassador);
 
         assertThat(processor.isReturnedCollectionOk(handCards, returnedCards), is(true));
     }
