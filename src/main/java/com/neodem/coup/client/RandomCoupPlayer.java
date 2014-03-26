@@ -99,7 +99,6 @@ public class RandomCoupPlayer extends BasePlayer<CoupAction> implements CoupPlay
      * @return the return cards
      */
     public Multiset<CoupCard> exchangeCards(Multiset<CoupCard> cards) {
-        //TODO deal with 1 card situation
 
         Multiset<CoupCard> returnedCards = HashMultiset.create();
 
