@@ -20,6 +20,8 @@ import org.apache.commons.logging.LogFactory;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.neodem.coup.common.CoupAction.ActionType.Assassinate;
+
 /**
  * Author: vfumo
  * Date: 2/28/14
@@ -180,6 +182,12 @@ public class CoupGameMaster extends BaseGameMaster<CoupPlayer> {
                     if (counterResolver.resolveCounter(currentPlayer, actionOn, currentAction)) {
                         // if we are here, the counter succeeded, thus the action was blocked/failed
                         getLog().info("Counter Succeeded thus the Action Failed.");
+
+                        if (currentAction.getActionType() == Assassinate) {
+                            getLog().info(currentPlayer.getMyName() + " still has to pay for his/her assasination attempt!");
+                            assasianationProcessor.handlePayment(currentPlayer);
+                        }
+
                         return false;
                     }
                 }

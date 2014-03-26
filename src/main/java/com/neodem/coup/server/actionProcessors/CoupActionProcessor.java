@@ -1,6 +1,7 @@
 package com.neodem.coup.server.actionProcessors;
 
 import com.neodem.coup.common.CoupPlayer;
+import com.neodem.coup.server.PlayerInfoState;
 import com.neodem.coup.server.ServerSideGameContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,6 +23,11 @@ public class CoupActionProcessor extends DamagingActionProcessor {
     }
 
     public void handleCoup(CoupPlayer actingPlayer, CoupPlayer targetPlayer) {
+        log.debug(actingPlayer + " has to pay 7 coins to coup.");
+
+        PlayerInfoState info = context.getPlayerInfo(actingPlayer);
+        info.removeCoins(7);
+
         log.debug(String.format("%s is launching a coup on %s", actingPlayer, targetPlayer));
         processLoss(targetPlayer);
     }

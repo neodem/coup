@@ -1,6 +1,7 @@
 package com.neodem.coup.server.actionProcessors;
 
 import com.neodem.coup.common.CoupPlayer;
+import com.neodem.coup.server.PlayerInfoState;
 import com.neodem.coup.server.ServerSideGameContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,7 +23,15 @@ public class AssasinationProcessor extends DamagingActionProcessor {
     }
 
     public void handleAssasinate(CoupPlayer actingPlayer, CoupPlayer targetPlayer) {
+        handlePayment(actingPlayer);
+
         log.debug(String.format("%s is assasinating %s", actingPlayer, targetPlayer));
         processLoss(targetPlayer);
+    }
+
+    public void handlePayment(CoupPlayer actingPlayer) {
+        log.debug(actingPlayer + " has to pay 3 coins to assasinate.");
+        PlayerInfoState info = context.getPlayerInfo(actingPlayer);
+        info.removeCoins(3);
     }
 }

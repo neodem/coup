@@ -125,6 +125,10 @@ public class CoupAction extends Action {
         return actionType == ActionType.ForeignAid;
     }
 
+    public boolean hasCost() {
+        return actionType == ActionType.Tax || actionType == ActionType.Coup;
+    }
+
     public enum ActionType {
         Income,
         ForeignAid,
