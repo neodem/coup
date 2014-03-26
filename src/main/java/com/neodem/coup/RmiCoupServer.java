@@ -48,8 +48,14 @@ public class RmiCoupServer implements CoupServer {
     // todo determine when/how the game starts. For now we simply do it here
     @Override
     public void triggerGameStart() {
+
+        log.info("initializing Game");
         cgm.initGame(registeredPlayers);
-        cgm.runGameLoop();
+
+        log.info("Starting Game");
+        CoupPlayer winningPlayer = cgm.runGameLoop();
+
+        log.info("The game is over : " + winningPlayer.getMyName() + " was the winner!");
     }
 
     public void setCoupGameMaster(CoupGameMaster cgm) {

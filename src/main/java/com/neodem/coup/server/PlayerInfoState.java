@@ -15,18 +15,25 @@ import java.util.Iterator;
  * Created Date: 3/24/14
  */
 public class PlayerInfoState {
-    public int coins;
-    public CoupCard card1;
-    public CoupCard card2;
-    public boolean active;
-    public String name;
+    private int coinCount;
+    private CoupCard card1;
+    private CoupCard card2;
+    private boolean active = true;
+    private String name;
+
+    public PlayerInfoState(int coinCount, CoupCard card1, CoupCard card2, String myName) {
+        this.coinCount = coinCount;
+        this.card1 = card1;
+        this.card2 = card2;
+        this.name = myName;
+    }
 
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append(name);
         b.append(" (");
-        b.append(coins);
+        b.append(coinCount);
         b.append(") : ");
 
         b.append(card1);
@@ -44,7 +51,7 @@ public class PlayerInfoState {
     public CoupPlayerInfo makePublicPlayerInfo() {
         CoupPlayerInfo pi = new CoupPlayerInfo();
         pi.active = active;
-        pi.coins = coins;
+        pi.coins = coinCount;
 
         if (card1.faceUp) pi.addUpCard(card1);
         if (card2.faceUp) pi.addUpCard(card2);
@@ -60,7 +67,7 @@ public class PlayerInfoState {
     public CoupPlayerInfo makePrivatePlayerInfo() {
         CoupPlayerInfo cpi = new CoupPlayerInfo();
         cpi.active = active;
-        cpi.coins = coins;
+        cpi.coins = coinCount;
 
         cpi.cardOne = card1;
         cpi.cardTwo = card2;
@@ -68,35 +75,23 @@ public class PlayerInfoState {
         return cpi;
     }
 
-    /**
-     * @return true if this player has at least one card face down, false if otherwise
-     */
-    public boolean evaluateActive() {
-        if (!active) return false;
-
-        if (!card1.faceUp) return true;
-        if (!card2.faceUp) return true;
-
-        return false;
-    }
-
     public void addCoin() {
-        coins++;
+        coinCount++;
     }
 
     public int removeCoins(int i) {
-        if (coins >= i) {
-            coins = coins - i;
+        if (coinCount >= i) {
+            coinCount = coinCount - i;
             return i;
         }
 
-        int avail = coins;
-        coins = 0;
+        int avail = coinCount;
+        coinCount = 0;
         return avail;
     }
 
     public void addCoins(int i) {
-        coins = coins + i;
+        coinCount = coinCount + i;
     }
 
     public boolean hasCard(CoupCardType card) {
@@ -125,6 +120,8 @@ public class PlayerInfoState {
         if (testCard == null) return;
         if (card1.equals(testCard)) card1.faceUp = true;
         else if (card2.equals(testCard)) card2.faceUp = true;
+
+        if (card1.faceUp && card2.faceUp) active = false;
     }
 
     public Collection<CoupCard> getDownCards() {
@@ -193,5 +190,13 @@ public class PlayerInfoState {
 
     public boolean hasOneInfluenceLeft() {
         return card1.faceUp || card2.faceUp;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public int getCoinCount() {
+        return coinCount;
     }
 }

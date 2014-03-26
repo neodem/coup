@@ -64,13 +64,13 @@ public class CoupGameMaster {
         }
     }
 
-    public void runGameLoop() {
+    public CoupPlayer runGameLoop() {
         CoupPlayer winningPlayer = null;
         while (winningPlayer == null) {
             for (CoupPlayer currentPlayer : context.getPlayerList()) {
                 PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
 
-                if (currentPlayerInfo.active) {
+                if (currentPlayerInfo.isActive()) {
 
                     log.info(getCurrentGameContext());
                     log.info("It is " + currentPlayer.getMyName() + "'s turn");
@@ -83,6 +83,8 @@ public class CoupGameMaster {
                     // process the action
                     if (actionSucceeds) processAction(currentPlayer, currentPlayerInfo, currentAction);
 
+                    updatePlayers();
+
                     // evaluate end game (is there a winner?)
                     winningPlayer = evaluateGame();
                 } else {
@@ -91,7 +93,7 @@ public class CoupGameMaster {
             }
         }
 
-        log.info("The game is over : " + winningPlayer.getMyName() + " was the winner!");
+        return winningPlayer;
     }
 
     public CoupGameContext getCurrentGameContext() {
@@ -130,10 +132,10 @@ public class CoupGameMaster {
             op.actionHappened(currentPlayer, currentAction, getCurrentGameContext());
         }
 
-        // remove inactive players
+        // remove inactive players from our list
         for (Iterator<CoupPlayer> i = orderedPlayers.iterator(); i.hasNext(); ) {
             CoupPlayer p = i.next();
-            if (!context.getPlayerInfo(p).active) {
+            if (!context.getPlayerInfo(p).isActive()) {
                 i.remove();
             }
         }
@@ -236,12 +238,9 @@ public class CoupGameMaster {
         CoupPlayer possibleWinner = null;
         for (CoupPlayer p : context.getPlayerList()) {
             PlayerInfoState info = context.getPlayerInfo(p);
-            if (info.evaluateActive()) {
+            if (info.isActive()) {
                 activeCount++;
                 possibleWinner = p;
-            } else {
-                info.active = false;
-                p.updateInfo(info.makePrivatePlayerInfo());
             }
         }
 
@@ -251,26 +250,32 @@ public class CoupGameMaster {
     }
 
     private void validateAction(PlayerInfoState info, CoupAction a) throws PlayerError {
-        if ((info.coins >= 10) && a.getActionType() != CoupAction.ActionType.Coup) {
+        if ((info.getCoinCount() >= 10) && a.getActionType() != CoupAction.ActionType.Coup) {
             String msg = "Player has more than 10 coins and they need to Coup someone. Yet they didn't";
             log.error(msg);
             throw new PlayerError(msg);
         }
 
-        if (info.coins < 7 && a.getActionType() == CoupAction.ActionType.Coup) {
-            String msg = "Player has attempted a Coup but they only have " + info.coins + " coins (they need 7).";
+        if (info.getCoinCount() < 7 && a.getActionType() == CoupAction.ActionType.Coup) {
+            String msg = "Player has attempted a Coup but they only have " + info.getCoinCount() + " coins (they need 7).";
             log.error(msg);
             throw new PlayerError(msg);
         }
 
-        if (info.coins < 3 && a.getActionType() == CoupAction.ActionType.Assassinate) {
-            String msg = "Player has attempted an Assasination but they only have " + info.coins + " coins (they need 3).";
+        if (info.getCoinCount() < 3 && a.getActionType() == CoupAction.ActionType.Assassinate) {
+            String msg = "Player has attempted an Assasination but they only have " + info.getCoinCount() + " coins (they need 3).";
             log.error(msg);
             throw new PlayerError(msg);
         }
 
         if (!CoupAction.isValidPlayableAction(a.getActionType())) {
             String msg = "Player has attempted an non playable action : " + a.getActionType();
+            log.error(msg);
+            throw new PlayerError(msg);
+        }
+
+        if (a.getActionOn() != null && !context.isPlayerActive(a.getActionOn())) {
+            String msg = "Player has attempted to act upon a player that is already inactive : " + a.getActionOn();
             log.error(msg);
             throw new PlayerError(msg);
         }

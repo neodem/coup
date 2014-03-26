@@ -13,20 +13,25 @@ import org.apache.commons.logging.LogFactory;
 public class AssasinationProcessor extends DamagingActionProcessor {
     private static Log log = LogFactory.getLog(AssasinationProcessor.class.getName());
 
+    public AssasinationProcessor(ServerSideGameContext context) {
+        super(context);
+    }
+
     @Override
     protected Log getLog() {
         return log;
     }
 
-    public AssasinationProcessor(ServerSideGameContext context) {
-        super(context);
-    }
-
     public void handleAssasinate(CoupPlayer actingPlayer, CoupPlayer targetPlayer) {
         handlePayment(actingPlayer);
 
-        log.debug(String.format("%s is assasinating %s", actingPlayer, targetPlayer));
-        processLoss(targetPlayer);
+        PlayerInfoState infoState = context.getPlayerInfo(targetPlayer);
+        if (infoState.isActive()) {
+            log.debug(String.format("%s is assasinating %s", actingPlayer, targetPlayer));
+            processLoss(targetPlayer);
+        } else {
+            log.debug(String.format("%s is assasinating %s but they have no cards left and are inactive.", actingPlayer, targetPlayer));
+        }
     }
 
     public void handlePayment(CoupPlayer actingPlayer) {

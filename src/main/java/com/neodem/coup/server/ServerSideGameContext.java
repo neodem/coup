@@ -47,15 +47,7 @@ public class ServerSideGameContext {
     }
 
     private PlayerInfoState makeNewPlayerInfo(CoupPlayer p) {
-        PlayerInfoState info = new PlayerInfoState();
-
-        info.coins = 2;
-        info.card1 = deck.takeCard();
-        info.card2 = deck.takeCard();
-        info.active = true;
-        info.name = p.getMyName();
-
-        return info;
+        return new PlayerInfoState(2, deck.takeCard(), deck.takeCard(), p.getMyName());
     }
 
     public CoupGameContext generateCurrentPublicGameContext() {
@@ -83,5 +75,9 @@ public class ServerSideGameContext {
 
     public List<CoupPlayer> getPlayerList() {
         return playerList;
+    }
+
+    public boolean isPlayerActive(CoupPlayer p) {
+        return playerInfoMap.get(p).isActive();
     }
 }
