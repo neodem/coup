@@ -37,14 +37,14 @@ public class ServerSideGameContext {
 
     public void addPlayer(CoupPlayer p) {
         PlayerInfoState info = makeNewPlayerInfo(p);
-        updatePlayer(p, info);
+        playerInfoMap.put(p, info);
         playerList.add(p);
     }
 
-    public void updatePlayer(CoupPlayer p, PlayerInfoState info) {
-        // update our internal map
-        playerInfoMap.put(p, info);
-    }
+//    public void updatePlayer(CoupPlayer p, PlayerInfoState info) {
+//        // update our internal map
+//        playerInfoMap.put(p, info);
+//    }
 
     private PlayerInfoState makeNewPlayerInfo(CoupPlayer p) {
         return new PlayerInfoState(2, deck.takeCard(), deck.takeCard(), p.getMyName());
@@ -79,5 +79,9 @@ public class ServerSideGameContext {
 
     public boolean isPlayerActive(CoupPlayer p) {
         return playerInfoMap.get(p).isActive();
+    }
+
+    public void addCoinsToPlayer(int coins, CoupPlayer p) {
+        playerInfoMap.get(p).addCoins(coins);
     }
 }

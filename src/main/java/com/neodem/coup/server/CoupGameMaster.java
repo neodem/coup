@@ -1,6 +1,5 @@
 package com.neodem.coup.server;
 
-import com.neodem.bandaid.game.GameContext;
 import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.common.CoupAction;
 import com.neodem.coup.common.CoupGameContext;
@@ -57,7 +56,7 @@ public class CoupGameMaster {
     }
 
     private void initPlayers() {
-        GameContext gc = getCurrentGameContext();
+        CoupGameContext gc = getCurrentGameContext();
         for (CoupPlayer p : context.getPlayerList()) {
             p.initializePlayer(gc);
             p.updateInfo(context.getPlayerInfo(p).makePrivatePlayerInfo());
@@ -81,7 +80,7 @@ public class CoupGameMaster {
                     boolean actionSucceeds = alertOtherPlayers(currentPlayer, currentAction);
 
                     // process the action
-                    if (actionSucceeds) processAction(currentPlayer, currentPlayerInfo, currentAction);
+                    if (actionSucceeds) processAction(currentPlayer, currentAction);
 
                     updatePlayers();
 
@@ -102,7 +101,7 @@ public class CoupGameMaster {
 
     private void updatePlayers() {
         // alert players of current game context and their specific context
-        GameContext gc = getCurrentGameContext();
+        CoupGameContext gc = getCurrentGameContext();
         for (CoupPlayer p : context.getPlayerList()) {
             p.updateContext(gc);
             p.updateInfo(context.getPlayerInfo(p).makePrivatePlayerInfo());
@@ -282,26 +281,25 @@ public class CoupGameMaster {
     }
 
     /**
-     * @param actingPlayer     the player doing the action
-     * @param actingPlayerInfo the PIS of the acting player
-     * @param currentAction    the current action
+     * @param actingPlayer  the player doing the action
+     * @param currentAction the current action
      */
-    private void processAction(CoupPlayer actingPlayer, PlayerInfoState actingPlayerInfo, CoupAction currentAction) {
+    private void processAction(CoupPlayer actingPlayer, CoupAction currentAction) {
         switch (currentAction.getActionType()) {
             case Income:
                 log.info(actingPlayer + " gets one coin");
-                actingPlayerInfo.addCoin();
+                context.addCoinsToPlayer(1, actingPlayer);
                 break;
             case ForeignAid:
                 log.info(actingPlayer + " gets two coins");
-                actingPlayerInfo.addCoins(2);
+                context.addCoinsToPlayer(2, actingPlayer);
                 break;
             case Coup:
                 coupActionProcessor.handleCoup(actingPlayer, currentAction.getActionOn());
                 break;
             case Tax:
                 log.info(actingPlayer + " gets two coins");
-                actingPlayerInfo.addCoins(2);
+                context.addCoinsToPlayer(2, actingPlayer);
                 break;
             case Assassinate:
                 assasianationProcessor.handleAssasinate(actingPlayer, currentAction.getActionOn());
@@ -314,7 +312,6 @@ public class CoupGameMaster {
                 break;
         }
 
-        context.updatePlayer(actingPlayer, actingPlayerInfo);
         updatePlayers();
     }
 }

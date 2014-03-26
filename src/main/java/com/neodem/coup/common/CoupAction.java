@@ -1,7 +1,6 @@
 package com.neodem.coup.common;
 
 import com.google.common.collect.Sets;
-import com.neodem.bandaid.game.Action;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -17,7 +16,7 @@ import static com.neodem.coup.common.CoupCardType.Duke;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 2/28/14
  */
-public class CoupAction extends Action {
+public class CoupAction {
 
     public static CoupAction NoAction = new CoupAction(null, ActionType.NoAction);
     private static Log log = LogFactory.getLog(CoupAction.class.getName());
@@ -33,7 +32,6 @@ public class CoupAction extends Action {
         return actionType != ActionType.NoAction;
     }
 
-    @Override
     protected Log getLog() {
         return log;
     }
