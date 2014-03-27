@@ -1,12 +1,14 @@
 package com.neodem.coup.common.messaging;
 
 import com.google.common.collect.Multiset;
+import com.neodem.coup.common.game.BaseCoupPlayer;
 import com.neodem.coup.common.game.CoupAction;
 import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupGameContext;
-import com.neodem.coup.common.game.CoupPlayer;
-import com.neodem.coup.common.game.BaseCoupPlayer;import org.json.JSONException;
+import com.neodem.coup.common.game.GamePlayer;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -26,6 +28,8 @@ public class JsonMessageTranslator implements MessageTranslator {
     private static final String CARD = "Card";
     private static final String BOOL = "TrueFalse";
     private static final String ACTIONTYPE = "ActionType";
+    private static final String FACEUP = "FaceUp";
+    private static final String CARDS = "CardCollection";
 
     @Override
     public Message makeMessage(MessageType type) {
@@ -51,7 +55,7 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public Message makeMessage(MessageType type, CoupPlayer p) {
+    public Message makeMessage(MessageType type, GamePlayer p) {
         JSONObject j = new JSONObject();
         addType(type, j);
         addPlayer(p, j);
@@ -67,7 +71,7 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public Message makeMessage(MessageType type, CoupAction a, CoupPlayer p, CoupGameContext gc) {
+    public Message makeMessage(MessageType type, CoupAction a, GamePlayer p, CoupGameContext gc) {
         JSONObject j = new JSONObject();
         addType(type, j);
         addAction(a, j);
@@ -109,11 +113,6 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public CoupAction getCoupAction(Message reply) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     public Boolean getBoolean(Message m) {
         JSONObject j;
         Boolean result = null;
@@ -129,22 +128,7 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public CoupCard getCoupCard(Message reply) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public Multiset<CoupCard> getCardMultiset(Message reply) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public CoupGameContext getCoupGameContext(Message m) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public GamePlayer getCoupPlayer(Message m) {
+    public GamePlayer getPlayer(Message m) {
         JSONObject j;
         GamePlayer result = null;
 
@@ -156,9 +140,6 @@ public class JsonMessageTranslator implements MessageTranslator {
         }
 
         return result;
-
-
-
     }
 
     @Override
@@ -178,7 +159,18 @@ public class JsonMessageTranslator implements MessageTranslator {
 
     @Override
     public CoupCardType getCoupCardType(Message m) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        JSONObject j;
+        CoupCardType result = CoupCardType.Unknown;
+
+        try {
+            j = new JSONObject(m.content);
+            String type = j.getString(CARDTYPE);
+            result = CoupCardType.valueOf(type);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     @Override
@@ -195,6 +187,26 @@ public class JsonMessageTranslator implements MessageTranslator {
         }
 
         return result;
+    }
+
+    @Override
+    public CoupAction getCoupAction(Message m) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public CoupCard getCoupCard(Message m) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Multiset<CoupCard> getCardMultiset(Message m) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public CoupGameContext getCoupGameContext(Message m) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private void addBoolean(boolean bool, JSONObject j) {
@@ -229,21 +241,29 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     private void addCoupCardType(CoupCardType c, JSONObject j) {
-        //To change body of created methods use File | Settings | File Templates.
-    }
-
-    private void addAction(CoupAction a, JSONObject j) {
-        JSONObject action = new JSONObject();
-        try {
-            action.put(ACTIONTYPE, a.getActionType().name());
-            addPlayer(a.getActionOn(), j);
-            j.put(ACTION, action);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (c != null) {
+            try {
+                j.put(CARDTYPE, c.name());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void addPlayer(CoupPlayer p, JSONObject j) {
+    private void addAction(CoupAction a, JSONObject j) {
+        if (a != null) {
+            JSONObject action = new JSONObject();
+            try {
+                action.put(ACTIONTYPE, a.getActionType().name());
+                addPlayer(a.getActionOn(), j);
+                j.put(ACTION, action);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addPlayer(GamePlayer p, JSONObject j) {
         if (p != null) {
             try {
                 j.put(PLAYER, p.getMyName());
@@ -254,11 +274,39 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     private void addCoupCard(CoupCard card, JSONObject j) {
-        //To change body of created methods use File | Settings | File Templates.
+        if (card != null) {
+            try {
+                JSONObject jcard = makeCard(card);
+                j.put(CARD, jcard);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private JSONObject makeCard(CoupCard c) {
+        JSONObject jcard = new JSONObject();
+        try {
+            addCoupCardType(c.type, jcard);
+            jcard.put(FACEUP, c.faceUp);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jcard;
     }
 
     private void addCardSet(Multiset<CoupCard> cards, JSONObject j) {
-        //To change body of created methods use File | Settings | File Templates.
+        if (cards != null) {
+            try {
+                JSONArray array = new JSONArray();
+                for (CoupCard c : cards)
+                    array.put(makeCard(c));
+                j.put(CARDS, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
