@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="coupGameMaster" class="com.neodem.coup.server.CoupGameMaster">
+
+
+    </bean>
+
+    <bean id="coupServer" class="com.neodem.coup.server.RmiCoupServer">
+        <property name="coupGameMaster" ref="coupGameMaster"/>
+    </bean>
+
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+        <property name="serviceName" value="CoupServer"/>
+        <property name="service" ref="coupServer"/>
+        <property name="serviceInterface" value="com.neodem.coup.server.CoupServer"/>
+        <property name="registryPort" value="1199"/>
+    </bean>
+
+</beans>

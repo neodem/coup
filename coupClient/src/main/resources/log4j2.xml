@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%-5p %c{1} - %m%n"/>
+        </Console>
+        <File name="R" fileName="./logs/coup-client.log" append="false">
+            <PatternLayout pattern="%p %t %c - %m%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.springframework.remoting.rmi" level="debug"/>
+        <Root level="debug">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="R"/>
+        </Root>
+    </Loggers>
+</Configuration>
