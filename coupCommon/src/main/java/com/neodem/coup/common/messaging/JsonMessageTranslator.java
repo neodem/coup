@@ -191,7 +191,19 @@ public class JsonMessageTranslator implements MessageTranslator {
 
     @Override
     public CoupAction getCoupAction(Message m) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        JSONObject j;
+        CoupAction result = null;
+
+        try {
+            j = new JSONObject(m.content);
+            String type = j.getString(ACTIONTYPE);
+            GamePlayer player = getPlayer(m);
+            result = new CoupAction(player, CoupAction.ActionType.valueOf(type));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     @Override

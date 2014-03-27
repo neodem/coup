@@ -7,12 +7,6 @@ import org.apache.commons.logging.LogFactory;
 import java.io.Serializable;
 import java.util.Collection;
 
-import static com.neodem.coup.common.game.CoupCardType.Ambassador;
-import static com.neodem.coup.common.game.CoupCardType.Assasin;
-import static com.neodem.coup.common.game.CoupCardType.Captain;
-import static com.neodem.coup.common.game.CoupCardType.Contessa;
-import static com.neodem.coup.common.game.CoupCardType.Duke;
-
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 2/28/14
@@ -22,7 +16,7 @@ public class CoupAction implements Serializable {
     public static CoupAction NoAction = new CoupAction(null, ActionType.NoAction);
     private static Log log = LogFactory.getLog(CoupAction.class.getName());
     private ActionType actionType;
-    private CoupPlayer actionOn;
+    private GamePlayer actionOn;
 
     @Override
     public boolean equals(Object o) {
@@ -44,7 +38,7 @@ public class CoupAction implements Serializable {
         return result;
     }
 
-    public CoupAction(CoupPlayer actionOn, ActionType actionType) {
+    public CoupAction(GamePlayer actionOn, ActionType actionType) {
         this.actionOn = actionOn;
         this.actionType = actionType;
     }
@@ -61,7 +55,7 @@ public class CoupAction implements Serializable {
         return actionType;
     }
 
-    public CoupPlayer getActionOn() {
+    public GamePlayer getActionOn() {
         return actionOn;
     }
 
