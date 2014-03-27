@@ -2,16 +2,21 @@
 <Configuration>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%-5p %c{1} - %m%n"/>
+            <PatternLayout pattern="[%t] %-5level %logger{36} - %m%n"/>
         </Console>
         <File name="File" fileName="./logs/coup-server.log" append="false">
             <PatternLayout pattern="%-5p %c{1} - %m%n"/>
         </File>
     </Appenders>
     <Loggers>
-        <Root level="DEBUG">
+        <Logger name="org.springframework" level="debug">
             <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="com.neodem" level="DEBUG">
             <AppenderRef ref="File"/>
+        </Logger>
+        <Root level="ERROR">
+            <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
 </Configuration>
