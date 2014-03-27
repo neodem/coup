@@ -1,6 +1,11 @@
 package com.neodem.coup.common;
 
 import com.google.common.collect.Multiset;
+import com.neodem.coup.common.game.CoupAction;
+import com.neodem.coup.common.game.CoupCard;
+import com.neodem.coup.common.game.CoupCardType;
+import com.neodem.coup.common.game.CoupGameContext;
+import com.neodem.coup.common.game.CoupPlayer;
 
 import java.io.Serializable;
 

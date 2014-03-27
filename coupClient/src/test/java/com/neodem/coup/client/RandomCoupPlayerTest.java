@@ -1,5 +1,6 @@
 package com.neodem.coup.client;
 
+import com.neodem.coup.client.game.RandomCoupPlayer;
 import org.apache.commons.lang.SerializationUtils;
 import org.junit.Test;
 

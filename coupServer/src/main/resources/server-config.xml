@@ -3,12 +3,12 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="coupGameMaster" class="com.neodem.coup.server.CoupGameMaster">
+    <bean id="coupGameMaster" class="com.neodem.coup.server.game.CoupGameMaster">
 
 
     </bean>
 
-    <bean id="coupServer" class="com.neodem.coup.server.RmiCoupServer">
+    <bean id="coupServer" class="com.neodem.coup.server.network.RmiCoupServer">
         <property name="coupGameMaster" ref="coupGameMaster"/>
     </bean>
 

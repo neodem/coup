@@ -1,11 +1,13 @@
 package com.neodem.coup.common;
 
+import com.neodem.coup.common.game.CoupAction;
+import com.neodem.coup.common.game.CoupPlayer;
 import org.apache.commons.lang.SerializationUtils;
 import org.junit.Test;
 
 import java.io.Serializable;
 
-import static com.neodem.coup.common.CoupAction.ActionType.Coup;
+import static com.neodem.coup.common.game.CoupAction.ActionType.Coup;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 

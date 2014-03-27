@@ -12,8 +12,12 @@
     <packaging>jar</packaging>
     <name>coupCommon</name>
 
-    <properties>
-        <spring.version>3.2.0.RELEASE</spring.version>
-    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20090211</version>
+        </dependency>
+    </dependencies>
 
 </project>

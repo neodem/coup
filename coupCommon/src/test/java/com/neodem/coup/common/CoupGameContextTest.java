@@ -1,5 +1,7 @@
 package com.neodem.coup.common;
 
+import com.neodem.coup.common.game.CoupGameContext;
+import com.neodem.coup.common.game.CoupPlayer;
 import org.apache.commons.lang.SerializationUtils;
 import org.junit.Test;
 

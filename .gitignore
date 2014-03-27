@@ -12,3 +12,7 @@ coup.log*
 *.jar
 *.war
 *.ear
+
+coupClient/target/*
+coupCommon/target/*
+coupServer/target/*
