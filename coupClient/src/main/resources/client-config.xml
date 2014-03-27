@@ -9,7 +9,7 @@
 
     <bean id="coupServer" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
         <property name="serviceUrl" value="rmi://localhost:1199/CoupServer"/>
-        <property name="serviceInterface" value="com.neodem.coup.server.CoupServer"/>
+        <property name="serviceInterface" value="com.neodem.coup.common.CoupServer"/>
     </bean>
 
 </beans>

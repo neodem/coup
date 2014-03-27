@@ -16,7 +16,7 @@
     <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
         <property name="serviceName" value="CoupServer"/>
         <property name="service" ref="coupServer"/>
-        <property name="serviceInterface" value="com.neodem.coup.server.CoupServer"/>
+        <property name="serviceInterface" value="com.neodem.coup.common.CoupServer"/>
         <property name="registryPort" value="1199"/>
     </bean>
 

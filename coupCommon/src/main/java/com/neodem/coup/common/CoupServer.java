@@ -1,6 +1,4 @@
-package com.neodem.coup.server;
-
-import com.neodem.coup.common.CoupPlayer;
+package com.neodem.coup.common;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com

@@ -1,6 +1,7 @@
 package com.neodem.coup.server;
 
 import com.neodem.coup.common.CoupPlayer;
+import com.neodem.coup.common.CoupServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

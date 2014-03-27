@@ -15,11 +15,6 @@
     <dependencies>
         <dependency>
             <groupId>com.neodem</groupId>
-            <artifactId>coupServer</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.neodem</groupId>
             <artifactId>coupCommon</artifactId>
             <version>${project.version}</version>
         </dependency>

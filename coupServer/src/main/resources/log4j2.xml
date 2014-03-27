@@ -9,14 +9,12 @@
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="org.springframework" level="debug">
-            <AppenderRef ref="Console"/>
-        </Logger>
-        <Logger name="com.neodem" level="DEBUG">
-            <AppenderRef ref="File"/>
-        </Logger>
-        <Root level="ERROR">
-            <AppenderRef ref="Console"/>
+        <Logger name="org.springframework" level="debug"/>
+        <Logger name="com.neodem" level="DEBUG"/>
+
+        <Root level="ALL">
+            <AppenderRef ref="Console" level="INFO"/>
+            <AppenderRef ref="File" level="Debug"/>
         </Root>
     </Loggers>
 </Configuration>
