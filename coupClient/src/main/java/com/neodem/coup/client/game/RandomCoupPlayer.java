@@ -16,7 +16,6 @@ import com.neodem.coup.common.game.GamePlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
@@ -45,13 +44,13 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer, Seri
     @Override
     public void updateContext(CoupGameContext gc) {
         currentGameContext = gc;
-        myState = gc.playerInfos.get(this);
+        myState = gc.getCoupPlayerInfos().get(this);
     }
 
     @Override
     public void initializePlayer(CoupGameContext g) {
         currentGameContext = g;
-        myState = g.playerInfos.get(this);
+        myState = g.getCoupPlayerInfos().get(this);
     }
 
     @Override
@@ -144,11 +143,11 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer, Seri
         getLog().debug(myName + " : my turn");
         //getLog().debug(gc);
 
-        CoupPlayer actionOn = null;
+        GamePlayer actionOn = null;
         ActionType actionType = ActionType.values()[r.nextInt(ActionType.values().length)];
 
         if (actionType == Assassinate || actionType == Steal || actionType == Coup) {
-            List<CoupPlayer> players = currentGameContext.getPlayers();
+            List<GamePlayer> players = currentGameContext.getPlayers();
             actionOn = Lists.getRandomElement(players, this);
         }
 
