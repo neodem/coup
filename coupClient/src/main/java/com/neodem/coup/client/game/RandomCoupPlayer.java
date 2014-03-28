@@ -16,7 +16,6 @@ import com.neodem.coup.common.game.GamePlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -29,7 +28,7 @@ import static com.neodem.coup.common.game.CoupAction.ActionType.Steal;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer, Serializable {
+public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
     private static Logger log = LogManager.getLogger(RandomCoupPlayer.class.getName());
     protected String myName;
     protected CoupGameContext currentGameContext;
