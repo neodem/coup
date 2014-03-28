@@ -30,7 +30,7 @@ public class CounterResolver {
      * @return true if the counter was successful, false otherwise
      */
     public boolean resolveCounter(CoupPlayer actingPlayer, CoupPlayer counteringPlayer, CoupAction counteredAction) {
-        if (actingPlayer.doYouWantToChallengeThisCounter(counteringPlayer)) {
+        if (actingPlayer.doYouWantToChallengeThisCounter(counteringPlayer.getPlayerName())) {
             Collection<CoupCardType> cardsNeededToCounter = counteredAction.getCounterCard();
 
             if (challengeResolver.resolveChallenge(actingPlayer, counteringPlayer, cardsNeededToCounter)) {

@@ -37,7 +37,7 @@ public class ChallengeResolver extends DamagingActionProcessor {
      * @return true if the challenge was successful, false otherwise
      */
     public boolean resolveChallenge(CoupPlayer challengingPlayer, CoupPlayer challengedPlayer, CoupCardType challengedCard) {
-        log.debug(String.format("resolveChallenge() : %s is challenging that %s has the %s card.", challengingPlayer.getMyName(), challengedPlayer.getMyName(), challengedCard));
+        log.debug(String.format("resolveChallenge() : %s is challenging that %s has the %s card.", challengingPlayer.getPlayerName(), challengedPlayer.getPlayerName(), challengedCard));
 
         // 1) acting player can decide to prove they have the card
         if (challengedPlayer.doYouWantToProveYouHaveACardOfThisType(challengedCard)) {
@@ -46,13 +46,13 @@ public class ChallengeResolver extends DamagingActionProcessor {
             PlayerInfoState playerInfoState = context.getPlayerInfo(challengedPlayer);
 
             if (playerInfoState.hasCard(challengedCard)) {
-                log.debug(String.format("%s does indeed have the %s card. Challenge failed :(", challengedPlayer.getMyName(), challengedCard));
+                log.debug(String.format("%s does indeed have the %s card. Challenge failed :(", challengedPlayer.getPlayerName(), challengedCard));
 
-                processLoss(challengingPlayer);
+                processLoss(challengingPlayer.getPlayerName());
 
                 // recycle the card
 
-                log.debug(String.format("%s has to recycle their %s card.", challengedPlayer.getMyName(), challengedCard));
+                log.debug(String.format("%s has to recycle their %s card.", challengedPlayer.getPlayerName(), challengedCard));
                 CoupCard actualCard = playerInfoState.removeCardOfType(challengedCard);
                 context.getDeck().putCard(actualCard);
                 context.getDeck().shuffleDeck();
@@ -61,11 +61,11 @@ public class ChallengeResolver extends DamagingActionProcessor {
                 return false;
             }
         } else {
-            log.debug(String.format("%s is refusing to prove they have the %s card.", challengedPlayer.getMyName(), challengedCard));
+            log.debug(String.format("%s is refusing to prove they have the %s card.", challengedPlayer.getPlayerName(), challengedCard));
         }
 
-        log.debug(String.format("%s did not prove they had the %s card. Challenge succeeded!", challengedPlayer.getMyName(), challengedCard));
-        processLoss(challengedPlayer);
+        log.debug(String.format("%s did not prove they had the %s card. Challenge succeeded!", challengedPlayer.getPlayerName(), challengedCard));
+        processLoss(challengedPlayer.getPlayerName());
         return true;
     }
 
@@ -86,7 +86,7 @@ public class ChallengeResolver extends DamagingActionProcessor {
     }
 
     @Override
-    public void process(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) {
+    public void process(CoupPlayer actingPlayer, String targetPlayer, CoupAction currentAction) {
         //noop : this should never be called
     }
 }

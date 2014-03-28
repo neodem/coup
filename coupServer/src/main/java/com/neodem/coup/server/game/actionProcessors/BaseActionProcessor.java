@@ -20,7 +20,7 @@ public abstract class BaseActionProcessor implements ActionProcessor {
     protected abstract Logger getLog();
 
     @Override
-    public void validate(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) throws PlayerError {
+    public void validate(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
 
     }
 

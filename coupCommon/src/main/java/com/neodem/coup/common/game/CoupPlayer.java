@@ -8,7 +8,7 @@ import com.google.common.collect.Multiset;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/24/14
  */
-public interface CoupPlayer extends GamePlayer {
+public interface CoupPlayer {
 
     /**
      * called by the GameMaster when this Player has a turn to process.
@@ -31,11 +31,11 @@ public interface CoupPlayer extends GamePlayer {
      * called by the GameMaster to alert other players to an action
      * by another player.
      *
-     * @param player    the player who initiated the action
-     * @param hisAction the action initiated
-     * @param gc        the current game context
+     * @param playerName the player who initiated the action
+     * @param hisAction  the action initiated
+     * @param gc         the current game context
      */
-    public void actionHappened(CoupPlayer player, CoupAction hisAction, CoupGameContext gc);
+    public void actionHappened(String playerName, CoupAction hisAction, CoupGameContext gc);
 
     /**
      * The players action was rejected and they will be called to try again
@@ -44,6 +44,13 @@ public interface CoupPlayer extends GamePlayer {
      *               TODO replace reason with an enum
      */
     public void tryAgain(String reason);
+
+    /**
+     * get the name of the player
+     *
+     * @return the name of the player (should never change)
+     */
+    public String getPlayerName();
 
     /**
      * will be called just before the game begins. This will allow the player to get set up
@@ -55,22 +62,22 @@ public interface CoupPlayer extends GamePlayer {
     /**
      * Called to ask the player if they want to counter the current action
      *
-     * @param theAction the action initiated
-     * @param thePlayer the player who initiated the action
-     * @param gc        the current game context
+     * @param theAction     the action initiated
+     * @param thePlayerName the player who initiated the action
+     * @param gc            the current game context
      * @return true if the player wants to counter the current action
      */
-    public boolean doYouWantToCounterThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc);
+    public boolean doYouWantToCounterThisAction(CoupAction theAction, String thePlayerName, CoupGameContext gc);
 
     /**
      * Called to ask the player if they want to challenge the current action
      *
-     * @param theAction the action initiated
-     * @param thePlayer the player who initiated the action
-     * @param gc        the current game context
+     * @param theAction     the action initiated
+     * @param thePlayerName the player who initiated the action
+     * @param gc            the current game context
      * @return true if the player wants to challenge the current action
      */
-    public boolean doYouWantToChallengeThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc);
+    public boolean doYouWantToChallengeThisAction(CoupAction theAction, String thePlayerName, CoupGameContext gc);
 
     /**
      * Called to ask the player if he/she wants to challenge the counter that is being played against them
@@ -78,7 +85,7 @@ public interface CoupPlayer extends GamePlayer {
      * @param playerCountering the player countering
      * @return true if the player wants to challenge this counter
      */
-    public boolean doYouWantToChallengeThisCounter(CoupPlayer playerCountering);
+    public boolean doYouWantToChallengeThisCounter(String playerCountering);
 
     /**
      * this is called when a player is challenged. the CGM is asking the player if they would like to

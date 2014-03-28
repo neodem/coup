@@ -16,11 +16,11 @@ import java.util.Map;
 public class CoupGameContext implements Serializable {
 
     private static Log log = LogFactory.getLog(CoupGameContext.class.getName());
-    private Map<CoupPlayer, CoupPlayerInfo> playerInfos = new HashMap<>();
+    private Map<String, CoupPlayerInfo> playerInfos = new HashMap<>();
     // a list of the players in the game (ordered by their position in the game)
-    private List<CoupPlayer> players = new ArrayList<>();
+    private List<String> players = new ArrayList<>();
 
-    public CoupGameContext(List<CoupPlayer> playerList, Map<CoupPlayer, CoupPlayerInfo> playerInfoMap) {
+    public CoupGameContext(List<String> playerList, Map<String, CoupPlayerInfo> playerInfoMap) {
         this.players = playerList;
         this.playerInfos = playerInfoMap;
     }
@@ -28,19 +28,19 @@ public class CoupGameContext implements Serializable {
     public CoupGameContext() {
     }
 
-    public void addInfo(CoupPlayer p, CoupPlayerInfo coupPlayerInfo) {
+    public void addInfo(String p, CoupPlayerInfo coupPlayerInfo) {
         playerInfos.put(p, coupPlayerInfo);
     }
 
-    public Map<CoupPlayer, CoupPlayerInfo> getCoupPlayerInfos() {
+    public Map<String, CoupPlayerInfo> getCoupPlayerInfos() {
         return playerInfos;
     }
 
-    public void addPlayer(CoupPlayer p) {
+    public void addPlayer(String p) {
         players.add(p);
     }
 
-    public List<CoupPlayer> getPlayers() {
+    public List<String> getPlayers() {
         return players;
     }
 
@@ -75,7 +75,7 @@ public class CoupGameContext implements Serializable {
         b.append('\n');
         b.append('\n');
 
-        for (CoupPlayer p : players) {
+        for (String p : players) {
             b.append(p);
             b.append('\n');
             b.append("===============");

@@ -31,7 +31,7 @@ public class AssasinationProcessor extends DamagingActionProcessor implements Ac
     }
 
     @Override
-    public void validate(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) throws PlayerError {
+    public void validate(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
         if (currentAction.getActionType() == CoupAction.ActionType.Assassinate) {
 
             PlayerInfoState info = context.getPlayerInfo(actingPlayer);
@@ -41,8 +41,8 @@ public class AssasinationProcessor extends DamagingActionProcessor implements Ac
                 throw new PlayerError(msg);
             }
 
-            if (targetPlayer != null && !context.isPlayerActive(targetPlayer)) {
-                String msg = "Player has attempted to Asssanate an inactive player : " + targetPlayer;
+            if (targetPlayerName != null && !context.isPlayerActive(targetPlayerName)) {
+                String msg = "Player has attempted to Asssanate an inactive player : " + targetPlayerName;
                 log.error(msg);
                 throw new PlayerError(msg);
             }
@@ -50,15 +50,15 @@ public class AssasinationProcessor extends DamagingActionProcessor implements Ac
     }
 
     @Override
-    public void process(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) {
+    public void process(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) {
         handlePayment(actingPlayer);
 
-        PlayerInfoState infoState = context.getPlayerInfo(targetPlayer);
+        PlayerInfoState infoState = context.getPlayerInfo(targetPlayerName);
         if (infoState.isActive()) {
-            log.debug(String.format("%s is assasinating %s", actingPlayer, targetPlayer));
-            processLoss(targetPlayer);
+            log.debug(String.format("%s is assasinating %s", actingPlayer, targetPlayerName));
+            processLoss(targetPlayerName);
         } else {
-            log.debug(String.format("%s is assasinating %s but they have no cards left and are inactive.", actingPlayer, targetPlayer));
+            log.debug(String.format("%s is assasinating %s but they have no cards left and are inactive.", actingPlayer, targetPlayerName));
         }
     }
 }

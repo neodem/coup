@@ -15,7 +15,7 @@ public class NetworkGateway {
 
     public void registerPlayer(CoupPlayer player) {
         ServiceProxy proxy = new ServiceProxy(player, messageTranslator);
-        messageTransport.registerNewClient(player.getMyName(), proxy);
+        messageTransport.registerNewClient(player.getPlayerName(), proxy);
     }
 
     public void setMessageTranslator(MessageTranslator messageTranslator) {

@@ -15,26 +15,26 @@ public abstract class DamagingActionProcessor extends BaseActionProcessor {
         super(context);
     }
 
-    protected void processLoss(CoupPlayer loser) {
-        String playerName = loser.getMyName();
+    protected void processLoss(String losingPlayerName) {
 
-        getLog().info(playerName + " has to loose an influence..");
+        getLog().info(losingPlayerName + " has to loose an influence..");
 
-        PlayerInfoState playerInfoState = context.getPlayerInfo(loser);
+        PlayerInfoState playerInfoState = context.getPlayerInfo(losingPlayerName);
 
         CoupCard card;
 
         if (playerInfoState.hasOneInfluenceLeft()) {
-            getLog().info(playerName + " has only one down card left so they are forced to turn it over and become inactive. :-(");
+            getLog().info(losingPlayerName + " has only one down card left so they are forced to turn it over and become inactive. :-(");
             card = playerInfoState.getDownCards().iterator().next();
         } else {
+            CoupPlayer losingPlayer = context.getCoupPlayer(losingPlayerName);
             // let them choose the card to turn over.
             do {
-                card = loser.youMustLooseAnInfluence();
+                card = losingPlayer.youMustLooseAnInfluence();
             } while (!playerInfoState.validInfluence(card));
         }
 
-        getLog().info(loser.getMyName() + " turns over their " + card + " card.");
+        getLog().info(losingPlayerName + " turns over their " + card + " card.");
         playerInfoState.turnFaceUp(card);
     }
 }

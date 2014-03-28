@@ -25,7 +25,7 @@ public class CoupActionProcessor extends DamagingActionProcessor implements Acti
     }
 
     @Override
-    public void validate(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) throws PlayerError {
+    public void validate(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
         if (currentAction.getActionType() == CoupAction.ActionType.Coup) {
             PlayerInfoState info = context.getPlayerInfo(actingPlayer);
 
@@ -41,8 +41,8 @@ public class CoupActionProcessor extends DamagingActionProcessor implements Acti
                 throw new PlayerError(msg);
             }
 
-            if (targetPlayer != null && !context.isPlayerActive(targetPlayer)) {
-                String msg = "Player has attempted to Coup an inactive player : " + targetPlayer;
+            if (targetPlayerName != null && !context.isPlayerActive(targetPlayerName)) {
+                String msg = "Player has attempted to Coup an inactive player : " + targetPlayerName;
                 log.error(msg);
                 throw new PlayerError(msg);
             }
@@ -50,13 +50,13 @@ public class CoupActionProcessor extends DamagingActionProcessor implements Acti
     }
 
     @Override
-    public void process(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) {
+    public void process(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) {
         log.debug(actingPlayer + " has to pay 7 coins to coup.");
 
         PlayerInfoState info = context.getPlayerInfo(actingPlayer);
         info.removeCoins(7);
 
-        log.debug(String.format("%s is launching a coup on %s", actingPlayer, targetPlayer));
-        processLoss(targetPlayer);
+        log.debug(String.format("%s is launching a coup on %s", actingPlayer, targetPlayerName));
+        processLoss(targetPlayerName);
     }
 }

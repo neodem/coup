@@ -23,7 +23,7 @@ public class IncomeProcessor extends BaseActionProcessor implements ActionProces
     }
 
     @Override
-    public void process(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) {
+    public void process(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) {
         switch (currentAction.getActionType()) {
             case Income:
                 getLog().info(actingPlayer + " gets one coin");

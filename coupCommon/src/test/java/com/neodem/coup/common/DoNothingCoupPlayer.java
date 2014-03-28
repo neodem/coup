@@ -35,7 +35,7 @@ public class DoNothingCoupPlayer implements CoupPlayer, Serializable {
     }
 
     @Override
-    public String getMyName() {
+    public String getPlayerName() {
         return name;
     }
 
@@ -50,7 +50,7 @@ public class DoNothingCoupPlayer implements CoupPlayer, Serializable {
     }
 
     @Override
-    public void actionHappened(CoupPlayer player, CoupAction hisAction, CoupGameContext gc) {
+    public void actionHappened(String player, CoupAction hisAction, CoupGameContext gc) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -65,17 +65,17 @@ public class DoNothingCoupPlayer implements CoupPlayer, Serializable {
     }
 
     @Override
-    public boolean doYouWantToCounterThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc) {
+    public boolean doYouWantToCounterThisAction(CoupAction theAction, String thePlayer, CoupGameContext gc) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public boolean doYouWantToChallengeThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc) {
+    public boolean doYouWantToChallengeThisAction(CoupAction theAction, String thePlayer, CoupGameContext gc) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public boolean doYouWantToChallengeThisCounter(CoupPlayer playerCountering) {
+    public boolean doYouWantToChallengeThisCounter(String playerCountering) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

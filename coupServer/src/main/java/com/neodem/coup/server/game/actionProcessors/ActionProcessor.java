@@ -9,7 +9,7 @@ import com.neodem.coup.common.game.PlayerError;
  * Created Date: 3/26/14
  */
 public interface ActionProcessor {
-    public void validate(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) throws PlayerError;
+    public void validate(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError;
 
-    public void process(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction);
+    public void process(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction);
 }

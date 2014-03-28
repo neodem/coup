@@ -20,7 +20,7 @@ public class CoupGameContextTest {
     public void coupGameContextShouldSerializeCorrectly() {
         CoupPlayer p = new DoNothingCoupPlayer();
         CoupGameContext gc = new CoupGameContext();
-        gc.addPlayer(p);
+        gc.addPlayer(p.getPlayerName());
 
         Serializable original = gc;
         Serializable copy = (Serializable) SerializationUtils.clone(original);

@@ -41,7 +41,7 @@ public class ServerSideGameContext {
     }
 
     private PlayerInfoState makeNewPlayerInfo(CoupPlayer p) {
-        return new PlayerInfoState(2, deck.takeCard(), deck.takeCard(), p.getMyName());
+        return new PlayerInfoState(2, deck.takeCard(), deck.takeCard(), p.getPlayerName());
     }
 
     public CoupGameContext generateCurrentPublicGameContext() {
@@ -53,18 +53,23 @@ public class ServerSideGameContext {
         CoupGameContext gc = new CoupGameContext();
 
         for (CoupPlayer p : playerList) {
-            gc.addPlayer(p);
+            String playerName = p.getPlayerName();
+            gc.addPlayer(playerName);
             PlayerInfoState pi = getPlayerInfo(p);
             if (pi != null) {
                 if (p.equals(privPlayer)) {
-                    gc.addInfo(p, pi.makePrivatePlayerInfo());
+                    gc.addInfo(playerName, pi.makePrivatePlayerInfo());
                 } else {
-                    gc.addInfo(p, pi.makePublicPlayerInfo());
+                    gc.addInfo(playerName, pi.makePublicPlayerInfo());
                 }
             }
         }
 
         return gc;
+    }
+
+    public PlayerInfoState getPlayerInfo(String playerName) {
+        return playerInfoMap.get(getCoupPlayer(playerName));
     }
 
     public PlayerInfoState getPlayerInfo(CoupPlayer p) {
@@ -79,13 +84,23 @@ public class ServerSideGameContext {
         return playerList;
     }
 
-    public boolean isPlayerActive(CoupPlayer p) {
-        return playerInfoMap.get(p).isActive();
+    public boolean isPlayerActive(String playerName) {
+        PlayerInfoState pis = getPlayerInfo(playerName);
+        return pis.isActive();
     }
 
     public void addCoinsToPlayer(int coins, CoupPlayer p) {
         playerInfoMap.get(p).addCoins(coins);
     }
 
+    public CoupPlayer getCoupPlayer(String playerName) {
 
+        for (CoupPlayer p : playerInfoMap.keySet()) {
+            if (p.getPlayerName().equals(playerName)) {
+                return p;
+            }
+        }
+
+        return null;
+    }
 }

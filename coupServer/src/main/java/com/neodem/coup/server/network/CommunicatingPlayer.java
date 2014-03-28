@@ -68,8 +68,8 @@ public class CommunicatingPlayer implements CoupPlayer {
     }
 
     @Override
-    public void actionHappened(CoupPlayer player, CoupAction hisAction, CoupGameContext gc) {
-        Message m = messageTranslator.makeMessage(actionHappened, hisAction, player, gc);
+    public void actionHappened(String playerName, CoupAction hisAction, CoupGameContext gc) {
+        Message m = messageTranslator.makeMessage(actionHappened, hisAction, playerName, gc);
         messageTransport.send(id, m);
     }
 
@@ -80,7 +80,7 @@ public class CommunicatingPlayer implements CoupPlayer {
     }
 
     @Override
-    public String getMyName() {
+    public String getPlayerName() {
         return playerName;
     }
 
@@ -91,21 +91,21 @@ public class CommunicatingPlayer implements CoupPlayer {
     }
 
     @Override
-    public boolean doYouWantToCounterThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc) {
+    public boolean doYouWantToCounterThisAction(CoupAction theAction, String thePlayer, CoupGameContext gc) {
         Message m = messageTranslator.makeMessage(counterAction, theAction, thePlayer, gc);
         Message reply = messageTransport.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);
     }
 
     @Override
-    public boolean doYouWantToChallengeThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc) {
+    public boolean doYouWantToChallengeThisAction(CoupAction theAction, String thePlayer, CoupGameContext gc) {
         Message m = messageTranslator.makeMessage(challengeAction, theAction, thePlayer, gc);
         Message reply = messageTransport.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);
     }
 
     @Override
-    public boolean doYouWantToChallengeThisCounter(CoupPlayer playerCountering) {
+    public boolean doYouWantToChallengeThisCounter(String playerCountering) {
         Message m = messageTranslator.makeMessage(challengeCounter, playerCountering);
         Message reply = messageTransport.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);

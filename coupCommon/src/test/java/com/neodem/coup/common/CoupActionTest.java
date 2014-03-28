@@ -20,7 +20,7 @@ public class CoupActionTest {
     @Test
     public void coupActionShouldSerializeCorrectly() {
         CoupPlayer p = new DoNothingCoupPlayer();
-        Serializable original = new CoupAction(p, Coup);
+        Serializable original = new CoupAction(p.getPlayerName(), Coup);
         Serializable copy = (Serializable) SerializationUtils.clone(original);
         assertThat(original, equalTo(copy));
     }

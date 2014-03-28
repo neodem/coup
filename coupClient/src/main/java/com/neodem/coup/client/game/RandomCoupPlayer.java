@@ -56,7 +56,7 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
     }
 
     @Override
-    public boolean doYouWantToCounterThisAction(CoupAction hisAction, CoupPlayer actingPlayer, CoupGameContext gc) {
+    public boolean doYouWantToCounterThisAction(CoupAction hisAction, String actingPlayer, CoupGameContext gc) {
         updateContext(gc);
         int rand = r.nextInt(100);
 
@@ -72,7 +72,7 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
     }
 
     @Override
-    public boolean doYouWantToChallengeThisAction(CoupAction hisAction, CoupPlayer actingPlayer, CoupGameContext gc) {
+    public boolean doYouWantToChallengeThisAction(CoupAction hisAction, String actingPlayer, CoupGameContext gc) {
         updateContext(gc);
         int rand = r.nextInt(100);
 
@@ -88,16 +88,16 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
     }
 
     @Override
-    public boolean doYouWantToChallengeThisCounter(CoupPlayer playerCountering) {
+    public boolean doYouWantToChallengeThisCounter(String counteringPlayer) {
         int rand = r.nextInt(100);
 
         if (rand < 70) {
-            String msg = String.format("%s : %s is trying to counter me, and I'm Challenging Them!", myName, playerCountering.getMyName());
+            String msg = String.format("%s : %s is trying to counter me, and I'm Challenging Them!", myName, counteringPlayer);
             log.debug(msg);
             return true;
         }
 
-        String msg = String.format("%s : %s is trying to counter me, and I'm not going to challenge them.", myName, playerCountering.getMyName());
+        String msg = String.format("%s : %s is trying to counter me, and I'm not going to challenge them.", myName, counteringPlayer);
         log.debug(msg);
         return false;
     }
@@ -140,12 +140,12 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
         getLog().debug(myName + " : my turn");
         //getLog().debug(gc);
 
-        CoupPlayer actionOn = null;
+        String actionOn = null;
         ActionType actionType = ActionType.values()[r.nextInt(ActionType.values().length)];
 
         if (actionType == Assassinate || actionType == Steal || actionType == Coup) {
-            List<CoupPlayer> players = currentGameContext.getPlayers();
-            actionOn = Lists.getRandomElement(players, this);
+            List<String> players = currentGameContext.getPlayers();
+            actionOn = Lists.getRandomElement(players, this.myName);
         }
 
         CoupAction action = new CoupAction(actionOn, actionType);
@@ -155,9 +155,9 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
     }
 
     @Override
-    public void actionHappened(CoupPlayer player, CoupAction hisAction, CoupGameContext gc) {
+    public void actionHappened(String actingPlayer, CoupAction hisAction, CoupGameContext gc) {
         updateContext(gc);
-        String msg = String.format("%s : %s", myName, DisplayUtils.formatAction(hisAction, player));
+        String msg = String.format("%s : %s", myName, DisplayUtils.formatAction(hisAction, actingPlayer));
         getLog().debug(msg);
     }
 

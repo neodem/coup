@@ -65,7 +65,7 @@ public class RmiCoupServer {
         log.info("Starting Game");
         CoupPlayer winningPlayer = cgm.runGameLoop();
 
-        log.info("The game is over : " + winningPlayer.getMyName() + " was the winner!");
+        log.info("The game is over : " + winningPlayer.getPlayerName() + " was the winner!");
     }
 
     public void setCoupGameMaster(CoupGameMaster cgm) {

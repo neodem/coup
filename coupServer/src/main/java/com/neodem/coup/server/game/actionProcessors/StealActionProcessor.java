@@ -25,10 +25,10 @@ public class StealActionProcessor extends BaseActionProcessor implements ActionP
     }
 
     @Override
-    public void validate(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) throws PlayerError {
+    public void validate(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
         if (currentAction.getActionType() == CoupAction.ActionType.Steal) {
-            if (targetPlayer != null && !context.isPlayerActive(targetPlayer)) {
-                String msg = "Player has attempted to Steal from an inactive player : " + targetPlayer;
+            if (targetPlayerName != null && !context.isPlayerActive(targetPlayerName)) {
+                String msg = "Player has attempted to Steal from an inactive player : " + targetPlayerName;
                 getLog().error(msg);
                 throw new PlayerError(msg);
             }
@@ -36,13 +36,13 @@ public class StealActionProcessor extends BaseActionProcessor implements ActionP
     }
 
     @Override
-    public void process(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) {
+    public void process(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) {
         PlayerInfoState aInfo = context.getPlayerInfo(actingPlayer);
-        PlayerInfoState oInfo = context.getPlayerInfo(targetPlayer);
+        PlayerInfoState oInfo = context.getPlayerInfo(targetPlayerName);
 
         // we may also get 0 or 1 coin here
         int coins = oInfo.removeCoins(2);
-        getLog().debug(actingPlayer.getMyName() + " steals " + coins + " coins from " + targetPlayer.getMyName());
+        getLog().debug(actingPlayer.getPlayerName() + " steals " + coins + " coins from " + targetPlayerName);
         aInfo.addCoins(coins);
     }
 }

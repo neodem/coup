@@ -30,7 +30,7 @@ public class ExchangeActionProcessor extends BaseActionProcessor implements Acti
     }
 
     @Override
-    public void process(CoupPlayer actingPlayer, CoupPlayer targetPlayer, CoupAction currentAction) {
+    public void process(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) {
         getLog().debug(String.format("%s is doing an exchange...", actingPlayer));
 
         PlayerInfoState currentPlayerInfo = context.getPlayerInfo(actingPlayer);

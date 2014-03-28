@@ -16,7 +16,7 @@ public class CoupAction implements Serializable {
     public static CoupAction NoAction = new CoupAction(null, ActionType.NoAction);
     private static Log log = LogFactory.getLog(CoupAction.class.getName());
     private ActionType actionType;
-    private CoupPlayer actionOn;
+    private String actionOn;
 
     @Override
     public boolean equals(Object o) {
@@ -38,7 +38,7 @@ public class CoupAction implements Serializable {
         return result;
     }
 
-    public CoupAction(CoupPlayer actionOn, ActionType actionType) {
+    public CoupAction(String actionOn, ActionType actionType) {
         this.actionOn = actionOn;
         this.actionType = actionType;
     }
@@ -55,7 +55,7 @@ public class CoupAction implements Serializable {
         return actionType;
     }
 
-    public CoupPlayer getActionOn() {
+    public String getActionOn() {
         return actionOn;
     }
 
@@ -64,7 +64,7 @@ public class CoupAction implements Serializable {
         if (actionOn == null)
             return actionType.toString();
 
-        return actionType.toString() + " on " + actionOn.getMyName();
+        return actionType.toString() + " on " + actionOn;
     }
 
     /**

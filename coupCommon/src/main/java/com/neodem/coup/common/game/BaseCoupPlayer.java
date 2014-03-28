@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public class BaseCoupPlayer implements GamePlayer {
+public abstract class BaseCoupPlayer implements CoupPlayer {
 
     private static Logger log = LogManager.getLogger(BaseCoupPlayer.class.getName());
     private String playerName;
@@ -17,7 +17,7 @@ public class BaseCoupPlayer implements GamePlayer {
     }
 
     @Override
-    public String getMyName() {
+    public String getPlayerName() {
         return playerName;
     }
 

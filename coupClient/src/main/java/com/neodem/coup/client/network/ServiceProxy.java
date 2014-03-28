@@ -31,7 +31,7 @@ public class ServiceProxy implements MessageClient {
         Message replyMessage = null;
 
         CoupGameContext gc;
-        CoupPlayer p;
+        String playerName;
         CoupAction a;
         boolean bool;
         CoupCardType cardType;
@@ -46,20 +46,20 @@ public class ServiceProxy implements MessageClient {
             case counterAction:
                 gc = messageTranslator.getCoupGameContext(m);
                 a = messageTranslator.getCoupAction(m);
-                p = messageTranslator.getCoupPlayer(m);
-                bool = player.doYouWantToCounterThisAction(a, p, gc);
+                playerName = messageTranslator.getPlayerName(m);
+                bool = player.doYouWantToCounterThisAction(a, playerName, gc);
                 replyMessage = messageTranslator.makeMessage(reply, bool);
                 break;
             case challengeAction:
                 gc = messageTranslator.getCoupGameContext(m);
                 a = messageTranslator.getCoupAction(m);
-                p = messageTranslator.getCoupPlayer(m);
-                bool = player.doYouWantToChallengeThisAction(a, p, gc);
+                playerName = messageTranslator.getPlayerName(m);
+                bool = player.doYouWantToChallengeThisAction(a, playerName, gc);
                 replyMessage = messageTranslator.makeMessage(reply, bool);
                 break;
             case challengeCounter:
-                p = messageTranslator.getCoupPlayer(m);
-                bool = player.doYouWantToChallengeThisCounter(p);
+                playerName = messageTranslator.getPlayerName(m);
+                bool = player.doYouWantToChallengeThisCounter(playerName);
                 replyMessage = messageTranslator.makeMessage(reply, bool);
                 break;
             case proveCard:
@@ -84,7 +84,7 @@ public class ServiceProxy implements MessageClient {
     @Override
     public void getAsynchonousMessage(Message m) {
         CoupGameContext gc;
-        CoupPlayer p;
+        String playerNane;
         CoupAction a;
         String message;
 
@@ -98,10 +98,10 @@ public class ServiceProxy implements MessageClient {
                 player.tryAgain(message);
                 break;
             case actionHappened:
-                p = messageTranslator.getCoupPlayer(m);
+                playerNane = messageTranslator.getPlayerName(m);
                 a = messageTranslator.getCoupAction(m);
                 gc = messageTranslator.getCoupGameContext(m);
-                player.actionHappened(p, a, gc);
+                player.actionHappened(playerNane, a, gc);
                 break;
             case intializePlayer:
                 gc = messageTranslator.getCoupGameContext(m);
