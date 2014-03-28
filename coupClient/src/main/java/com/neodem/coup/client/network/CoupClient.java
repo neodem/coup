@@ -11,9 +11,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public class RmiCoupClient {
+public class CoupClient {
 
-    private static Log log = LogFactory.getLog(RmiCoupClient.class.getName());
+    private static Log log = LogFactory.getLog(CoupClient.class.getName());
     private NetworkGateway gateway;
 
     public static void main(String[] args) {
@@ -21,7 +21,7 @@ public class RmiCoupClient {
         log.info(springContextFile);
         ApplicationContext context = new ClassPathXmlApplicationContext(springContextFile);
 
-        RmiCoupClient c = (RmiCoupClient) context.getBean("coupClient");
+        CoupClient c = (CoupClient) context.getBean("coupClient");
         c.start();
     }
 

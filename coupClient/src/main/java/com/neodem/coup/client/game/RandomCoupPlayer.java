@@ -12,7 +12,6 @@ import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayer;
 import com.neodem.coup.common.game.CoupPlayerInfo;
-import com.neodem.coup.common.game.GamePlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +33,6 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
     protected CoupGameContext currentGameContext;
     private CoupPlayerInfo myState = null;
     private Random r = new Random(System.currentTimeMillis());
-
 
     public RandomCoupPlayer(String name) {
         super(name);
@@ -58,7 +56,7 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
     }
 
     @Override
-    public boolean doYouWantToCounterThisAction(CoupAction hisAction, GamePlayer actingPlayer, CoupGameContext gc) {
+    public boolean doYouWantToCounterThisAction(CoupAction hisAction, CoupPlayer actingPlayer, CoupGameContext gc) {
         updateContext(gc);
         int rand = r.nextInt(100);
 
@@ -74,7 +72,7 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
     }
 
     @Override
-    public boolean doYouWantToChallengeThisAction(CoupAction hisAction, GamePlayer actingPlayer, CoupGameContext gc) {
+    public boolean doYouWantToChallengeThisAction(CoupAction hisAction, CoupPlayer actingPlayer, CoupGameContext gc) {
         updateContext(gc);
         int rand = r.nextInt(100);
 
@@ -90,7 +88,7 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
     }
 
     @Override
-    public boolean doYouWantToChallengeThisCounter(GamePlayer playerCountering) {
+    public boolean doYouWantToChallengeThisCounter(CoupPlayer playerCountering) {
         int rand = r.nextInt(100);
 
         if (rand < 70) {
@@ -142,11 +140,11 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
         getLog().debug(myName + " : my turn");
         //getLog().debug(gc);
 
-        GamePlayer actionOn = null;
+        CoupPlayer actionOn = null;
         ActionType actionType = ActionType.values()[r.nextInt(ActionType.values().length)];
 
         if (actionType == Assassinate || actionType == Steal || actionType == Coup) {
-            List<GamePlayer> players = currentGameContext.getPlayers();
+            List<CoupPlayer> players = currentGameContext.getPlayers();
             actionOn = Lists.getRandomElement(players, this);
         }
 
@@ -157,7 +155,7 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayer {
     }
 
     @Override
-    public void actionHappened(GamePlayer player, CoupAction hisAction, CoupGameContext gc) {
+    public void actionHappened(CoupPlayer player, CoupAction hisAction, CoupGameContext gc) {
         updateContext(gc);
         String msg = String.format("%s : %s", myName, DisplayUtils.formatAction(hisAction, player));
         getLog().debug(msg);

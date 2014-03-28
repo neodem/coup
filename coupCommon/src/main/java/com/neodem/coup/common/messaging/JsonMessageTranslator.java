@@ -2,14 +2,14 @@ package com.neodem.coup.common.messaging;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Multiset;
-import com.neodem.coup.common.game.BaseCoupPlayer;
 import com.neodem.coup.common.game.CoupAction;
 import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupGameContext;
+import com.neodem.coup.common.game.CoupPlayer;
 import com.neodem.coup.common.game.CoupPlayerInfo;
-import com.neodem.coup.common.game.GamePlayer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,10 +42,11 @@ public class JsonMessageTranslator implements MessageTranslator {
     private static final String COINCOUNT = "CoinCount";
     private static final String CARD1 = "Card1";
     private static final String CARD2 = "Card2";
-    public boolean active = true;
-    public int coins = 0;
-    public CoupCard cardOne = new CoupCard(CoupCardType.Unknown);
-    public CoupCard cardTwo = new CoupCard(CoupCardType.Unknown);
+    private PlayerStore playerStore;
+
+    public void setPlayerStore(PlayerStore playerStore) {
+        this.playerStore = playerStore;
+    }
 
     @Override
     public Message makeMessage(MessageType type) {
@@ -71,10 +72,10 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public Message makeMessage(MessageType type, GamePlayer p) {
+    public Message makeMessage(MessageType type, CoupPlayer p) {
         JSONObject j = new JSONObject();
         setType(type, j);
-        setGamePlayer(p, j);
+        setCoupPlayer(p, j);
         return new Message(j.toString());
     }
 
@@ -87,11 +88,11 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public Message makeMessage(MessageType type, CoupAction a, GamePlayer p, CoupGameContext gc) {
+    public Message makeMessage(MessageType type, CoupAction a, CoupPlayer p, CoupGameContext gc) {
         JSONObject j = new JSONObject();
         setType(type, j);
         setCoupAction(a, j);
-        setGamePlayer(p, j);
+        setCoupPlayer(p, j);
         setCoupGameContext(gc, j);
         return new Message(j.toString());
     }
@@ -183,8 +184,9 @@ public class JsonMessageTranslator implements MessageTranslator {
         return result;
     }
 
-    protected void setGamePlayer(GamePlayer p, JSONObject j) {
+    protected void setCoupPlayer(CoupPlayer p, JSONObject j) {
         if (p != null && j != null) {
+            playerStore.storePlayer(p);
             try {
                 j.put(PLAYER, p.getMyName());
             } catch (JSONException e) {
@@ -194,14 +196,14 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public GamePlayer getGamePlayer(Message m) {
+    public CoupPlayer getCoupPlayer(Message m) {
         JSONObject j;
-        GamePlayer result = null;
+        CoupPlayer result = null;
 
         if (m != null) {
             try {
                 j = new JSONObject(m.content);
-                result = new BaseCoupPlayer(j.getString(PLAYER));
+                result = playerStore.getPlayer(j.getString(PLAYER));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -243,7 +245,7 @@ public class JsonMessageTranslator implements MessageTranslator {
             JSONObject action = new JSONObject();
             try {
                 action.put(ACTIONTYPE, a.getActionType().name());
-                setGamePlayer(a.getActionOn(), j);
+                setCoupPlayer(a.getActionOn(), j);
                 j.put(ACTION, action);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -261,7 +263,7 @@ public class JsonMessageTranslator implements MessageTranslator {
             try {
                 j = new JSONObject(m.content);
                 String type = j.getString(ACTIONTYPE);
-                GamePlayer player = getGamePlayer(m);
+                CoupPlayer player = getCoupPlayer(m);
                 result = new CoupAction(player, CoupAction.ActionType.valueOf(type));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -395,10 +397,10 @@ public class JsonMessageTranslator implements MessageTranslator {
 
                 JSONObject context = j.getJSONObject(CONTEXT);
                 JSONArray players = context.getJSONArray(PLAYERS);
-                List<GamePlayer> playerList = makePlayerListFromJSONObject(players);
+                List<CoupPlayer> playerList = makePlayerListFromJSONObject(players);
 
                 JSONObject playerInfos = context.getJSONObject(PLAYERINFOS);
-                Map<GamePlayer, CoupPlayerInfo> playerInfoMap = makePlayerInfoMapFromJSONObject(playerInfos);
+                Map<CoupPlayer, CoupPlayerInfo> playerInfoMap = makePlayerInfoMapFromJSONObject(playerInfos);
 
                 result = new CoupGameContext(playerList, playerInfoMap);
             } catch (JSONException e) {
@@ -409,25 +411,24 @@ public class JsonMessageTranslator implements MessageTranslator {
         return result;
     }
 
-    private JSONArray makePlayers(List<GamePlayer> players) {
+    private JSONArray makePlayers(List<CoupPlayer> players) {
         JSONArray j = new JSONArray();
 
-        for (GamePlayer p : players)
+        for (CoupPlayer p : players)
             j.put(p.getMyName());
 
         return j;
     }
 
-    private List<GamePlayer> makePlayerListFromJSONObject(JSONArray j) {
-        List<GamePlayer> result = Lists.newArrayList();
+    private List<CoupPlayer> makePlayerListFromJSONObject(JSONArray j) {
+        List<CoupPlayer> result = Lists.newArrayList();
 
         if (j != null) {
             try {
                 int len = j.length();
                 for (int i = 0; i < len; i++) {
                     String name = j.getString(i);
-                    result.add(new BaseCoupPlayer(name));
-
+                    result.add(playerStore.getPlayer(name));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -437,11 +438,11 @@ public class JsonMessageTranslator implements MessageTranslator {
         return result;
     }
 
-    private JSONObject makePlayerInfos(Map<GamePlayer, CoupPlayerInfo> coupPlayerInfos) {
+    private JSONObject makePlayerInfos(Map<CoupPlayer, CoupPlayerInfo> coupPlayerInfos) {
         JSONObject j = new JSONObject();
         try {
             JSONArray a = new JSONArray();
-            for (GamePlayer player : coupPlayerInfos.keySet()) {
+            for (CoupPlayer player : coupPlayerInfos.keySet()) {
                 CoupPlayerInfo info = coupPlayerInfos.get(player);
                 JSONObject playerInfo = makePlayerInfo(info);
                 String playerName = player.getMyName();
@@ -450,6 +451,7 @@ public class JsonMessageTranslator implements MessageTranslator {
                 element.put(playerName, playerInfo);
 
                 a.put(element);
+                playerStore.storePlayer(player);
             }
             j.put(PLAYERINFOS, a);
         } catch (JSONException e) {
@@ -459,8 +461,28 @@ public class JsonMessageTranslator implements MessageTranslator {
         return j;
     }
 
-    private Map<GamePlayer, CoupPlayerInfo> makePlayerInfoMapFromJSONObject(JSONObject j) {
-        return null;
+    private Map<CoupPlayer, CoupPlayerInfo> makePlayerInfoMapFromJSONObject(JSONObject j) {
+        Map<CoupPlayer, CoupPlayerInfo> result = Maps.newHashMap();
+
+        if (j != null) {
+            try {
+                JSONArray array = j.getJSONArray(PLAYERINFOS);
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject element = array.getJSONObject(i);
+                    String playerName = (String) element.keys().next();
+                    JSONObject playerInfoJSON = element.getJSONObject(playerName);
+
+                    CoupPlayerInfo playerInfo = makePlayerInfoFromJSONObject(playerInfoJSON);
+                    CoupPlayer player = playerStore.getPlayer(playerName);
+
+                    result.put(player, playerInfo);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
     }
 
     private JSONObject makePlayerInfo(CoupPlayerInfo coupPlayerInfo) {

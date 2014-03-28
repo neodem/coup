@@ -6,15 +6,11 @@ import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayer;
-import com.neodem.coup.common.game.GamePlayer;
 import com.neodem.coup.common.messaging.Message;
 import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.common.messaging.MessageTransport;
 
 import static com.neodem.coup.common.messaging.MessageType.*;
-import static com.neodem.coup.common.messaging.MessageType.tryAgain;
-import static com.neodem.coup.common.messaging.MessageType.updateContext;
-import static com.neodem.coup.common.messaging.MessageType.yourTurn;
 
 /**
  * This class will communicate with it's parter on the client side
@@ -29,7 +25,7 @@ public class CommunicatingPlayer implements CoupPlayer {
     private MessageTransport messageTransport;
     private int id;
 
-    public CommunicatingPlayer(String playerName, int id,MessageTranslator messageTranslator, MessageTransport messageTransport) {
+    public CommunicatingPlayer(String playerName, int id, MessageTranslator messageTranslator, MessageTransport messageTransport) {
         this.playerName = playerName;
         this.id = id;
         this.messageTranslator = messageTranslator;
@@ -72,7 +68,7 @@ public class CommunicatingPlayer implements CoupPlayer {
     }
 
     @Override
-    public void actionHappened(GamePlayer player, CoupAction hisAction, CoupGameContext gc) {
+    public void actionHappened(CoupPlayer player, CoupAction hisAction, CoupGameContext gc) {
         Message m = messageTranslator.makeMessage(actionHappened, hisAction, player, gc);
         messageTransport.send(id, m);
     }
@@ -95,21 +91,21 @@ public class CommunicatingPlayer implements CoupPlayer {
     }
 
     @Override
-    public boolean doYouWantToCounterThisAction(CoupAction theAction, GamePlayer thePlayer, CoupGameContext gc) {
+    public boolean doYouWantToCounterThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc) {
         Message m = messageTranslator.makeMessage(counterAction, theAction, thePlayer, gc);
         Message reply = messageTransport.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);
     }
 
     @Override
-    public boolean doYouWantToChallengeThisAction(CoupAction theAction, GamePlayer thePlayer, CoupGameContext gc) {
+    public boolean doYouWantToChallengeThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc) {
         Message m = messageTranslator.makeMessage(challengeAction, theAction, thePlayer, gc);
         Message reply = messageTransport.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);
     }
 
     @Override
-    public boolean doYouWantToChallengeThisCounter(GamePlayer playerCountering) {
+    public boolean doYouWantToChallengeThisCounter(CoupPlayer playerCountering) {
         Message m = messageTranslator.makeMessage(challengeCounter, playerCountering);
         Message reply = messageTransport.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);

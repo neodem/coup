@@ -6,7 +6,6 @@ import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayer;
-import com.neodem.coup.common.game.GamePlayer;
 import com.neodem.coup.common.messaging.Message;
 import com.neodem.coup.common.messaging.MessageClient;
 import com.neodem.coup.common.messaging.MessageTranslator;
@@ -32,7 +31,7 @@ public class ServiceProxy implements MessageClient {
         Message replyMessage = null;
 
         CoupGameContext gc;
-        GamePlayer p;
+        CoupPlayer p;
         CoupAction a;
         boolean bool;
         CoupCardType cardType;
@@ -47,19 +46,19 @@ public class ServiceProxy implements MessageClient {
             case counterAction:
                 gc = messageTranslator.getCoupGameContext(m);
                 a = messageTranslator.getCoupAction(m);
-                p = messageTranslator.getGamePlayer(m);
+                p = messageTranslator.getCoupPlayer(m);
                 bool = player.doYouWantToCounterThisAction(a, p, gc);
                 replyMessage = messageTranslator.makeMessage(reply, bool);
                 break;
             case challengeAction:
                 gc = messageTranslator.getCoupGameContext(m);
                 a = messageTranslator.getCoupAction(m);
-                p = messageTranslator.getGamePlayer(m);
+                p = messageTranslator.getCoupPlayer(m);
                 bool = player.doYouWantToChallengeThisAction(a, p, gc);
                 replyMessage = messageTranslator.makeMessage(reply, bool);
                 break;
             case challengeCounter:
-                p = messageTranslator.getGamePlayer(m);
+                p = messageTranslator.getCoupPlayer(m);
                 bool = player.doYouWantToChallengeThisCounter(p);
                 replyMessage = messageTranslator.makeMessage(reply, bool);
                 break;
@@ -85,7 +84,7 @@ public class ServiceProxy implements MessageClient {
     @Override
     public void getAsynchonousMessage(Message m) {
         CoupGameContext gc;
-        GamePlayer p;
+        CoupPlayer p;
         CoupAction a;
         String message;
 
@@ -99,7 +98,7 @@ public class ServiceProxy implements MessageClient {
                 player.tryAgain(message);
                 break;
             case actionHappened:
-                p = messageTranslator.getGamePlayer(m);
+                p = messageTranslator.getCoupPlayer(m);
                 a = messageTranslator.getCoupAction(m);
                 gc = messageTranslator.getCoupGameContext(m);
                 player.actionHappened(p, a, gc);

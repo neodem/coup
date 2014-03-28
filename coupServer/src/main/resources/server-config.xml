@@ -8,16 +8,20 @@
 
     </bean>
 
-    <bean id="coupServer" class="com.neodem.coup.server.network.RmiCoupServer">
-        <property name="coupGameMaster" ref="coupGameMaster"/>
-    </bean>
-
 
     <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
-        <property name="serviceName" value="CoupServer"/>
-        <property name="service" ref="coupServer"/>
-        <property name="serviceInterface" value="com.neodem.coup.common.CoupServer"/>
+        <property name="serviceName" value="messageTransport"/>
+        <property name="service" ref="messageTransport"/>
+        <property name="serviceInterface" value="com.neodem.coup.common.messaging.MessageTransport"/>
         <property name="registryPort" value="1199"/>
     </bean>
+
+    <bean id="messageTransport" class="com.neodem.coup.server.network.DefaultMessageTransport"/>
+
+    <bean id="messageTranslator" class="com.neodem.coup.common.messaging.JsonMessageTranslator">
+        <property name="playerStore" ref="playerStore"/>
+    </bean>
+
+    <bean id="playerStore" class="com.neodem.coup.common.messaging.InMemoryPlayerStore"/>
 
 </beans>

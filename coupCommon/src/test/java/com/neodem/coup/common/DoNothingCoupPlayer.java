@@ -1,6 +1,11 @@
 package com.neodem.coup.common;
 
-import com.neodem.coup.common.game.GamePlayer;
+import com.google.common.collect.Multiset;
+import com.neodem.coup.common.game.CoupAction;
+import com.neodem.coup.common.game.CoupCard;
+import com.neodem.coup.common.game.CoupCardType;
+import com.neodem.coup.common.game.CoupGameContext;
+import com.neodem.coup.common.game.CoupPlayer;
 
 import java.io.Serializable;
 
@@ -8,7 +13,7 @@ import java.io.Serializable;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class DoNothingCoupPlayer implements GamePlayer, Serializable {
+public class DoNothingCoupPlayer implements CoupPlayer, Serializable {
 
     private String name = "DoNothingName";
 
@@ -34,5 +39,58 @@ public class DoNothingCoupPlayer implements GamePlayer, Serializable {
         return name;
     }
 
+    @Override
+    public CoupAction yourTurn(CoupGameContext gc) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
+    @Override
+    public void updateContext(CoupGameContext gc) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void actionHappened(CoupPlayer player, CoupAction hisAction, CoupGameContext gc) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void tryAgain(String reason) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void initializePlayer(CoupGameContext g) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean doYouWantToCounterThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean doYouWantToChallengeThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean doYouWantToChallengeThisCounter(CoupPlayer playerCountering) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean doYouWantToProveYouHaveACardOfThisType(CoupCardType challengedCardType) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Multiset<CoupCard> exchangeCards(Multiset<CoupCard> cards) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public CoupCard youMustLooseAnInfluence() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

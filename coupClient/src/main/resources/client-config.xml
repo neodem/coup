@@ -3,13 +3,24 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="coupClient" class="com.neodem.coup.client.network.RmiCoupClient">
-        <property name="coupServer" ref="coupServer"/>
+    <bean id="coupClient" class="com.neodem.coup.client.network.CoupClient">
+        <property name="gateway" ref="networkGateway"/>
     </bean>
 
-    <bean id="coupServer" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
-        <property name="serviceUrl" value="rmi://localhost:1199/CoupServer"/>
-        <property name="serviceInterface" value="com.neodem.coup.common.CoupServer"/>
+    <bean id="networkGateway" class="com.neodem.coup.client.network.NetworkGateway">
+        <property name="messageTranslator" ref="messageTranslator"/>
+        <property name="messageTransport" ref="messageTransport"/>
     </bean>
+
+    <bean id="messageTransport" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+        <property name="serviceUrl" value="rmi://localhost:1199/messageTransport"/>
+        <property name="serviceInterface" value="com.neodem.coup.common.messaging.MessageTransport"/>
+    </bean>
+
+    <bean id="messageTranslator" class="com.neodem.coup.common.messaging.JsonMessageTranslator">
+        <property name="playerStore" ref="playerStore"/>
+    </bean>
+
+    <bean id="playerStore" class="com.neodem.coup.common.messaging.InMemoryPlayerStore"/>
 
 </beans>

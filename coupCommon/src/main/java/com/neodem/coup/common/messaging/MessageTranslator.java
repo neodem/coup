@@ -5,7 +5,7 @@ import com.neodem.coup.common.game.CoupAction;
 import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupGameContext;
-import com.neodem.coup.common.game.GamePlayer;
+import com.neodem.coup.common.game.CoupPlayer;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -19,11 +19,11 @@ public interface MessageTranslator {
 
     Message makeMessage(MessageType type, String message);
 
-    Message makeMessage(MessageType type, GamePlayer p);
+    Message makeMessage(MessageType type, CoupPlayer p);
 
     Message makeMessage(MessageType type, CoupAction a);
 
-    Message makeMessage(MessageType type, CoupAction a, GamePlayer p, CoupGameContext gc);
+    Message makeMessage(MessageType type, CoupAction a, CoupPlayer p, CoupGameContext gc);
 
     Message makeMessage(MessageType type, CoupCardType c);
 
@@ -43,7 +43,7 @@ public interface MessageTranslator {
 
     CoupGameContext getCoupGameContext(Message m);
 
-    GamePlayer getGamePlayer(Message m);
+    CoupPlayer getCoupPlayer(Message m);
 
     String getString(Message m);
 

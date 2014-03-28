@@ -35,7 +35,7 @@ public interface CoupPlayer extends GamePlayer {
      * @param hisAction the action initiated
      * @param gc        the current game context
      */
-    public void actionHappened(GamePlayer player, CoupAction hisAction, CoupGameContext gc);
+    public void actionHappened(CoupPlayer player, CoupAction hisAction, CoupGameContext gc);
 
     /**
      * The players action was rejected and they will be called to try again
@@ -60,7 +60,7 @@ public interface CoupPlayer extends GamePlayer {
      * @param gc        the current game context
      * @return true if the player wants to counter the current action
      */
-    public boolean doYouWantToCounterThisAction(CoupAction theAction, GamePlayer thePlayer, CoupGameContext gc);
+    public boolean doYouWantToCounterThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc);
 
     /**
      * Called to ask the player if they want to challenge the current action
@@ -70,7 +70,7 @@ public interface CoupPlayer extends GamePlayer {
      * @param gc        the current game context
      * @return true if the player wants to challenge the current action
      */
-    public boolean doYouWantToChallengeThisAction(CoupAction theAction, GamePlayer thePlayer, CoupGameContext gc);
+    public boolean doYouWantToChallengeThisAction(CoupAction theAction, CoupPlayer thePlayer, CoupGameContext gc);
 
     /**
      * Called to ask the player if he/she wants to challenge the counter that is being played against them
@@ -78,7 +78,7 @@ public interface CoupPlayer extends GamePlayer {
      * @param playerCountering the player countering
      * @return true if the player wants to challenge this counter
      */
-    public boolean doYouWantToChallengeThisCounter(GamePlayer playerCountering);
+    public boolean doYouWantToChallengeThisCounter(CoupPlayer playerCountering);
 
     /**
      * this is called when a player is challenged. the CGM is asking the player if they would like to
