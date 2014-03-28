@@ -6,9 +6,17 @@ import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayer;
-import com.neodem.coup.common.messaging.Message;
-import com.neodem.coup.common.messaging.MessageClient;
 import com.neodem.coup.common.messaging.MessageTranslator;
+import com.neodem.coup.common.messaging.MessageType;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
+
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 
 import static com.neodem.coup.common.messaging.MessageType.reply;
 
@@ -16,19 +24,57 @@ import static com.neodem.coup.common.messaging.MessageType.reply;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public class ServiceProxy implements MessageClient {
+public class ServiceProxy implements MessageListener {
 
     private final MessageTranslator messageTranslator;
     private CoupPlayer player;
+    private JmsTemplate jms;
+    private Destination server;
 
-    public ServiceProxy(CoupPlayer target, MessageTranslator messageTranslator) {
+    public ServiceProxy(CoupPlayer target, MessageTranslator messageTranslator, JmsTemplate jmsTemplate) {
         this.player = target;
         this.messageTranslator = messageTranslator;
+        jms = jmsTemplate;
+
+        //TODO server init?
+    }
+
+    public void init() {
+        //TODO connect up with/register with server
     }
 
     @Override
-    public Message handleMessageWithReply(Message m) {
-        Message replyMessage = null;
+    public void onMessage(Message message) {
+        try {
+            String content = ((TextMessage) message).getText();
+            handleMessage(content);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleMessage(String m) {
+        MessageType type = messageTranslator.getType(m);
+
+        if (type.requiresReply()) {
+            String reply = handleMessageWithReply(type, m);
+            sendReplyToServer(reply);
+        } else {
+            handleAsynchonousMessage(type, m);
+        }
+    }
+
+    private void sendReplyToServer(final String reply) {
+        jms.send(server, new MessageCreator() {
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                return session.createTextMessage(reply);
+            }
+        });
+    }
+
+    public String handleMessageWithReply(MessageType type, String m) {
+        String replyMessage = null;
 
         CoupGameContext gc;
         String playerName;
@@ -37,7 +83,7 @@ public class ServiceProxy implements MessageClient {
         CoupCardType cardType;
         CoupCard card;
 
-        switch (messageTranslator.getType(m)) {
+        switch (type) {
             case yourTurn:
                 gc = messageTranslator.getCoupGameContext(m);
                 a = player.yourTurn(gc);
@@ -81,14 +127,13 @@ public class ServiceProxy implements MessageClient {
         return replyMessage;
     }
 
-    @Override
-    public void handleAsynchonousMessage(Message m) {
+    public void handleAsynchonousMessage(MessageType type, String m) {
         CoupGameContext gc;
         String playerNane;
         CoupAction a;
         String message;
 
-        switch (messageTranslator.getType(m)) {
+        switch (type) {
             case updateContext:
                 gc = messageTranslator.getCoupGameContext(m);
                 player.updateContext(gc);

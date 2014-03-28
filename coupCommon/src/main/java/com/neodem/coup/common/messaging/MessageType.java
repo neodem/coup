@@ -17,5 +17,9 @@ public enum MessageType {
     looseInfluence,
     exchangeCards,
     reply,
-    unknown
+    unknown;
+
+    public boolean requiresReply() {
+        return this == yourTurn || this == counterAction || this == challengeAction || this == challengeCounter || this == proveCard || this == looseInfluence || this == exchangeCards;
+    }
 }

@@ -4,19 +4,28 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="coupClient" class="com.neodem.coup.client.network.CoupClient">
-        <property name="gateway" ref="networkGateway"/>
-    </bean>
-
-    <bean id="networkGateway" class="com.neodem.coup.client.network.NetworkGateway">
         <property name="messageTranslator" ref="messageTranslator"/>
-        <property name="coupServer" ref="coupServer"/>
-    </bean>
-
-    <bean id="coupServer" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
-        <property name="serviceUrl" value="rmi://localhost:1199/coupServer"/>
-        <property name="serviceInterface" value="com.neodem.coup.common.messaging.CoupServer"/>
+        <property name="jmsTemplate" ref="jmsTemplate"/>
     </bean>
 
     <bean id="messageTranslator" class="com.neodem.coup.common.messaging.JsonMessageTranslator"/>
+
+    <!-- a pooling based JMS provider -->
+    <bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+        <property name="connectionFactory">
+            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+                <property name="brokerURL">
+                    <value>tcp://localhost:61616</value>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Spring JMS Template -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory">
+            <ref local="jmsFactory"/>
+        </property>
+    </bean>
 
 </beans>

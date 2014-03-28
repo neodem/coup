@@ -12,39 +12,39 @@ import com.neodem.coup.common.game.CoupGameContext;
  */
 public interface MessageTranslator {
 
-    Message makeMessage(MessageType type);
+    String makeMessage(MessageType type);
 
-    Message makeMessage(MessageType type, CoupGameContext gc);
+    String makeMessage(MessageType type, CoupGameContext gc);
 
-    Message makeMessage(MessageType type, String message);
+    String makeMessage(MessageType type, String message);
 
-    Message makeMessage(MessageType type, CoupAction a);
+    String makeMessage(MessageType type, CoupAction a);
 
-    Message makeMessage(MessageType type, CoupAction a, String playerName, CoupGameContext gc);
+    String makeMessage(MessageType type, CoupAction a, String playerName, CoupGameContext gc);
 
-    Message makeMessage(MessageType type, CoupCardType c);
+    String makeMessage(MessageType type, CoupCardType c);
 
-    Message makeMessage(MessageType type, Multiset<CoupCard> cards);
+    String makeMessage(MessageType type, Multiset<CoupCard> cards);
 
-    Message makeMessage(MessageType type, CoupCard card);
+    String makeMessage(MessageType type, CoupCard card);
 
-    Message makeMessage(MessageType type, boolean bool);
+    String makeMessage(MessageType type, boolean bool);
 
-    CoupAction getCoupAction(Message m);
+    CoupAction getCoupAction(String m);
 
-    Boolean getBoolean(Message m);
+    Boolean getBoolean(String m);
 
-    CoupCard getCoupCard(Message m);
+    CoupCard getCoupCard(String m);
 
-    Multiset<CoupCard> getCardMultiset(Message m);
+    Multiset<CoupCard> getCardMultiset(String m);
 
-    CoupGameContext getCoupGameContext(Message m);
+    CoupGameContext getCoupGameContext(String m);
 
-    String getString(Message m);
+    String getString(String m);
 
-    String getPlayerName(Message m);
+    String getPlayerName(String m);
 
-    CoupCardType getCoupCardType(Message m);
+    CoupCardType getCoupCardType(String m);
 
-    MessageType getType(Message m);
+    MessageType getType(String m);
 }

@@ -37,6 +37,7 @@ public class RmiCoupServer implements CoupServer {
 
     public RmiCoupServer() {
         registeredPlayers = new HashMap<>();
+        clients = new HashMap<>();
         maxPlayers = 4;
         nextId = 1;
     }
@@ -68,7 +69,7 @@ public class RmiCoupServer implements CoupServer {
         registeredPlayers.put(nextId, cp);
         clients.put(nextId, client);
 
-        if (nextId == 4) {
+        if (nextId == 5) {
             start();
         }
     }

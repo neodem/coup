@@ -6,7 +6,5 @@ package com.neodem.coup.common.messaging;
  */
 public interface MessageClient {
 
-    Message handleMessageWithReply(Message m);
-
     void handleAsynchonousMessage(Message m);
 }
