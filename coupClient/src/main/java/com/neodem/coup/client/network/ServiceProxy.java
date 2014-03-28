@@ -47,19 +47,19 @@ public class ServiceProxy implements MessageClient {
             case counterAction:
                 gc = messageTranslator.getCoupGameContext(m);
                 a = messageTranslator.getCoupAction(m);
-                p = messageTranslator.getPlayer(m);
+                p = messageTranslator.getGamePlayer(m);
                 bool = player.doYouWantToCounterThisAction(a, p, gc);
                 replyMessage = messageTranslator.makeMessage(reply, bool);
                 break;
             case challengeAction:
                 gc = messageTranslator.getCoupGameContext(m);
                 a = messageTranslator.getCoupAction(m);
-                p = messageTranslator.getPlayer(m);
+                p = messageTranslator.getGamePlayer(m);
                 bool = player.doYouWantToChallengeThisAction(a, p, gc);
                 replyMessage = messageTranslator.makeMessage(reply, bool);
                 break;
             case challengeCounter:
-                p = messageTranslator.getPlayer(m);
+                p = messageTranslator.getGamePlayer(m);
                 bool = player.doYouWantToChallengeThisCounter(p);
                 replyMessage = messageTranslator.makeMessage(reply, bool);
                 break;
@@ -99,7 +99,7 @@ public class ServiceProxy implements MessageClient {
                 player.tryAgain(message);
                 break;
             case actionHappened:
-                p = messageTranslator.getPlayer(m);
+                p = messageTranslator.getGamePlayer(m);
                 a = messageTranslator.getCoupAction(m);
                 gc = messageTranslator.getCoupGameContext(m);
                 player.actionHappened(p, a, gc);

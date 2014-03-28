@@ -43,7 +43,7 @@ public interface MessageTranslator {
 
     CoupGameContext getCoupGameContext(Message m);
 
-    GamePlayer getPlayer(Message m);
+    GamePlayer getGamePlayer(Message m);
 
     String getString(Message m);
 

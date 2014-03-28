@@ -16,6 +16,11 @@ public class CoupCard implements Serializable {
         faceUp = false;
     }
 
+    public CoupCard(CoupCardType type, boolean faceUp) {
+        this.faceUp = faceUp;
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return type.name();

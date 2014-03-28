@@ -12,6 +12,16 @@ public class CoupPlayerInfo implements Serializable {
     public CoupCard cardOne = new CoupCard(CoupCardType.Unknown);
     public CoupCard cardTwo = new CoupCard(CoupCardType.Unknown);
 
+    public CoupPlayerInfo() {
+    }
+
+    public CoupPlayerInfo(boolean active, int coins, CoupCard cardOne, CoupCard cardTwo) {
+        this.active = active;
+        this.coins = coins;
+        this.cardOne = cardOne;
+        this.cardTwo = cardTwo;
+    }
+
     public void addUpCard(CoupCard card) {
         if (cardOne.type == CoupCardType.Unknown) {
             cardOne = card;
