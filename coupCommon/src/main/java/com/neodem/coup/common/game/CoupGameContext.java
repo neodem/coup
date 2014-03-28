@@ -36,7 +36,7 @@ public class CoupGameContext implements Serializable {
         return playerInfos;
     }
 
-    public void addPlayer(CoupPlayer p) {
+    public void addPlayer(GamePlayer p) {
         players.add(p);
     }
 
