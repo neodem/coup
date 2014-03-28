@@ -1,8 +1,10 @@
 package com.neodem.coup.server.network;
 
 import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.messaging.CoupServer;
+import com.neodem.coup.common.messaging.Message;
+import com.neodem.coup.common.messaging.MessageClient;
 import com.neodem.coup.common.messaging.MessageTranslator;
-import com.neodem.coup.common.messaging.MessageTransport;
 import com.neodem.coup.server.game.CoupGameMaster;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,17 +16,24 @@ import java.util.Map;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
- * Created Date: 3/26/14
+ * Created Date: 3/27/14
  */
-public class RmiCoupServer {
+public class RmiCoupServer implements CoupServer {
 
     private static Logger log = LogManager.getLogger(RmiCoupServer.class.getName());
-    protected Map<String, CoupPlayer> registeredPlayers;
+    protected Map<Integer, CommunicatingPlayer> registeredPlayers;
+    protected Map<Integer, MessageClient> clients;
     private int maxPlayers;
     private CoupGameMaster cgm;
-    private MessageTranslator messageTranslator;
-    private MessageTransport messageTransport;
     private int nextId = 1;
+
+    private MessageTranslator messageTranslator;
+
+    public static void main(String[] args) {
+        String springContextFile = "server-config.xml";
+        log.info(springContextFile);
+        new ClassPathXmlApplicationContext(springContextFile);
+    }
 
     public RmiCoupServer() {
         registeredPlayers = new HashMap<>();
@@ -32,15 +41,20 @@ public class RmiCoupServer {
         nextId = 1;
     }
 
-    public static void main(String[] args) {
-        String springContextFile = "server-config.xml";
-        log.info(springContextFile);
-        new ClassPathXmlApplicationContext(springContextFile);
-        log.info("server up and ready for connections!");
+    @Override
+    public void send(int id, Message m) {
+        MessageClient client = clients.get(id);
+        client.handleAsynchonousMessage(m);
     }
 
-    public int registerPlayer(String playerName) {
+    @Override
+    public Message sendAndGetReply(int id, Message m) {
+        MessageClient client = clients.get(id);
+        return client.handleMessageWithReply(m);
+    }
 
+    @Override
+    public void registerNewClient(String playerName, MessageClient client) {
         log.debug("registerPlayer(" + playerName + ")");
 
         if (registeredPlayers.keySet().contains(playerName)) throw new IllegalArgumentException("name already used");
@@ -49,16 +63,17 @@ public class RmiCoupServer {
             throw new IllegalStateException("max players already");
         }
 
-        CommunicatingPlayer cp = new CommunicatingPlayer(playerName, ++nextId, messageTranslator, messageTransport);
+        CommunicatingPlayer cp = new CommunicatingPlayer(playerName, ++nextId, messageTranslator, this);
 
-        registeredPlayers.put(playerName, cp);
+        registeredPlayers.put(nextId, cp);
+        clients.put(nextId, client);
 
-        return nextId;
+        if (nextId == 4) {
+            start();
+        }
     }
 
-    // todo determine when/how the game starts. For now we simply do it here
-    public void triggerGameStart() {
-
+    private void start() {
         log.info("initializing Game");
         cgm.initGame(new ArrayList(registeredPlayers.values()));
 
@@ -68,15 +83,11 @@ public class RmiCoupServer {
         log.info("The game is over : " + winningPlayer.getPlayerName() + " was the winner!");
     }
 
-    public void setCoupGameMaster(CoupGameMaster cgm) {
+    public void setCgm(CoupGameMaster cgm) {
         this.cgm = cgm;
     }
 
     public void setMessageTranslator(MessageTranslator messageTranslator) {
         this.messageTranslator = messageTranslator;
-    }
-
-    public void setMessageTransport(MessageTransport messageTransport) {
-        this.messageTransport = messageTransport;
     }
 }

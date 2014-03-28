@@ -82,7 +82,7 @@ public class ServiceProxy implements MessageClient {
     }
 
     @Override
-    public void getAsynchonousMessage(Message m) {
+    public void handleAsynchonousMessage(Message m) {
         CoupGameContext gc;
         String playerNane;
         CoupAction a;

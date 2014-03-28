@@ -1,8 +1,8 @@
 package com.neodem.coup.client.network;
 
 import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.messaging.CoupServer;
 import com.neodem.coup.common.messaging.MessageTranslator;
-import com.neodem.coup.common.messaging.MessageTransport;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -11,18 +11,18 @@ import com.neodem.coup.common.messaging.MessageTransport;
 public class NetworkGateway {
 
     private MessageTranslator messageTranslator;
-    private MessageTransport messageTransport;
+    private CoupServer coupServer;
 
     public void registerPlayer(CoupPlayer player) {
         ServiceProxy proxy = new ServiceProxy(player, messageTranslator);
-        messageTransport.registerNewClient(player.getPlayerName(), proxy);
+        coupServer.registerNewClient(player.getPlayerName(), proxy);
     }
 
     public void setMessageTranslator(MessageTranslator messageTranslator) {
         this.messageTranslator = messageTranslator;
     }
 
-    public void setMessageTransport(MessageTransport messageTransport) {
-        this.messageTransport = messageTransport;
+    public void setCoupServer(CoupServer coupServer) {
+        this.coupServer = coupServer;
     }
 }
