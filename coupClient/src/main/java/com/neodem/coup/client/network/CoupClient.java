@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jms.core.JmsTemplate;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
@@ -16,7 +15,6 @@ import org.springframework.jms.core.JmsTemplate;
 public class CoupClient {
 
     private static Logger log = LogManager.getLogger(CoupClient.class.getName());
-    private JmsTemplate jmsTemplate;
     private MessageTranslator messageTranslator;
 
     public static void main(String[] args) {
@@ -38,10 +36,6 @@ public class CoupClient {
     private void setupPlayer(CoupCommunicationInterface player) {
         ServiceProxy sp = new ServiceProxy(player, messageTranslator, "localhost", 6969);
         sp.init();
-    }
-
-    public void setJmsTemplate(JmsTemplate jmsTemplate) {
-        this.jmsTemplate = jmsTemplate;
     }
 
     public void setMessageTranslator(MessageTranslator messageTranslator) {

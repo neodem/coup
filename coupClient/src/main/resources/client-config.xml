@@ -5,27 +5,7 @@
 
     <bean id="coupClient" class="com.neodem.coup.client.network.CoupClient">
         <property name="messageTranslator" ref="messageTranslator"/>
-        <property name="jmsTemplate" ref="jmsTemplate"/>
     </bean>
 
     <bean id="messageTranslator" class="com.neodem.coup.common.messaging.JsonMessageTranslator"/>
-
-    <!-- a pooling based JMS provider -->
-    <bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
-        <property name="connectionFactory">
-            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
-                <property name="brokerURL">
-                    <value>tcp://localhost:61616</value>
-                </property>
-            </bean>
-        </property>
-    </bean>
-
-    <!-- Spring JMS Template -->
-    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-        <property name="connectionFactory">
-            <ref local="jmsFactory"/>
-        </property>
-    </bean>
-
 </beans>

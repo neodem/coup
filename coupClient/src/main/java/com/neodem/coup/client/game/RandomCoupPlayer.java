@@ -40,13 +40,12 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicatio
     @Override
     public void updateContext(CoupGameContext gc) {
         currentGameContext = gc;
-        myState = gc.getCoupPlayerInfos().get(this);
+        myState = gc.getCoupPlayerInfos().get(playerName);
     }
 
     @Override
     public void initializePlayer(CoupGameContext g) {
-        currentGameContext = g;
-        myState = g.getCoupPlayerInfos().get(this);
+        updateContext(g);
     }
 
     @Override
@@ -164,6 +163,4 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicatio
     public void tryAgain(String reason) {
         getLog().info(String.format("%s : I have to try again because : %s", playerName, reason));
     }
-
-
 }
