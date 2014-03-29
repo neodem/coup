@@ -36,7 +36,7 @@ public class CoupClient {
     }
 
     private void setupPlayer(CoupCommunicationInterface player) {
-        ServiceProxy sp = new ServiceProxy(player, messageTranslator);
+        ServiceProxy sp = new ServiceProxy(player, messageTranslator, "localhost", 6969);
         sp.init();
     }
 

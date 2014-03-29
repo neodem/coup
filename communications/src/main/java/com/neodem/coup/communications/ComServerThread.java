@@ -28,6 +28,7 @@ public class ComServerThread extends Thread {
     }
 
     public void send(String msg) {
+        log.debug("send message to {} : {}", d, msg);
         try {
             streamOut.writeUTF(msg);
             streamOut.flush();
@@ -39,7 +40,7 @@ public class ComServerThread extends Thread {
     }
 
     public void run() {
-        log.info("Server Thread " + d + " running.");
+        log.info("Server Thread connected to: " + d);
         while (true) {
             try {
                 server.handle(d, streamIn.readUTF());

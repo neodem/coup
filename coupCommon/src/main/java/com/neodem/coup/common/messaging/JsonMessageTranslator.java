@@ -250,7 +250,6 @@ public class JsonMessageTranslator implements MessageTranslator {
         JSONObject j;
         CoupAction result = null;
 
-
         if (m != null) {
             try {
                 j = new JSONObject(m);

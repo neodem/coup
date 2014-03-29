@@ -1,5 +1,6 @@
 package com.neodem.coup.communications;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.DataInputStream;
@@ -10,30 +11,32 @@ import java.net.UnknownHostException;
 
 public abstract class ComBaseClient {
 
+    private static Logger log = LogManager.getLogger(ComBaseClient.class.getName());
+
     private final String serverName;
+    private final int port;
     private Socket socket = null;
     private DataInputStream console = null;
     private DataOutputStream streamOut = null;
     private ComClientThread client = null;
     private ComMessageTranslator mt = new DefaultComMessageTranslator();
 
-    public ComBaseClient(String serverName) {
-        this.serverName = serverName;
+    public ComBaseClient(String host, int port) {
+        this.serverName = host;
+        this.port = port;
     }
 
-    protected abstract Logger getLog();
-
     public void init() {
-        getLog().info("Establishing connection. Please wait ...");
+        log.info("Establishing connection. Please wait ...");
         try {
-            socket = new Socket(serverName, 6969);
-            getLog().info("Connected to ComServer : " + socket);
+            socket = new Socket(serverName, port);
+            log.info("Connected to ComServer : " + socket);
             streamOut = new DataOutputStream(socket.getOutputStream());
             client = new ComClientThread(this, socket);
         } catch (UnknownHostException uhe) {
-            getLog().error("Host unknown: " + uhe.getMessage());
+            log.error("Host unknown: " + uhe.getMessage());
         } catch (IOException ioe) {
-            getLog().error("Unexpected exception: " + ioe.getMessage());
+            log.error("Unexpected exception: " + ioe.getMessage());
         }
     }
 
@@ -46,13 +49,13 @@ public abstract class ComBaseClient {
     public void send(Dest destination, String message) {
         String m = mt.makeMessage(destination, message);
 
-        getLog().debug("send: {} : {}", destination, message);
+        log.trace("send to ComServer to route to {} : {}", destination, message);
 
         try {
             streamOut.writeUTF(m);
             streamOut.flush();
         } catch (IOException ioe) {
-            getLog().error("Sending error: " + ioe.getMessage());
+            log.error("Sending error: " + ioe.getMessage());
             stop();
         }
     }
@@ -65,13 +68,13 @@ public abstract class ComBaseClient {
             if (streamOut != null) streamOut.close();
             if (socket != null) socket.close();
         } catch (IOException ioe) {
-            getLog().error("Error closing ...");
+            log.error("Error closing ...");
         }
         client.close();
         client.stop();
     }
 
     public enum Dest {
-        Broadcast, Server, Player1, Player2, Player3, Player4
+        Broadcast, Server, Player1, Player2, Player3, Player4, Unknown
     }
 }

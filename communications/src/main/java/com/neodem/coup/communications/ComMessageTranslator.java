@@ -10,9 +10,11 @@ public interface ComMessageTranslator {
 
     Dest getDest(String m);
 
+    Dest getFrom(String m);
+
     String getPayload(String m);
 
-    String makeMessage(Dest d, String payload);
+    String makeMessage(Dest to, String payload);
 
-
+    String makeMessage(Dest to, Dest from, String payload);
 }

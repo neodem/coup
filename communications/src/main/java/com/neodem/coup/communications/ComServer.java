@@ -64,21 +64,21 @@ public class ComServer implements Runnable {
     }
 
     public synchronized void handle(Dest from, String input) {
-        log.debug("handle message from {} : {}", from, input);
         if (input.equals(".bye")) {
             clientMap.get(from).send(".bye");
             remove(from);
         } else {
-            Dest dest = mt.getDest(input);
+            Dest to = mt.getDest(input);
             String payload = mt.getPayload(input);
+            log.debug("relaying message from {} to {} : {}", from, to, payload);
 
-            if (dest == Dest.Broadcast) {
+            if (to == Dest.Broadcast) {
                 for (ComServerThread c : clientMap.values()) {
                     c.send(payload);
                 }
             } else {
-                ComServerThread client = clientMap.get(dest);
-                client.send(payload);
+                ComServerThread c = clientMap.get(to);
+                c.send(payload);
             }
         }
     }
@@ -99,15 +99,17 @@ public class ComServer implements Runnable {
     private void addThread(Socket socket) {
         if (clientCount < 5) {
             log.info("Client accepted: " + socket);
+
+            //todo make this dynamic
             Dest dest = getNextDest();
 
-            ComServerThread client = new ComServerThread(this, socket, dest);
+            ComServerThread serverThread = new ComServerThread(this, socket, dest);
 
-            clientMap.put(dest, client);
+            clientMap.put(dest, serverThread);
 
             try {
-                client.open();
-                client.start();
+                serverThread.open();
+                serverThread.start();
                 clientCount++;
             } catch (IOException ioe) {
                 log.error("Error opening thread: " + ioe);

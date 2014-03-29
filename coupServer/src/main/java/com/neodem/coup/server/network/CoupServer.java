@@ -1,6 +1,5 @@
 package com.neodem.coup.server.network;
 
-import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
 import com.neodem.coup.communications.ComBaseClient;
@@ -26,25 +25,31 @@ public final class CoupServer {
     private MessageHandler messageHandler;
     private CoupGameMaster cgm;
     private MessageTranslator messageTranslator;
-    private String mostRecentMessage = null;
+
 
     public class MessageHandler extends ComBaseClient implements Runnable {
 
         private final CoupServer server;
+        private String mostRecentMessage = null;
+        private boolean replyWaiting = false;
 
-        public MessageHandler(String serverName, CoupServer server) {
-            super(serverName);
+        public boolean isReplyWaiting() {
+            return replyWaiting;
+        }
+
+        public String getMostRecentMessage() {
+            replyWaiting = false;
+            return mostRecentMessage;
+        }
+
+        public MessageHandler(String host, int port, CoupServer server) {
+            super(host, port);
             this.server = server;
         }
 
         @Override
-        protected Logger getLog() {
-            return log;
-        }
-
-        @Override
         protected void handleMessage(String msg) {
-            getLog().debug("Server : handle message : " + msg);
+            log.debug("Server : handle message : " + msg);
             MessageType type = messageTranslator.getType(msg);
             if (type == MessageType.register) {
                 String playerName = messageTranslator.getPlayerName(msg);
@@ -56,6 +61,7 @@ public final class CoupServer {
                 }
             } else if (type == MessageType.reply) {
                 mostRecentMessage = msg;
+                replyWaiting = true;
             }
         }
 
@@ -67,7 +73,7 @@ public final class CoupServer {
     public CoupServer() {
         registeredPlayers = new HashMap<>();
 
-        messageHandler = new MessageHandler("localhost", this);
+        messageHandler = new MessageHandler("localhost", 6969, this);
 
         (new Thread(messageHandler)).start();
     }
@@ -84,10 +90,8 @@ public final class CoupServer {
 
     public String sendAndGetReply(Dest dest, String msg) {
         messageHandler.send(dest, msg);
-        while (mostRecentMessage == null) ;
-        String returnedMsg = mostRecentMessage;
-        mostRecentMessage = null;
-        return returnedMsg;
+        while (!messageHandler.isReplyWaiting()) ;
+        return messageHandler.getMostRecentMessage();
     }
 
     private void startGame() {
@@ -95,9 +99,11 @@ public final class CoupServer {
         cgm.initGame(new ArrayList(registeredPlayers.values()));
 
         log.info("Starting Game");
-        CoupCommunicationInterface winningPlayer = cgm.runGameLoop();
+        (new Thread(cgm)).start();
 
-        log.info("The game is over : " + winningPlayer.getPlayerName() + " was the winner!");
+//        CoupCommunicationInterface winningPlayer = cgm.getWinningPlayer();
+//
+//        log.info("The game is over : " + winningPlayer.getPlayerName() + " was the winner!");
     }
 
     public void setCgm(CoupGameMaster cgm) {

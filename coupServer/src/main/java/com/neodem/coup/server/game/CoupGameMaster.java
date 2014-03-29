@@ -35,7 +35,7 @@ import static com.neodem.coup.common.game.CoupAction.ActionType.Tax;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class CoupGameMaster {
+public class CoupGameMaster implements Runnable {
 
     private static Logger log = LogManager.getLogger(CoupGameMaster.class.getName());
     private ServerSideGameContext context;
@@ -43,6 +43,7 @@ public class CoupGameMaster {
     private ChallengeResolver challengeResolver;
     private CounterResolver counterResolver;
     private AssasinationProcessor assasinationProcessor;
+    private CoupCommunicationInterface winningPlayer = null;
 
     public void initGame(List<CoupCommunicationInterface> registeredPlayers) {
 
@@ -73,6 +74,36 @@ public class CoupGameMaster {
         // initialize players
         for (CoupCommunicationInterface p : context.getPlayerList()) {
             p.initializePlayer(getCurrentGameContext(p));
+        }
+    }
+
+    @Override
+    public void run() {
+        while (winningPlayer == null) {
+            for (CoupCommunicationInterface currentPlayer : context.getPlayerList()) {
+                PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
+
+                if (currentPlayerInfo.isActive()) {
+
+                    log.info(context.generateCurrentPublicGameContext());
+                    log.info("It is " + currentPlayer.getPlayerName() + "'s turn");
+
+                    CoupAction currentAction = getValidCoupAction(currentPlayer);
+
+                    // alert other players in sequence (and let them counter or challenge)
+                    boolean actionSucceeds = alertOtherPlayers(currentPlayer, currentAction);
+
+                    // process the action
+                    if (actionSucceeds) processAction(currentPlayer, currentAction);
+
+                    updatePlayers();
+
+                    // evaluate end game (is there a winner?)
+                    winningPlayer = evaluateGame();
+                } else {
+                    log.info(currentPlayer.getPlayerName() + " is not active.");
+                }
+            }
         }
     }
 
@@ -281,5 +312,9 @@ public class CoupGameMaster {
         ActionProcessor ap = actionProcessors.get(currentAction.getActionType());
         ap.process(actingPlayer, currentAction.getActionOn(), currentAction);
         updatePlayers();
+    }
+
+    public CoupCommunicationInterface getWinningPlayer() {
+        return winningPlayer;
     }
 }

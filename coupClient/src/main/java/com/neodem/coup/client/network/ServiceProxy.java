@@ -25,15 +25,10 @@ public class ServiceProxy extends ComBaseClient {
     private final MessageTranslator messageTranslator;
     private CoupCommunicationInterface player;
 
-    public ServiceProxy(CoupCommunicationInterface target, MessageTranslator messageTranslator) {
-        super("localhost");
+    public ServiceProxy(CoupCommunicationInterface target, MessageTranslator messageTranslator, String host, int port) {
+        super(host, port);
         this.player = target;
         this.messageTranslator = messageTranslator;
-    }
-
-    @Override
-    protected Logger getLog() {
-        return log;
     }
 
     @Override
@@ -45,13 +40,13 @@ public class ServiceProxy extends ComBaseClient {
 
     @Override
     public void handleMessage(String m) {
-        getLog().debug("{} : handleMessage : {}", player.getPlayerName(), m);
+        log.debug("{} : message received : {}", player.getPlayerName(), m);
 
         MessageType type = messageTranslator.getType(m);
 
         if (type.requiresReply()) {
             String reply = handleMessageWithReply(type, m);
-            getLog().debug("{} : replying to server : {}", player.getPlayerName(), reply);
+            log.debug("{} : replying to server : {}", player.getPlayerName(), reply);
             send(Dest.Server, reply);
         } else {
             handleAsynchonousMessage(type, m);
