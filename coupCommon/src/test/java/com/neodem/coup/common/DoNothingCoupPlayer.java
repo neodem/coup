@@ -1,11 +1,12 @@
 package com.neodem.coup.common;
 
 import com.google.common.collect.Multiset;
-import com.neodem.coup.common.game.CoupAction;
-import com.neodem.coup.common.game.CoupCard;
-import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
+import com.neodem.coup.common.game.actions.CoupAction;
+import com.neodem.coup.common.game.actions.SimpleCoupAction;
+import com.neodem.coup.common.game.cards.CoupCard;
+import com.neodem.coup.common.game.cards.CoupCardType;
 
 import java.io.Serializable;
 
@@ -40,7 +41,7 @@ public class DoNothingCoupPlayer implements CoupCommunicationInterface, Serializ
     }
 
     @Override
-    public CoupAction yourTurn(CoupGameContext gc) {
+    public SimpleCoupAction yourTurn(CoupGameContext gc) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

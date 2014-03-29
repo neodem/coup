@@ -1,11 +1,11 @@
 package com.neodem.coup.server.network;
 
 import com.google.common.collect.Multiset;
-import com.neodem.coup.common.game.CoupAction;
-import com.neodem.coup.common.game.CoupCard;
-import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
+import com.neodem.coup.common.game.actions.CoupAction;
+import com.neodem.coup.common.game.cards.CoupCard;
+import com.neodem.coup.common.game.cards.CoupCardType;
 import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.communications.ComBaseClient.Dest;
 
@@ -94,6 +94,8 @@ public class PlayerProxy implements CoupCommunicationInterface {
 
     @Override
     public boolean doYouWantToCounterThisAction(CoupAction theAction, String thePlayer, CoupGameContext gc) {
+
+
         String m = messageTranslator.makeMessage(counterAction, theAction, thePlayer, gc);
         String reply = coupServer.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);

@@ -4,11 +4,14 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multiset;
-import com.neodem.coup.common.game.CoupAction;
-import com.neodem.coup.common.game.CoupCard;
-import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupGameContext;
-import com.neodem.coup.common.game.CoupPlayerInfo;
+import com.neodem.coup.common.game.actions.ComplexCoupAction;
+import com.neodem.coup.common.game.actions.CoupAction;
+import com.neodem.coup.common.game.actions.CoupAction.ActionType;
+import com.neodem.coup.common.game.actions.CoupActionFactory;
+import com.neodem.coup.common.game.cards.CoupCard;
+import com.neodem.coup.common.game.cards.CoupCardType;
+import com.neodem.coup.common.game.player.CoupPlayerInfo;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -248,7 +251,8 @@ public class JsonMessageTranslator implements MessageTranslator {
             JSONObject action = new JSONObject();
             try {
                 action.put(ACTIONTYPE, a.getActionType().name());
-                setPlayerName(a.getActionOn(), action);
+                if (a instanceof ComplexCoupAction)
+                    setPlayerName(((ComplexCoupAction) a).getActionOn(), action);
                 j.put(ACTION, action);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -268,8 +272,14 @@ public class JsonMessageTranslator implements MessageTranslator {
                 JSONObject action = j.getJSONObject(ACTION);
 
                 String type = action.getString(ACTIONTYPE);
-                String playerName = getPlayerNameFromJSONObject(action);
-                result = new CoupAction(playerName, CoupAction.ActionType.valueOf(type));
+                ActionType actionType = ActionType.valueOf(type);
+
+                if (actionType.isSimple()) {
+                    result = CoupActionFactory.newAction(actionType, null);
+                } else {
+                    String playerName = getPlayerNameFromJSONObject(action);
+                    result = CoupActionFactory.newAction(actionType, playerName);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

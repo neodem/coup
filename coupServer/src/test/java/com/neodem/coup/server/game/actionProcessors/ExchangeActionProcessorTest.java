@@ -2,18 +2,18 @@ package com.neodem.coup.server.game.actionProcessors;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
+import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.server.game.ServerSideGameContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.neodem.coup.common.game.CoupCardType.Ambassador;
-import static com.neodem.coup.common.game.CoupCardType.Assasin;
-import static com.neodem.coup.common.game.CoupCardType.Captain;
-import static com.neodem.coup.common.game.CoupCardType.Contessa;
-import static com.neodem.coup.common.game.CoupCardType.Duke;
+import static com.neodem.coup.common.game.cards.CoupCardType.Ambassador;
+import static com.neodem.coup.common.game.cards.CoupCardType.Assasin;
+import static com.neodem.coup.common.game.cards.CoupCardType.Captain;
+import static com.neodem.coup.common.game.cards.CoupCardType.Contessa;
+import static com.neodem.coup.common.game.cards.CoupCardType.Duke;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;

@@ -1,8 +1,8 @@
 package com.neodem.coup.server.game.resolvers;
 
-import com.neodem.coup.common.game.CoupAction;
-import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
+import com.neodem.coup.common.game.actions.CoupAction;
+import com.neodem.coup.common.game.cards.CoupCardType;
 import com.neodem.coup.server.game.ServerSideGameContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

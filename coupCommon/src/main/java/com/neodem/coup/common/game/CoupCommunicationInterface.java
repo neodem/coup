@@ -1,6 +1,9 @@
 package com.neodem.coup.common.game;
 
 import com.google.common.collect.Multiset;
+import com.neodem.coup.common.game.actions.CoupAction;
+import com.neodem.coup.common.game.cards.CoupCard;
+import com.neodem.coup.common.game.cards.CoupCardType;
 
 /**
  * note : Any time you get a CoupGameContext, it will show you the current game context and your specific info.

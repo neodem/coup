@@ -2,11 +2,13 @@ package com.neodem.coup.server.game;
 
 import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.common.DisplayUtils;
-import com.neodem.coup.common.game.CoupAction;
-import com.neodem.coup.common.game.CoupAction.ActionType;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.PlayerError;
+import com.neodem.coup.common.game.actions.ComplexCoupAction;
+import com.neodem.coup.common.game.actions.CoupAction;
+import com.neodem.coup.common.game.actions.CoupAction.ActionType;
+import com.neodem.coup.common.game.actions.SimpleCoupAction;
 import com.neodem.coup.server.game.actionProcessors.ActionProcessor;
 import com.neodem.coup.server.game.actionProcessors.AssasinationProcessor;
 import com.neodem.coup.server.game.actionProcessors.CoupActionProcessor;
@@ -23,13 +25,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.neodem.coup.common.game.CoupAction.ActionType.Assassinate;
-import static com.neodem.coup.common.game.CoupAction.ActionType.Coup;
-import static com.neodem.coup.common.game.CoupAction.ActionType.Exchange;
-import static com.neodem.coup.common.game.CoupAction.ActionType.ForeignAid;
-import static com.neodem.coup.common.game.CoupAction.ActionType.Income;
-import static com.neodem.coup.common.game.CoupAction.ActionType.Steal;
-import static com.neodem.coup.common.game.CoupAction.ActionType.Tax;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Assassinate;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Coup;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Exchange;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.ForeignAid;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Income;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Steal;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Tax;
 
 /**
  * Author: vfumo
@@ -105,38 +107,7 @@ public class CoupGameMaster implements Runnable {
                 }
             }
         }
-    }
-
-    public CoupCommunicationInterface runGameLoop() {
-        CoupCommunicationInterface winningPlayer = null;
-        while (winningPlayer == null) {
-            for (CoupCommunicationInterface currentPlayer : context.getPlayerList()) {
-                PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
-
-                if (currentPlayerInfo.isActive()) {
-
-                    log.info(context.generateCurrentPublicGameContext());
-                    log.info("It is " + currentPlayer.getPlayerName() + "'s turn");
-
-                    CoupAction currentAction = getValidCoupAction(currentPlayer);
-
-                    // alert other players in sequence (and let them counter or challenge)
-                    boolean actionSucceeds = alertOtherPlayers(currentPlayer, currentAction);
-
-                    // process the action
-                    if (actionSucceeds) processAction(currentPlayer, currentAction);
-
-                    updatePlayers();
-
-                    // evaluate end game (is there a winner?)
-                    winningPlayer = evaluateGame();
-                } else {
-                    log.info(currentPlayer.getPlayerName() + " is not active.");
-                }
-            }
-        }
-
-        return winningPlayer;
+        log.info("The game is over : " + winningPlayer.getPlayerName() + " was the winner!");
     }
 
     public CoupGameContext getCurrentGameContext(CoupCommunicationInterface p) {
@@ -184,10 +155,11 @@ public class CoupGameMaster implements Runnable {
         }
 
         // go to each one in turn and see if they want to challenge it
-        if (currentAction.isChallengeable()) {
+        if (currentAction.getActionType().isChallengeable()) {
             log.debug("determining if players want to challenge this action...");
             for (CoupCommunicationInterface op : orderedPlayers) {
                 if (op.doYouWantToChallengeThisAction(currentAction, currentPlayer.getPlayerName(), getCurrentGameContext(op))) {
+                    log.debug("{} is going to challenge this action", op.getPlayerName());
                     if (challengeResolver.resolveChallenge(op, currentPlayer, currentAction.getActionCard())) {
                         // if we are here, the challenge succeeded, thus the action failed
                         log.info("Challenge Succeeded thus the Action Failed.");
@@ -203,12 +175,13 @@ public class CoupGameMaster implements Runnable {
         }
 
         // go to each one in turn and see if they want to counter it
-        if (currentAction.isCounterable()) {
+        if (currentAction.getActionType().isCounterable()) {
 
-            if (currentAction.isCounterableByGroup()) {
+            if (currentAction.getActionType().isCounterableByGroup()) {
                 log.debug("determining if players want to counter this action...");
                 for (CoupCommunicationInterface op : orderedPlayers) {
                     if (op.doYouWantToCounterThisAction(currentAction, currentPlayer.getPlayerName(), getCurrentGameContext(op))) {
+                        log.debug("{} is going to counter this action", op.getPlayerName());
                         if (counterResolver.resolveCounter(currentPlayer, op, currentAction)) {
                             // if we are here, the counter succeeded, thus the action was blocked/failed
                             log.info("Counter Succeeded thus the Action Failed.");
@@ -217,9 +190,10 @@ public class CoupGameMaster implements Runnable {
                     }
                 }
             } else {
-                CoupCommunicationInterface actionOn = context.getCoupPlayer(currentAction.getActionOn());
+                CoupCommunicationInterface actionOn = context.getCoupPlayer(((ComplexCoupAction) currentAction).getActionOn());
                 log.debug("seeing if " + actionOn.getPlayerName() + " wants to counter this action...");
                 if (actionOn.doYouWantToCounterThisAction(currentAction, currentPlayer.getPlayerName(), getCurrentGameContext(actionOn))) {
+                    log.debug("{} is going to counter this action", actionOn.getPlayerName());
                     if (counterResolver.resolveCounter(currentPlayer, actionOn, currentAction)) {
                         // if we are here, the counter succeeded, thus the action was blocked/failed
                         log.info("Counter Succeeded thus the Action Failed.");
@@ -293,14 +267,17 @@ public class CoupGameMaster implements Runnable {
     }
 
     private void validateAction(CoupCommunicationInterface actingPlayer, CoupAction a) throws PlayerError {
-        if (!CoupAction.isValidPlayableAction(a.getActionType())) {
+        if (!a.getActionType().isValidPlayableAction()) {
             String msg = "Player has attempted an non playable action : " + a.getActionType();
             log.error(msg);
             throw new PlayerError(msg);
         }
 
         for (ActionProcessor ap : actionProcessors.values()) {
-            ap.validate(actingPlayer, a.getActionOn(), a);
+            if (a instanceof SimpleCoupAction)
+                ap.validate(actingPlayer, null, a);
+            else
+                ap.validate(actingPlayer, ((ComplexCoupAction) a).getActionOn(), a);
         }
     }
 
@@ -310,7 +287,12 @@ public class CoupGameMaster implements Runnable {
      */
     private void processAction(CoupCommunicationInterface actingPlayer, CoupAction currentAction) {
         ActionProcessor ap = actionProcessors.get(currentAction.getActionType());
-        ap.process(actingPlayer, currentAction.getActionOn(), currentAction);
+
+        if (currentAction instanceof SimpleCoupAction)
+            ap.process(actingPlayer, null, currentAction);
+        else
+            ap.process(actingPlayer, ((ComplexCoupAction) currentAction).getActionOn(), currentAction);
+
         updatePlayers();
     }
 

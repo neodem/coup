@@ -43,7 +43,7 @@ public final class CoupServer {
 
         @Override
         protected void handleMessage(String msg) {
-            log.debug("Server : handle message : " + msg);
+            log.trace("Server : handle message : " + msg);
             MessageType type = messageTranslator.getType(msg);
             if (type == MessageType.register) {
                 String playerName = messageTranslator.getPlayerName(msg);
@@ -81,10 +81,6 @@ public final class CoupServer {
         mt.start();
     }
 
-    public void setComServer(ComServer comServer) {
-        this.comServer = comServer;
-    }
-
     public void sendMessage(Dest dest, String msg) {
         messageHandler.send(dest, msg);
     }
@@ -111,11 +107,6 @@ public final class CoupServer {
         Thread game = new Thread(cgm);
         game.setName("Coup GameMaster");
         game.start();
-
-
-//        CoupCommunicationInterface winningPlayer = cgm.getWinningPlayer();
-//
-//        log.info("The game is over : " + winningPlayer.getPlayerName() + " was the winner!");
     }
 
     public void setCgm(CoupGameMaster cgm) {
@@ -126,5 +117,7 @@ public final class CoupServer {
         this.messageTranslator = messageTranslator;
     }
 
-
+    public void setComServer(ComServer comServer) {
+        this.comServer = comServer;
+    }
 }

@@ -1,6 +1,6 @@
 package com.neodem.coup.common;
 
-import com.neodem.coup.common.game.CoupAction;
+import com.neodem.coup.common.game.actions.CoupAction;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com

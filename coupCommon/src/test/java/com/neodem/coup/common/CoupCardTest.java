@@ -1,12 +1,12 @@
 package com.neodem.coup.common;
 
-import com.neodem.coup.common.game.CoupCard;
+import com.neodem.coup.common.game.cards.CoupCard;
 import org.apache.commons.lang.SerializationUtils;
 import org.junit.Test;
 
 import java.io.Serializable;
 
-import static com.neodem.coup.common.game.CoupCardType.Captain;
+import static com.neodem.coup.common.game.cards.CoupCardType.Captain;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 

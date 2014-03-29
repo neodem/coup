@@ -1,7 +1,7 @@
 package com.neodem.coup.server.game.actionProcessors;
 
-import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
+import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.server.game.PlayerInfoState;
 import com.neodem.coup.server.game.ServerSideGameContext;
 

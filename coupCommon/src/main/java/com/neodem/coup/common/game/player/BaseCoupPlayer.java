@@ -1,5 +1,6 @@
-package com.neodem.coup.common.game;
+package com.neodem.coup.common.game.player;
 
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

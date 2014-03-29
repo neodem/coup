@@ -1,11 +1,11 @@
 package com.neodem.coup.client.network;
 
 import com.google.common.collect.Multiset;
-import com.neodem.coup.common.game.CoupAction;
-import com.neodem.coup.common.game.CoupCard;
-import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
+import com.neodem.coup.common.game.actions.CoupAction;
+import com.neodem.coup.common.game.cards.CoupCard;
+import com.neodem.coup.common.game.cards.CoupCardType;
 import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
 import com.neodem.coup.communications.ComBaseClient;
@@ -21,7 +21,6 @@ import static com.neodem.coup.common.messaging.MessageType.reply;
 public class ServiceProxy extends ComBaseClient {
 
     private static Logger log = LogManager.getLogger(ServiceProxy.class.getName());
-
     private final MessageTranslator messageTranslator;
     private CoupCommunicationInterface player;
 
@@ -47,7 +46,7 @@ public class ServiceProxy extends ComBaseClient {
 
         if (type.requiresReply()) {
             String reply = handleMessageWithReply(type, m);
-            log.debug("{} : replying to server : {}", player.getPlayerName(), reply);
+            log.trace("{} : replying to server : {}", player.getPlayerName(), reply);
             send(Dest.Server, reply);
         } else {
             handleAsynchonousMessage(type, m);
@@ -59,6 +58,7 @@ public class ServiceProxy extends ComBaseClient {
 
         CoupGameContext gc;
         String playerName;
+
         CoupAction a;
         boolean bool;
         CoupCardType cardType;

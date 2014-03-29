@@ -1,8 +1,8 @@
 package com.neodem.coup.common;
 
-import com.neodem.coup.common.game.CoupCard;
-import com.neodem.coup.common.game.CoupCardType;
-import com.neodem.coup.common.game.CoupPlayerInfo;
+import com.neodem.coup.common.game.cards.CoupCard;
+import com.neodem.coup.common.game.cards.CoupCardType;
+import com.neodem.coup.common.game.player.CoupPlayerInfo;
 import org.apache.commons.lang.SerializationUtils;
 import org.junit.Test;
 

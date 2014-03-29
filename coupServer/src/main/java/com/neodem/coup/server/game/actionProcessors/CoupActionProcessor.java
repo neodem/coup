@@ -1,8 +1,9 @@
 package com.neodem.coup.server.game.actionProcessors;
 
-import com.neodem.coup.common.game.CoupAction;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.PlayerError;
+import com.neodem.coup.common.game.actions.CoupAction;
+import com.neodem.coup.common.game.actions.SimpleCoupAction;
 import com.neodem.coup.server.game.PlayerInfoState;
 import com.neodem.coup.server.game.ServerSideGameContext;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +27,7 @@ public class CoupActionProcessor extends DamagingActionProcessor implements Acti
 
     @Override
     public void validate(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
-        if (currentAction.getActionType() == CoupAction.ActionType.Coup) {
+        if (currentAction.getActionType() == SimpleCoupAction.ActionType.Coup) {
             PlayerInfoState info = context.getPlayerInfo(actingPlayer);
 
             if (info.getCoinCount() < 7) {

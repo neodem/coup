@@ -1,8 +1,8 @@
 package com.neodem.coup.server.game;
 
-import com.neodem.coup.common.game.CoupCard;
-import com.neodem.coup.common.game.CoupCardType;
-import com.neodem.coup.common.game.CoupPlayerInfo;
+import com.neodem.coup.common.game.cards.CoupCard;
+import com.neodem.coup.common.game.cards.CoupCardType;
+import com.neodem.coup.common.game.player.CoupPlayerInfo;
 
 import java.util.ArrayList;
 import java.util.Collection;

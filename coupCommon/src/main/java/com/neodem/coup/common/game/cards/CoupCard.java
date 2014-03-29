@@ -1,4 +1,4 @@
-package com.neodem.coup.common.game;
+package com.neodem.coup.common.game.cards;
 
 import java.io.Serializable;
 

@@ -4,14 +4,15 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.common.DisplayUtils;
-import com.neodem.coup.common.game.BaseCoupPlayer;
-import com.neodem.coup.common.game.CoupAction;
-import com.neodem.coup.common.game.CoupAction.ActionType;
-import com.neodem.coup.common.game.CoupCard;
-import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
-import com.neodem.coup.common.game.CoupPlayerInfo;
+import com.neodem.coup.common.game.actions.CoupAction;
+import com.neodem.coup.common.game.actions.CoupAction.ActionType;
+import com.neodem.coup.common.game.actions.CoupActionFactory;
+import com.neodem.coup.common.game.cards.CoupCard;
+import com.neodem.coup.common.game.cards.CoupCardType;
+import com.neodem.coup.common.game.player.BaseCoupPlayer;
+import com.neodem.coup.common.game.player.CoupPlayerInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,9 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import static com.neodem.coup.common.game.CoupAction.ActionType.Assassinate;
-import static com.neodem.coup.common.game.CoupAction.ActionType.Coup;
-import static com.neodem.coup.common.game.CoupAction.ActionType.Steal;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Assassinate;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Coup;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Steal;
 
 /**
  * Author: vfumo
@@ -146,7 +147,7 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicatio
             actionOn = Lists.getRandomElement(players, playerName);
         }
 
-        CoupAction action = new CoupAction(actionOn, actionType);
+        CoupAction action = CoupActionFactory.newAction(actionType, actionOn);
         getLog().debug(playerName + " : I will try : " + action);
 
         return action;

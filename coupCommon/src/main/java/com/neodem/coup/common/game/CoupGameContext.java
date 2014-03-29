@@ -1,5 +1,6 @@
 package com.neodem.coup.common.game;
 
+import com.neodem.coup.common.game.player.CoupPlayerInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

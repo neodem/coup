@@ -1,4 +1,7 @@
-package com.neodem.coup.common.game;
+package com.neodem.coup.common.game.player;
+
+import com.neodem.coup.common.game.cards.CoupCard;
+import com.neodem.coup.common.game.cards.CoupCardType;
 
 import java.io.Serializable;
 
