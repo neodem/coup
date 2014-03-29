@@ -28,6 +28,41 @@ public final class CoupServer {
     private MessageTranslator messageTranslator;
     private String mostRecentMessage = null;
 
+    public class MessageHandler extends ComBaseClient implements Runnable {
+
+        private final CoupServer server;
+
+        public MessageHandler(String serverName, CoupServer server) {
+            super(serverName);
+            this.server = server;
+        }
+
+        @Override
+        protected Logger getLog() {
+            return log;
+        }
+
+        @Override
+        protected void handleMessage(String msg) {
+            MessageType type = messageTranslator.getType(msg);
+            if (type == MessageType.register) {
+                String playerName = messageTranslator.getPlayerName(msg);
+                Dest dest = Dest.valueOf(playerName);
+                PlayerProxy proxy = new PlayerProxy(playerName, dest, messageTranslator, server);
+                registeredPlayers.put(dest, proxy);
+                if (registeredPlayers.size() == 4) {
+                    startGame();
+                }
+            } else if (type == MessageType.reply) {
+                mostRecentMessage = msg;
+            }
+        }
+
+        public void run() {
+            init();
+        }
+    }
+
     public CoupServer() {
         registeredPlayers = new HashMap<>();
 
@@ -73,51 +108,4 @@ public final class CoupServer {
     public void setMessageTranslator(MessageTranslator messageTranslator) {
         this.messageTranslator = messageTranslator;
     }
-
-    public class MessageHandler extends ComBaseClient implements Runnable {
-
-        private final CoupServer server;
-        private Dest nextDest = Dest.Player1;
-
-        public MessageHandler(String serverName, CoupServer server) {
-            super(serverName);
-            this.server = server;
-        }
-
-        @Override
-        protected Logger getLog() {
-            return log;
-        }
-
-        private Dest getNextDest() {
-            Dest ret = nextDest;
-            if (nextDest == Dest.Player1) nextDest = Dest.Player2;
-            else if (nextDest == Dest.Player2) nextDest = Dest.Player3;
-            else if (nextDest == Dest.Player3) nextDest = Dest.Player4;
-            else nextDest = null;
-            return ret;
-        }
-
-        @Override
-        protected void handleMessage(String msg) {
-            MessageType type = messageTranslator.getType(msg);
-            if (type == MessageType.register) {
-                String playerName = messageTranslator.getPlayerName(msg);
-                Dest dest = getNextDest();
-                PlayerProxy proxy = new PlayerProxy(playerName, dest, messageTranslator, server);
-                registeredPlayers.put(dest, proxy);
-                if (nextDest == null) {
-                    startGame();
-                }
-            } else if (type == MessageType.reply) {
-                mostRecentMessage = msg;
-            }
-        }
-
-        public void run() {
-            init();
-        }
-    }
-
-
 }
