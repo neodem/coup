@@ -1,6 +1,8 @@
 package com.neodem.coup.communications;
 
-import com.neodem.coup.communications.ComMessageTranslator.Dest;
+import com.neodem.coup.communications.ComBaseClient.Dest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -10,6 +12,8 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ComServerThread extends Thread {
+    private static Logger log = LogManager.getLogger(ComServerThread.class.getName());
+
     private ComServer server = null;
     private Socket socket = null;
     private DataInputStream streamIn = null;
@@ -28,14 +32,14 @@ public class ComServerThread extends Thread {
             streamOut.writeUTF(msg);
             streamOut.flush();
         } catch (IOException ioe) {
-            System.out.println(d + " ERROR sending: " + ioe.getMessage());
+            log.error(d + " ERROR sending: " + ioe.getMessage());
             server.remove(d);
             stop();
         }
     }
 
     public void run() {
-        System.out.println("Server Thread " + d + " running.");
+        log.info("Server Thread " + d + " running.");
         while (true) {
             try {
                 server.handle(d, streamIn.readUTF());

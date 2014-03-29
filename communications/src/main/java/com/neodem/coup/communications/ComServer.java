@@ -1,6 +1,8 @@
 package com.neodem.coup.communications;
 
-import com.neodem.coup.communications.ComMessageTranslator.Dest;
+import com.neodem.coup.communications.ComBaseClient.Dest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -9,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ComServer implements Runnable {
+
+    private static Logger log = LogManager.getLogger(ComServer.class.getName());
     private ServerSocket server = null;
     private Thread thread = null;
     private int clientCount = 0;
@@ -17,12 +21,12 @@ public class ComServer implements Runnable {
 
     public ComServer(int port) {
         try {
-            System.out.println("Binding to port " + port + ", please wait  ...");
+            log.info("Binding to port " + port + ", please wait  ...");
             server = new ServerSocket(port);
-            System.out.println("Server started: " + server);
+            log.info("Server started: " + server);
             start();
         } catch (IOException ioe) {
-            System.out.println("Can not bind to port " + port + ": " + ioe.getMessage());
+            log.error("Can not bind to port " + port + ": " + ioe.getMessage());
         }
     }
 
@@ -36,10 +40,10 @@ public class ComServer implements Runnable {
     public void run() {
         while (thread != null) {
             try {
-                System.out.println("Waiting for a client ...");
+                log.info("Waiting for a client ...");
                 addThread(server.accept());
             } catch (IOException ioe) {
-                System.out.println("Server accept error: " + ioe);
+                log.error("Server accept error: " + ioe);
                 stop();
             }
         }
@@ -60,6 +64,7 @@ public class ComServer implements Runnable {
     }
 
     public synchronized void handle(Dest d, String input) {
+        log.debug("handle({} : {})", d, input);
         if (input.equals(".bye")) {
             clientMap.get(d).send(".bye");
             remove(d);
@@ -67,25 +72,25 @@ public class ComServer implements Runnable {
             Dest dest = mt.getDest(input);
             String payload = mt.getPayload(input);
 
-            if (dest == ComMessageTranslator.Dest.Broadcast) {
+            if (dest == Dest.Broadcast) {
                 for (ComServerThread c : clientMap.values()) {
-                    c.send(d + ": " + payload);
+                    c.send(payload);
                 }
             } else {
                 ComServerThread client = clientMap.get(dest);
-                client.send(d + ": " + payload);
+                client.send(payload);
             }
         }
     }
 
     public synchronized void remove(Dest d) {
         ComServerThread toTerminate = clientMap.get(d);
-        System.out.println("Removing client thread " + d);
+        log.info("Removing client thread " + d);
         clientCount--;
         try {
             toTerminate.close();
         } catch (IOException ioe) {
-            System.out.println("Error closing thread: " + ioe);
+            log.error("Error closing thread: " + ioe);
         }
         toTerminate.stop();
         clientMap.put(d, null);
@@ -93,7 +98,7 @@ public class ComServer implements Runnable {
 
     private void addThread(Socket socket) {
         if (clientCount < 5) {
-            System.out.println("Client accepted: " + socket);
+            log.info("Client accepted: " + socket);
             Dest dest = getNextDest();
 
             ComServerThread client = new ComServerThread(this, socket, dest);
@@ -105,10 +110,10 @@ public class ComServer implements Runnable {
                 client.start();
                 clientCount++;
             } catch (IOException ioe) {
-                System.out.println("Error opening thread: " + ioe);
+                log.error("Error opening thread: " + ioe);
             }
         } else
-            System.out.println("Client refused: maximum 5 reached.");
+            log.warn("Client refused: maximum 5 reached.");
     }
 
     private Dest getNextDest() {

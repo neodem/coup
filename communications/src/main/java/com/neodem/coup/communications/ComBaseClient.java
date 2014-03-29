@@ -1,5 +1,7 @@
 package com.neodem.coup.communications;
 
+import org.apache.logging.log4j.Logger;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,10 +9,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public abstract class ComBaseClient {
-
-    public enum Dest {
-        Broadcast, Server, Player1, Player2, Player3, Player4
-    }
 
     private final String serverName;
     private Socket socket = null;
@@ -23,27 +21,19 @@ public abstract class ComBaseClient {
         this.serverName = serverName;
     }
 
+    protected abstract Logger getLog();
+
     public void init() {
-        System.out.println("Establishing connection. Please wait ...");
+        getLog().info("Establishing connection. Please wait ...");
         try {
             socket = new Socket(serverName, 6969);
-            System.out.println("Connected: " + socket);
+            getLog().info("Connected to ComServer : " + socket);
             streamOut = new DataOutputStream(socket.getOutputStream());
             client = new ComClientThread(this, socket);
         } catch (UnknownHostException uhe) {
-            System.out.println("Host unknown: " + uhe.getMessage());
+            getLog().error("Host unknown: " + uhe.getMessage());
         } catch (IOException ioe) {
-            System.out.println("Unexpected exception: " + ioe.getMessage());
-        }
-    }
-
-    protected void send(String m) {
-        try {
-            streamOut.writeUTF(m);
-            streamOut.flush();
-        } catch (IOException ioe) {
-            System.out.println("Sending error: " + ioe.getMessage());
-            stop();
+            getLog().error("Unexpected exception: " + ioe.getMessage());
         }
     }
 
@@ -53,19 +43,16 @@ public abstract class ComBaseClient {
      * @param destination the dest to send the message to
      * @param message     the message to send
      */
-    protected void sendTo(Dest destination, String message) {
+    public void send(Dest destination, String message) {
         String m = mt.makeMessage(destination, message);
-        send(m);
-    }
 
-    /**
-     * send a message to all registered users
-     *
-     * @param message the message to send
-     */
-    protected void broadcast(String message) {
-        String m = mt.makeMessage(Dest.Broadcast, message);
-        send(m);
+        try {
+            streamOut.writeUTF(m);
+            streamOut.flush();
+        } catch (IOException ioe) {
+            getLog().error("Sending error: " + ioe.getMessage());
+            stop();
+        }
     }
 
     protected abstract void handleMessage(String msg);
@@ -76,9 +63,13 @@ public abstract class ComBaseClient {
             if (streamOut != null) streamOut.close();
             if (socket != null) socket.close();
         } catch (IOException ioe) {
-            System.out.println("Error closing ...");
+            getLog().error("Error closing ...");
         }
         client.close();
         client.stop();
+    }
+
+    public enum Dest {
+        Broadcast, Server, Player1, Player2, Player3, Player4
     }
 }

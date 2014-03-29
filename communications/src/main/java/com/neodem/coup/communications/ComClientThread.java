@@ -1,10 +1,14 @@
 package com.neodem.coup.communications;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 
 public class ComClientThread extends Thread {
+    private static Logger log = LogManager.getLogger(ComClientThread.class.getName());
     private Socket socket = null;
     private ComBaseClient client = null;
     private DataInputStream streamIn = null;
@@ -20,7 +24,7 @@ public class ComClientThread extends Thread {
         try {
             streamIn = new DataInputStream(socket.getInputStream());
         } catch (IOException ioe) {
-            System.out.println("Error getting input stream: " + ioe);
+            log.error("Error getting input stream: " + ioe);
             client.stop();
         }
     }
@@ -29,7 +33,7 @@ public class ComClientThread extends Thread {
         try {
             if (streamIn != null) streamIn.close();
         } catch (IOException ioe) {
-            System.out.println("Error closing input stream: " + ioe);
+            log.error("Error closing input stream: " + ioe);
         }
     }
 
@@ -38,7 +42,7 @@ public class ComClientThread extends Thread {
             try {
                 client.handleMessage(streamIn.readUTF());
             } catch (IOException ioe) {
-                System.out.println("Listening error: " + ioe.getMessage());
+                log.error("Listening error: " + ioe.getMessage());
                 client.stop();
             }
         }

@@ -1,5 +1,6 @@
 package com.neodem.coup.communications;
 
+import com.neodem.coup.communications.ComBaseClient.Dest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,7 +14,7 @@ public class DefaultComMessageTranslator implements ComMessageTranslator {
     private static final String PAYLOAD = "p";
 
     @Override
-    public Dest getDest(String m) {
+    public ComBaseClient.Dest getDest(String m) {
         JSONObject j;
         Dest result = Dest.Broadcast;
 
