@@ -11,8 +11,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ComServerThread extends Thread {
-    private static Logger log = LogManager.getLogger(ComServerThread.class.getName());
+public class ClientConnector extends Thread {
+    private static Logger log = LogManager.getLogger(ClientConnector.class.getName());
 
     private ComServer server = null;
     private Socket socket = null;
@@ -20,10 +20,12 @@ public class ComServerThread extends Thread {
     private DataOutputStream streamOut = null;
     private Dest d;
 
-    public ComServerThread(ComServer _server, Socket _socket, Dest d) {
+    public ClientConnector(ComServer _server, Socket _socket, Dest d) {
         super();
         server = _server;
         socket = _socket;
+
+        setName("ClientConnectionThread-" + d);
         this.d = d;
     }
 

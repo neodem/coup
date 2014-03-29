@@ -18,32 +18,27 @@ import java.util.Map;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public final class CoupServer extends ComServer {
+public final class CoupServer {
 
     private static Logger log = LogManager.getLogger(CoupServer.class.getName());
     protected Map<Dest, PlayerProxy> registeredPlayers;
     private MessageHandler messageHandler;
     private CoupGameMaster cgm;
     private MessageTranslator messageTranslator;
+    private ComServer comServer;
 
     public class MessageHandler extends ComBaseClient implements Runnable {
 
         private final CoupServer server;
         private String mostRecentMessage = null;
-        private boolean replyWaiting = false;
-
-        public boolean isReplyWaiting() {
-            return replyWaiting;
-        }
-
-        public String getMostRecentMessage() {
-            replyWaiting = false;
-            return mostRecentMessage;
-        }
 
         public MessageHandler(String host, int port, CoupServer server) {
             super(host, port);
             this.server = server;
+        }
+
+        public String getMostRecentMessage() {
+            return mostRecentMessage;
         }
 
         @Override
@@ -59,8 +54,10 @@ public final class CoupServer extends ComServer {
                     startGame();
                 }
             } else if (type == MessageType.reply) {
-                mostRecentMessage = msg;
-                replyWaiting = true;
+                synchronized (this) {
+                    mostRecentMessage = msg;
+                    notify();
+                }
             }
         }
 
@@ -69,18 +66,23 @@ public final class CoupServer extends ComServer {
         }
     }
 
-    public CoupServer() {
-        super(6969);
-
-        registeredPlayers = new HashMap<>();
-        messageHandler = new MessageHandler("localhost", 6969, this);
-        (new Thread(messageHandler)).start();
-    }
-
     public static void main(String[] args) {
         String springContextFile = "server-config.xml";
         log.info(springContextFile);
         new ClassPathXmlApplicationContext(springContextFile);
+    }
+
+    public void startCoupServer() {
+        registeredPlayers = new HashMap<>();
+        messageHandler = new MessageHandler("localhost", 6969, this);
+
+        Thread mt = new Thread(messageHandler);
+        mt.setName("Coup Server MessageHandler");
+        mt.start();
+    }
+
+    public void setComServer(ComServer comServer) {
+        this.comServer = comServer;
     }
 
     public void sendMessage(Dest dest, String msg) {
@@ -89,7 +91,15 @@ public final class CoupServer extends ComServer {
 
     public String sendAndGetReply(Dest dest, String msg) {
         messageHandler.send(dest, msg);
-        while (!messageHandler.isReplyWaiting()) ;
+
+        synchronized (messageHandler) {
+            try {
+                messageHandler.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         return messageHandler.getMostRecentMessage();
     }
 
@@ -98,7 +108,10 @@ public final class CoupServer extends ComServer {
         cgm.initGame(new ArrayList(registeredPlayers.values()));
 
         log.info("Starting Game");
-        (new Thread(cgm)).start();
+        Thread game = new Thread(cgm);
+        game.setName("Coup GameMaster");
+        game.start();
+
 
 //        CoupCommunicationInterface winningPlayer = cgm.getWinningPlayer();
 //
@@ -112,4 +125,6 @@ public final class CoupServer extends ComServer {
     public void setMessageTranslator(MessageTranslator messageTranslator) {
         this.messageTranslator = messageTranslator;
     }
+
+
 }

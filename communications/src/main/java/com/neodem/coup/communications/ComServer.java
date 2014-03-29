@@ -17,9 +17,10 @@ public class ComServer implements Runnable {
     private Thread thread = null;
     private int clientCount = 0;
     private ComMessageTranslator mt = new DefaultComMessageTranslator();
-    private Map<Dest, ComServerThread> clientMap = new HashMap<>();
+    private Map<Dest, ClientConnector> clientMap = new HashMap<>();
+    private int port = 6969;
 
-    public ComServer(int port) {
+    public void startComServer() {
         try {
             log.info("Binding to port " + port + ", please wait  ...");
             server = new ServerSocket(port);
@@ -28,13 +29,6 @@ public class ComServer implements Runnable {
         } catch (IOException ioe) {
             log.error("Can not bind to port " + port + ": " + ioe.getMessage());
         }
-    }
-
-    public static void main(String args[]) {
-        if (args.length != 1)
-            System.out.println("Usage: java ComServer port");
-        else
-            new ComServer(Integer.parseInt(args[0]));
     }
 
     public void run() {
@@ -52,6 +46,7 @@ public class ComServer implements Runnable {
     public void start() {
         if (thread == null) {
             thread = new Thread(this);
+            thread.setName("ComServer-main");
             thread.start();
         }
     }
@@ -73,18 +68,18 @@ public class ComServer implements Runnable {
             log.debug("relaying message from {} to {} : {}", from, to, payload);
 
             if (to == Dest.Broadcast) {
-                for (ComServerThread c : clientMap.values()) {
+                for (ClientConnector c : clientMap.values()) {
                     c.send(payload);
                 }
             } else {
-                ComServerThread c = clientMap.get(to);
+                ClientConnector c = clientMap.get(to);
                 c.send(payload);
             }
         }
     }
 
     public synchronized void remove(Dest d) {
-        ComServerThread toTerminate = clientMap.get(d);
+        ClientConnector toTerminate = clientMap.get(d);
         log.info("Removing client thread " + d);
         clientCount--;
         try {
@@ -103,7 +98,7 @@ public class ComServer implements Runnable {
             //todo make this dynamic
             Dest dest = getNextDest();
 
-            ComServerThread serverThread = new ComServerThread(this, socket, dest);
+            ClientConnector serverThread = new ClientConnector(this, socket, dest);
 
             clientMap.put(dest, serverThread);
 
@@ -125,5 +120,9 @@ public class ComServer implements Runnable {
         if (clientCount == 3) return Dest.Player3;
         if (clientCount == 4) return Dest.Player4;
         return null;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

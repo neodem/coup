@@ -2,19 +2,32 @@
 <Configuration>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%t] %-5level %logger{36} - %m%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
         <File name="File" fileName="./logs/coup-server.log" append="false">
-            <PatternLayout pattern="%-5p %c{1} - %m%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+        <File name="ComFile" fileName="./logs/coup-communication.log" append="false">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="org.springframework" level="debug"/>
-        <Logger name="com.neodem" level="DEBUG"/>
-
-        <Root level="ALL">
+        <Logger name="org.springframework" level="debug" additivity="false">
             <AppenderRef ref="Console" level="INFO"/>
-            <AppenderRef ref="File" level="Debug"/>
+            <AppenderRef ref="File"/>
+        </Logger>
+
+        <Logger name="com.neodem.coup.communications" level="debug" additivity="false">
+            <AppenderRef ref="ComFile"/>
+            <AppenderRef ref="Console" level="INFO"/>
+        </Logger>
+
+        <Logger name="com.neodem.coup" level="debug">
+            <AppenderRef ref="File"/>
+        </Logger>
+
+        <Root level="INFO">
+            <AppenderRef ref="Console" level="INFO"/>
         </Root>
     </Loggers>
 </Configuration>

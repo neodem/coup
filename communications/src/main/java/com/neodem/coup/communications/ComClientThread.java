@@ -16,6 +16,7 @@ public class ComClientThread extends Thread {
     public ComClientThread(ComBaseClient _client, Socket _socket) {
         client = _client;
         socket = _socket;
+        setName("ComClientThread");
         open();
         start();
     }
