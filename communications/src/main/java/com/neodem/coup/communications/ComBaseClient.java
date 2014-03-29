@@ -46,6 +46,8 @@ public abstract class ComBaseClient {
     public void send(Dest destination, String message) {
         String m = mt.makeMessage(destination, message);
 
+        getLog().debug("send: {} : {}", destination, message);
+
         try {
             streamOut.writeUTF(m);
             streamOut.flush();

@@ -45,10 +45,13 @@ public class ServiceProxy extends ComBaseClient {
 
     @Override
     public void handleMessage(String m) {
+        getLog().debug("{} : handleMessage : {}", player.getPlayerName(), m);
+
         MessageType type = messageTranslator.getType(m);
 
         if (type.requiresReply()) {
             String reply = handleMessageWithReply(type, m);
+            getLog().debug("{} : replying to server : {}", player.getPlayerName(), reply);
             send(Dest.Server, reply);
         } else {
             handleAsynchonousMessage(type, m);

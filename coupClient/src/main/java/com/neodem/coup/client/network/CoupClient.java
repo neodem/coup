@@ -29,10 +29,10 @@ public class CoupClient {
     }
 
     private void start() {
-        setupPlayer(new RandomCoupPlayer("player1"));
-        setupPlayer(new RandomCoupPlayer("player2"));
-        setupPlayer(new RandomCoupPlayer("player3"));
-        setupPlayer(new RandomCoupPlayer("player4"));
+        setupPlayer(new RandomCoupPlayer("Player1"));
+        setupPlayer(new RandomCoupPlayer("Player2"));
+        setupPlayer(new RandomCoupPlayer("Player3"));
+        setupPlayer(new RandomCoupPlayer("Player4"));
     }
 
     private void setupPlayer(CoupCommunicationInterface player) {

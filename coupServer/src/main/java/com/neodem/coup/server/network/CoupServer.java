@@ -44,6 +44,7 @@ public final class CoupServer {
 
         @Override
         protected void handleMessage(String msg) {
+            getLog().debug("Server : handle message : " + msg);
             MessageType type = messageTranslator.getType(msg);
             if (type == MessageType.register) {
                 String playerName = messageTranslator.getPlayerName(msg);
@@ -74,9 +75,7 @@ public final class CoupServer {
     public static void main(String[] args) {
         String springContextFile = "server-config.xml";
         log.info(springContextFile);
-        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(springContextFile);
-        //CoupServer server = (CoupServer) applicationContext.getBean("coupServer");
-
+        new ClassPathXmlApplicationContext(springContextFile);
     }
 
     public void sendMessage(Dest dest, String msg) {
