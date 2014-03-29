@@ -41,7 +41,7 @@ public class ServiceProxy extends ComBaseClient {
 
     @Override
     public void handleMessage(String m) {
-        log.debug("{} : message received : {}", player.getPlayerName(), m);
+        log.trace("{} : message received : {}", player.getPlayerName(), m);
 
         MessageType type = messageTranslator.getType(m);
 

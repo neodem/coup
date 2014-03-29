@@ -9,7 +9,6 @@ import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCardType;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayerInfo;
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,7 +69,7 @@ public class JsonMessageTranslator implements MessageTranslator {
     public String makeRegistrationMesage(String playerName) {
         JSONObject j = new JSONObject();
         setType(MessageType.register, j);
-        setCoupPlayerName(playerName, j);
+        setPlayerName(playerName, j);
         return j.toString();
     }
 
@@ -79,7 +78,7 @@ public class JsonMessageTranslator implements MessageTranslator {
         JSONObject j = new JSONObject();
         setType(type, j);
         setCoupAction(a, j);
-        setCoupPlayerName(playerName, j);
+        setPlayerName(playerName, j);
         setCoupGameContext(gc, j);
         return j.toString();
     }
@@ -178,8 +177,8 @@ public class JsonMessageTranslator implements MessageTranslator {
         return result;
     }
 
-    protected void setCoupPlayerName(String playerName, JSONObject j) {
-        if (StringUtils.isNotBlank(playerName) && j != null) {
+    protected void setPlayerName(String playerName, JSONObject j) {
+        if (playerName != null && j != null) {
             try {
                 j.put(PLAYER, playerName);
             } catch (JSONException e) {
@@ -188,7 +187,7 @@ public class JsonMessageTranslator implements MessageTranslator {
         }
     }
 
-    protected String getCoupPlayerNameFromJSONObject(JSONObject j) {
+    protected String getPlayerNameFromJSONObject(JSONObject j) {
         String result = null;
         if (j != null) {
             try {
@@ -232,7 +231,6 @@ public class JsonMessageTranslator implements MessageTranslator {
         JSONObject j;
         CoupCardType result = CoupCardType.Unknown;
 
-
         if (m != null) {
             try {
                 j = new JSONObject(m);
@@ -250,7 +248,7 @@ public class JsonMessageTranslator implements MessageTranslator {
             JSONObject action = new JSONObject();
             try {
                 action.put(ACTIONTYPE, a.getActionType().name());
-                setCoupPlayerName(a.getActionOn(), j);
+                setPlayerName(a.getActionOn(), action);
                 j.put(ACTION, action);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -270,7 +268,7 @@ public class JsonMessageTranslator implements MessageTranslator {
                 JSONObject action = j.getJSONObject(ACTION);
 
                 String type = action.getString(ACTIONTYPE);
-                String playerName = getCoupPlayerNameFromJSONObject(action);
+                String playerName = getPlayerNameFromJSONObject(action);
                 result = new CoupAction(playerName, CoupAction.ActionType.valueOf(type));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -323,7 +321,6 @@ public class JsonMessageTranslator implements MessageTranslator {
     public CoupCard getCoupCard(String m) {
         JSONObject j;
         CoupCard result = null;
-
 
         if (m != null) {
             try {
