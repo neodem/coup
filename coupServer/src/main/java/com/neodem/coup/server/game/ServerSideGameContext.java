@@ -1,8 +1,8 @@
 package com.neodem.coup.server.game;
 
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupDeck;
 import com.neodem.coup.common.game.CoupGameContext;
-import com.neodem.coup.common.game.CoupPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,29 +18,29 @@ import java.util.Map;
 public class ServerSideGameContext {
     private static Logger log = LogManager.getLogger(ServerSideGameContext.class.getName());
     // the players in the game (in play order)
-    private List<CoupPlayer> playerList;
+    private List<CoupCommunicationInterface> playerList;
     // keeps track of the state of the players
-    private Map<CoupPlayer, PlayerInfoState> playerInfoMap;
+    private Map<CoupCommunicationInterface, PlayerInfoState> playerInfoMap;
     // the deck we are using
     private CoupDeck deck;
 
-    public ServerSideGameContext(Map<CoupPlayer, PlayerInfoState> playerInfoMap, CoupDeck deck) {
+    public ServerSideGameContext(Map<CoupCommunicationInterface, PlayerInfoState> playerInfoMap, CoupDeck deck) {
         this.playerInfoMap = playerInfoMap;
         this.deck = deck;
         playerList = new ArrayList<>();
     }
 
     public ServerSideGameContext() {
-        this(new HashMap<CoupPlayer, PlayerInfoState>(), new CoupDeck());
+        this(new HashMap<CoupCommunicationInterface, PlayerInfoState>(), new CoupDeck());
     }
 
-    public void addPlayer(CoupPlayer p) {
+    public void addPlayer(CoupCommunicationInterface p) {
         PlayerInfoState info = makeNewPlayerInfo(p);
         playerInfoMap.put(p, info);
         playerList.add(p);
     }
 
-    private PlayerInfoState makeNewPlayerInfo(CoupPlayer p) {
+    private PlayerInfoState makeNewPlayerInfo(CoupCommunicationInterface p) {
         return new PlayerInfoState(2, deck.takeCard(), deck.takeCard(), p.getPlayerName());
     }
 
@@ -48,11 +48,11 @@ public class ServerSideGameContext {
         return generatePrivateGameContext(null);
     }
 
-    public CoupGameContext generatePrivateGameContext(CoupPlayer privPlayer) {
+    public CoupGameContext generatePrivateGameContext(CoupCommunicationInterface privPlayer) {
 
         CoupGameContext gc = new CoupGameContext();
 
-        for (CoupPlayer p : playerList) {
+        for (CoupCommunicationInterface p : playerList) {
             String playerName = p.getPlayerName();
             gc.addPlayer(playerName);
             PlayerInfoState pi = getPlayerInfo(p);
@@ -72,7 +72,7 @@ public class ServerSideGameContext {
         return playerInfoMap.get(getCoupPlayer(playerName));
     }
 
-    public PlayerInfoState getPlayerInfo(CoupPlayer p) {
+    public PlayerInfoState getPlayerInfo(CoupCommunicationInterface p) {
         return playerInfoMap.get(p);
     }
 
@@ -80,7 +80,7 @@ public class ServerSideGameContext {
         return deck;
     }
 
-    public List<CoupPlayer> getPlayerList() {
+    public List<CoupCommunicationInterface> getPlayerList() {
         return playerList;
     }
 
@@ -89,13 +89,13 @@ public class ServerSideGameContext {
         return pis.isActive();
     }
 
-    public void addCoinsToPlayer(int coins, CoupPlayer p) {
+    public void addCoinsToPlayer(int coins, CoupCommunicationInterface p) {
         playerInfoMap.get(p).addCoins(coins);
     }
 
-    public CoupPlayer getCoupPlayer(String playerName) {
+    public CoupCommunicationInterface getCoupPlayer(String playerName) {
 
-        for (CoupPlayer p : playerInfoMap.keySet()) {
+        for (CoupCommunicationInterface p : playerInfoMap.keySet()) {
             if (p.getPlayerName().equals(playerName)) {
                 return p;
             }

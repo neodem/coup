@@ -7,10 +7,10 @@ import org.apache.logging.log4j.Logger;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public abstract class BaseCoupPlayer implements CoupPlayer {
+public abstract class BaseCoupPlayer implements CoupCommunicationInterface {
 
     private static Logger log = LogManager.getLogger(BaseCoupPlayer.class.getName());
-    private String playerName;
+    protected String playerName;
 
     public BaseCoupPlayer(String playerName) {
         this.playerName = playerName;

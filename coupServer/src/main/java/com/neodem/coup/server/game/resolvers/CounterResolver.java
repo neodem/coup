@@ -2,7 +2,7 @@ package com.neodem.coup.server.game.resolvers;
 
 import com.neodem.coup.common.game.CoupAction;
 import com.neodem.coup.common.game.CoupCardType;
-import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.server.game.ServerSideGameContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +29,7 @@ public class CounterResolver {
      * @param counteredAction  the action being countered
      * @return true if the counter was successful, false otherwise
      */
-    public boolean resolveCounter(CoupPlayer actingPlayer, CoupPlayer counteringPlayer, CoupAction counteredAction) {
+    public boolean resolveCounter(CoupCommunicationInterface actingPlayer, CoupCommunicationInterface counteringPlayer, CoupAction counteredAction) {
         if (actingPlayer.doYouWantToChallengeThisCounter(counteringPlayer.getPlayerName())) {
             Collection<CoupCardType> cardsNeededToCounter = counteredAction.getCounterCard();
 

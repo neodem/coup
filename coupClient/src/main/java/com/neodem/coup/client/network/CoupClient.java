@@ -1,10 +1,10 @@
 package com.neodem.coup.client.network;
 
 import com.neodem.coup.client.game.RandomCoupPlayer;
-import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.messaging.MessageTranslator;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jms.core.JmsTemplate;
@@ -15,7 +15,7 @@ import org.springframework.jms.core.JmsTemplate;
  */
 public class CoupClient {
 
-    private static Log log = LogFactory.getLog(CoupClient.class.getName());
+    private static Logger log = LogManager.getLogger(CoupClient.class.getName());
     private JmsTemplate jmsTemplate;
     private MessageTranslator messageTranslator;
 
@@ -35,7 +35,7 @@ public class CoupClient {
         setupPlayer(new RandomCoupPlayer("player4"));
     }
 
-    private void setupPlayer(CoupPlayer player) {
+    private void setupPlayer(CoupCommunicationInterface player) {
         ServiceProxy sp = new ServiceProxy(player, messageTranslator);
         sp.init();
     }

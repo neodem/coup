@@ -3,7 +3,7 @@ package com.neodem.coup.server.game.actionProcessors;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.neodem.coup.common.game.CoupCard;
-import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.server.game.ServerSideGameContext;
 import org.junit.After;
 import org.junit.Before;
@@ -25,11 +25,11 @@ import static org.mockito.Mockito.mock;
 public class ExchangeActionProcessorTest {
     private ServerSideGameContext context;
     private ExchangeActionProcessor processor;
-    private CoupPlayer mockPlayer;
+    private CoupCommunicationInterface mockPlayer;
 
     @Before
     public void before() {
-        mockPlayer = mock(CoupPlayer.class);
+        mockPlayer = mock(CoupCommunicationInterface.class);
 
         context = new ServerSideGameContext();
         context.addPlayer(mockPlayer);

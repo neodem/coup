@@ -1,7 +1,7 @@
 package com.neodem.coup.common;
 
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
-import com.neodem.coup.common.game.CoupPlayer;
 import org.apache.commons.lang.SerializationUtils;
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ public class CoupGameContextTest {
 
     @Test
     public void coupGameContextShouldSerializeCorrectly() {
-        CoupPlayer p = new DoNothingCoupPlayer();
+        CoupCommunicationInterface p = new DoNothingCoupPlayer();
         CoupGameContext gc = new CoupGameContext();
         gc.addPlayer(p.getPlayerName());
 

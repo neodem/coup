@@ -1,8 +1,10 @@
 package com.neodem.coup.server.network;
 
-import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.messaging.MessageTranslator;
+import com.neodem.coup.common.messaging.MessageType;
 import com.neodem.coup.communications.ComBaseClient;
+import com.neodem.coup.communications.ComBaseClient.Dest;
 import com.neodem.coup.server.game.CoupGameMaster;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,62 +18,50 @@ import java.util.Map;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public class CoupServer extends ComBaseClient {
+public final class CoupServer {
+
 
     private static Logger log = LogManager.getLogger(CoupServer.class.getName());
-    protected Map<Integer, CommunicatingPlayer> registeredPlayers;
-    //protected Map<Integer, MessageClient> clients;
-    private int maxPlayers;
+    protected Map<Dest, PlayerProxy> registeredPlayers;
+    private MessageHandler messageHandler;
     private CoupGameMaster cgm;
-    private int nextId = 1;
-
     private MessageTranslator messageTranslator;
+    private String mostRecentMessage = null;
+
+    public CoupServer() {
+        registeredPlayers = new HashMap<>();
+
+        messageHandler = new MessageHandler("localhost", this);
+
+        (new Thread(messageHandler)).start();
+    }
 
     public static void main(String[] args) {
         String springContextFile = "server-config.xml";
         log.info(springContextFile);
-        new ClassPathXmlApplicationContext(springContextFile);
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(springContextFile);
+        //CoupServer server = (CoupServer) applicationContext.getBean("coupServer");
+
     }
 
-    public CoupServer() {
-        super("localhost");
-        registeredPlayers = new HashMap<>();
-        //clients = new HashMap<>();
-        maxPlayers = 4;
-        nextId = 1;
+    public void sendMessage(Dest dest, String msg) {
+        messageHandler.send(dest, msg);
     }
 
-    @Override
-    protected void handleMessage(String msg) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public String sendAndGetReply(Dest dest, String msg) {
+        messageHandler.send(dest, msg);
+        while (mostRecentMessage == null) ;
+        String returnedMsg = mostRecentMessage;
+        mostRecentMessage = null;
+        return returnedMsg;
     }
 
-
-//    public void registerNewClient(String playerName, MessageClient client) {
-//        log.debug("registerPlayer(" + playerName + ")");
-//
-//        if (registeredPlayers.keySet().contains(playerName)) throw new IllegalArgumentException("name already used");
-//
-//        if (registeredPlayers.size() == maxPlayers) {
-//            throw new IllegalStateException("max players already");
-//        }
-//
-//        CommunicatingPlayer cp = new CommunicatingPlayer(playerName, ++nextId, messageTranslator, this);
-//
-//        registeredPlayers.put(nextId, cp);
-//        clients.put(nextId, client);
-//
-//        if (nextId == 5) {
-//            start();
-//        }
-//    }
-
-    private void start() {
+    private void startGame() {
         log.info("initializing Game");
         cgm.initGame(new ArrayList(registeredPlayers.values()));
 
         log.info("Starting Game");
-        CoupPlayer winningPlayer = cgm.runGameLoop();
+        CoupCommunicationInterface winningPlayer = cgm.runGameLoop();
 
         log.info("The game is over : " + winningPlayer.getPlayerName() + " was the winner!");
     }
@@ -82,6 +72,51 @@ public class CoupServer extends ComBaseClient {
 
     public void setMessageTranslator(MessageTranslator messageTranslator) {
         this.messageTranslator = messageTranslator;
+    }
+
+    public class MessageHandler extends ComBaseClient implements Runnable {
+
+        private final CoupServer server;
+        private Dest nextDest = Dest.Player1;
+
+        public MessageHandler(String serverName, CoupServer server) {
+            super(serverName);
+            this.server = server;
+        }
+
+        @Override
+        protected Logger getLog() {
+            return log;
+        }
+
+        private Dest getNextDest() {
+            Dest ret = nextDest;
+            if (nextDest == Dest.Player1) nextDest = Dest.Player2;
+            else if (nextDest == Dest.Player2) nextDest = Dest.Player3;
+            else if (nextDest == Dest.Player3) nextDest = Dest.Player4;
+            else nextDest = null;
+            return ret;
+        }
+
+        @Override
+        protected void handleMessage(String msg) {
+            MessageType type = messageTranslator.getType(msg);
+            if (type == MessageType.register) {
+                String playerName = messageTranslator.getPlayerName(msg);
+                Dest dest = getNextDest();
+                PlayerProxy proxy = new PlayerProxy(playerName, dest, messageTranslator, server);
+                registeredPlayers.put(dest, proxy);
+                if (nextDest == null) {
+                    startGame();
+                }
+            } else if (type == MessageType.reply) {
+                mostRecentMessage = msg;
+            }
+        }
+
+        public void run() {
+            init();
+        }
     }
 
 

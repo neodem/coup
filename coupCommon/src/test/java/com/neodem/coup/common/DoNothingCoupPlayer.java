@@ -4,8 +4,8 @@ import com.google.common.collect.Multiset;
 import com.neodem.coup.common.game.CoupAction;
 import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCardType;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
-import com.neodem.coup.common.game.CoupPlayer;
 
 import java.io.Serializable;
 
@@ -13,7 +13,7 @@ import java.io.Serializable;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class DoNothingCoupPlayer implements CoupPlayer, Serializable {
+public class DoNothingCoupPlayer implements CoupCommunicationInterface, Serializable {
 
     private String name = "DoNothingName";
 

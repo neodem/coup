@@ -1,7 +1,7 @@
 package com.neodem.coup.server.game.actionProcessors;
 
 import com.neodem.coup.common.game.CoupAction;
-import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.PlayerError;
 import com.neodem.coup.server.game.ServerSideGameContext;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +20,7 @@ public abstract class BaseActionProcessor implements ActionProcessor {
     protected abstract Logger getLog();
 
     @Override
-    public void validate(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
+    public void validate(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
 
     }
 

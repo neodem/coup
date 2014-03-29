@@ -63,11 +63,11 @@ public class ComServer implements Runnable {
         }
     }
 
-    public synchronized void handle(Dest d, String input) {
-        log.debug("handle({} : {})", d, input);
+    public synchronized void handle(Dest from, String input) {
+        log.debug("handle message from {} : {}", from, input);
         if (input.equals(".bye")) {
-            clientMap.get(d).send(".bye");
-            remove(d);
+            clientMap.get(from).send(".bye");
+            remove(from);
         } else {
             Dest dest = mt.getDest(input);
             String payload = mt.getPayload(input);

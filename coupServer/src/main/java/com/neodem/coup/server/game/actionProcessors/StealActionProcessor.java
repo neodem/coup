@@ -1,7 +1,7 @@
 package com.neodem.coup.server.game.actionProcessors;
 
 import com.neodem.coup.common.game.CoupAction;
-import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.PlayerError;
 import com.neodem.coup.server.game.PlayerInfoState;
 import com.neodem.coup.server.game.ServerSideGameContext;
@@ -25,7 +25,7 @@ public class StealActionProcessor extends BaseActionProcessor implements ActionP
     }
 
     @Override
-    public void validate(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
+    public void validate(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
         if (currentAction.getActionType() == CoupAction.ActionType.Steal) {
             if (targetPlayerName != null && !context.isPlayerActive(targetPlayerName)) {
                 String msg = "Player has attempted to Steal from an inactive player : " + targetPlayerName;
@@ -36,7 +36,7 @@ public class StealActionProcessor extends BaseActionProcessor implements ActionP
     }
 
     @Override
-    public void process(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) {
+    public void process(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) {
         PlayerInfoState aInfo = context.getPlayerInfo(actingPlayer);
         PlayerInfoState oInfo = context.getPlayerInfo(targetPlayerName);
 

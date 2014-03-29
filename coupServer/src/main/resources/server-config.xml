@@ -5,13 +5,6 @@
 
     <bean id="coupGameMaster" class="com.neodem.coup.server.game.CoupGameMaster"/>
 
-    <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
-        <property name="serviceName" value="coupServer"/>
-        <property name="service" ref="coupServer"/>
-        <property name="serviceInterface" value="com.neodem.coup.common.messaging.CoupServer"/>
-        <property name="registryPort" value="1199"/>
-    </bean>
-
     <bean id="coupServer" class="com.neodem.coup.server.network.CoupServer">
         <property name="messageTranslator" ref="messageTranslator"/>
         <property name="cgm" ref="coupGameMaster"/>

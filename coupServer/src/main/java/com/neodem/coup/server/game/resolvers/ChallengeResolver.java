@@ -3,7 +3,7 @@ package com.neodem.coup.server.game.resolvers;
 import com.neodem.coup.common.game.CoupAction;
 import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCardType;
-import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.server.game.PlayerInfoState;
 import com.neodem.coup.server.game.ServerSideGameContext;
 import com.neodem.coup.server.game.actionProcessors.DamagingActionProcessor;
@@ -36,7 +36,7 @@ public class ChallengeResolver extends DamagingActionProcessor {
      * @param challengedCard    the card being challenged
      * @return true if the challenge was successful, false otherwise
      */
-    public boolean resolveChallenge(CoupPlayer challengingPlayer, CoupPlayer challengedPlayer, CoupCardType challengedCard) {
+    public boolean resolveChallenge(CoupCommunicationInterface challengingPlayer, CoupCommunicationInterface challengedPlayer, CoupCardType challengedCard) {
         log.debug(String.format("resolveChallenge() : %s is challenging that %s has the %s card.", challengingPlayer.getPlayerName(), challengedPlayer.getPlayerName(), challengedCard));
 
         // 1) acting player can decide to prove they have the card
@@ -75,7 +75,7 @@ public class ChallengeResolver extends DamagingActionProcessor {
      * @param challengedCards   the cards being challenged. The challenged player has to have at least one of them
      * @return true if the challenge was successful, false otherwise
      */
-    public boolean resolveChallenge(CoupPlayer challengingPlayer, CoupPlayer challengedPlayer, Collection<CoupCardType> challengedCards) {
+    public boolean resolveChallenge(CoupCommunicationInterface challengingPlayer, CoupCommunicationInterface challengedPlayer, Collection<CoupCardType> challengedCards) {
         Set<CoupCardType> uniqueTypes = new HashSet<>(challengedCards);
 
         for (CoupCardType card : uniqueTypes) {
@@ -86,7 +86,7 @@ public class ChallengeResolver extends DamagingActionProcessor {
     }
 
     @Override
-    public void process(CoupPlayer actingPlayer, String targetPlayer, CoupAction currentAction) {
+    public void process(CoupCommunicationInterface actingPlayer, String targetPlayer, CoupAction currentAction) {
         //noop : this should never be called
     }
 }

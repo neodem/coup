@@ -67,6 +67,14 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
+    public String makeRegistrationMesage(String playerName) {
+        JSONObject j = new JSONObject();
+        setType(MessageType.register, j);
+        setCoupPlayerName(playerName, j);
+        return j.toString();
+    }
+
+    @Override
     public String makeMessage(MessageType type, CoupAction a, String playerName, CoupGameContext gc) {
         JSONObject j = new JSONObject();
         setType(type, j);

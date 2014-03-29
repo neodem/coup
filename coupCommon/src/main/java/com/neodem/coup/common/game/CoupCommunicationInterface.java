@@ -8,7 +8,7 @@ import com.google.common.collect.Multiset;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/24/14
  */
-public interface CoupPlayer {
+public interface CoupCommunicationInterface {
 
     /**
      * called by the GameMaster when this Player has a turn to process.

@@ -4,8 +4,8 @@ import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.common.DisplayUtils;
 import com.neodem.coup.common.game.CoupAction;
 import com.neodem.coup.common.game.CoupAction.ActionType;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
-import com.neodem.coup.common.game.CoupPlayer;
 import com.neodem.coup.common.game.PlayerError;
 import com.neodem.coup.server.game.actionProcessors.ActionProcessor;
 import com.neodem.coup.server.game.actionProcessors.AssasinationProcessor;
@@ -44,12 +44,12 @@ public class CoupGameMaster {
     private CounterResolver counterResolver;
     private AssasinationProcessor assasinationProcessor;
 
-    public void initGame(List<CoupPlayer> registeredPlayers) {
+    public void initGame(List<CoupCommunicationInterface> registeredPlayers) {
 
         context = new ServerSideGameContext();
 
         // add players to context (this will set them up)
-        for (CoupPlayer p : registeredPlayers) {
+        for (CoupCommunicationInterface p : registeredPlayers) {
             context.addPlayer(p);
         }
 
@@ -71,15 +71,15 @@ public class CoupGameMaster {
         counterResolver = new CounterResolver(context, challengeResolver);
 
         // initialize players
-        for (CoupPlayer p : context.getPlayerList()) {
+        for (CoupCommunicationInterface p : context.getPlayerList()) {
             p.initializePlayer(getCurrentGameContext(p));
         }
     }
 
-    public CoupPlayer runGameLoop() {
-        CoupPlayer winningPlayer = null;
+    public CoupCommunicationInterface runGameLoop() {
+        CoupCommunicationInterface winningPlayer = null;
         while (winningPlayer == null) {
-            for (CoupPlayer currentPlayer : context.getPlayerList()) {
+            for (CoupCommunicationInterface currentPlayer : context.getPlayerList()) {
                 PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
 
                 if (currentPlayerInfo.isActive()) {
@@ -108,7 +108,7 @@ public class CoupGameMaster {
         return winningPlayer;
     }
 
-    public CoupGameContext getCurrentGameContext(CoupPlayer p) {
+    public CoupGameContext getCurrentGameContext(CoupCommunicationInterface p) {
         return context.generatePrivateGameContext(p);
     }
 
@@ -116,7 +116,7 @@ public class CoupGameMaster {
      * alert players of the current game context and their specific context
      */
     private void updatePlayers() {
-        for (CoupPlayer p : context.getPlayerList()) {
+        for (CoupCommunicationInterface p : context.getPlayerList()) {
             p.updateContext(getCurrentGameContext(p));
         }
     }
@@ -129,24 +129,24 @@ public class CoupGameMaster {
      * @param currentAction the action being played
      * @return true if the action succeeds or false if the action is over (challenged or countered)
      */
-    private boolean alertOtherPlayers(CoupPlayer currentPlayer, CoupAction currentAction) {
+    private boolean alertOtherPlayers(CoupCommunicationInterface currentPlayer, CoupAction currentAction) {
         log.debug("alertOtherPlayers()");
 
         // get a list of the players starting with the person taking the turn
-        List<CoupPlayer> orderedPlayers = Lists.reorder(context.getPlayerList(), currentPlayer);
+        List<CoupCommunicationInterface> orderedPlayers = Lists.reorder(context.getPlayerList(), currentPlayer);
 
         // remove the currentPlayer
         orderedPlayers.remove(currentPlayer);
 
         // let all players know of the action
         log.debug("alerting other players of the action...");
-        for (CoupPlayer op : orderedPlayers) {
+        for (CoupCommunicationInterface op : orderedPlayers) {
             op.actionHappened(currentPlayer.getPlayerName(), currentAction, getCurrentGameContext(op));
         }
 
         // remove inactive players from our list
-        for (Iterator<CoupPlayer> i = orderedPlayers.iterator(); i.hasNext(); ) {
-            CoupPlayer p = i.next();
+        for (Iterator<CoupCommunicationInterface> i = orderedPlayers.iterator(); i.hasNext(); ) {
+            CoupCommunicationInterface p = i.next();
             if (!context.getPlayerInfo(p).isActive()) {
                 i.remove();
             }
@@ -155,7 +155,7 @@ public class CoupGameMaster {
         // go to each one in turn and see if they want to challenge it
         if (currentAction.isChallengeable()) {
             log.debug("determining if players want to challenge this action...");
-            for (CoupPlayer op : orderedPlayers) {
+            for (CoupCommunicationInterface op : orderedPlayers) {
                 if (op.doYouWantToChallengeThisAction(currentAction, currentPlayer.getPlayerName(), getCurrentGameContext(op))) {
                     if (challengeResolver.resolveChallenge(op, currentPlayer, currentAction.getActionCard())) {
                         // if we are here, the challenge succeeded, thus the action failed
@@ -176,7 +176,7 @@ public class CoupGameMaster {
 
             if (currentAction.isCounterableByGroup()) {
                 log.debug("determining if players want to counter this action...");
-                for (CoupPlayer op : orderedPlayers) {
+                for (CoupCommunicationInterface op : orderedPlayers) {
                     if (op.doYouWantToCounterThisAction(currentAction, currentPlayer.getPlayerName(), getCurrentGameContext(op))) {
                         if (counterResolver.resolveCounter(currentPlayer, op, currentAction)) {
                             // if we are here, the counter succeeded, thus the action was blocked/failed
@@ -186,7 +186,7 @@ public class CoupGameMaster {
                     }
                 }
             } else {
-                CoupPlayer actionOn = context.getCoupPlayer(currentAction.getActionOn());
+                CoupCommunicationInterface actionOn = context.getCoupPlayer(currentAction.getActionOn());
                 log.debug("seeing if " + actionOn.getPlayerName() + " wants to counter this action...");
                 if (actionOn.doYouWantToCounterThisAction(currentAction, currentPlayer.getPlayerName(), getCurrentGameContext(actionOn))) {
                     if (counterResolver.resolveCounter(currentPlayer, actionOn, currentAction)) {
@@ -210,7 +210,7 @@ public class CoupGameMaster {
         return true;
     }
 
-    private CoupAction getValidCoupAction(CoupPlayer p) {
+    private CoupAction getValidCoupAction(CoupCommunicationInterface p) {
 
         CoupAction a = p.yourTurn(getCurrentGameContext(p));
 
@@ -225,7 +225,7 @@ public class CoupGameMaster {
         return a;
     }
 
-    private CoupAction tryAgain(PlayerError pe, CoupPlayer p) {
+    private CoupAction tryAgain(PlayerError pe, CoupCommunicationInterface p) {
         CoupAction a;
 
         p.tryAgain(pe.getMessage());
@@ -245,10 +245,10 @@ public class CoupGameMaster {
      *
      * @return null if no winner, the player that won if there was
      */
-    private CoupPlayer evaluateGame() {
+    private CoupCommunicationInterface evaluateGame() {
         int activeCount = 0;
-        CoupPlayer possibleWinner = null;
-        for (CoupPlayer p : context.getPlayerList()) {
+        CoupCommunicationInterface possibleWinner = null;
+        for (CoupCommunicationInterface p : context.getPlayerList()) {
             PlayerInfoState info = context.getPlayerInfo(p);
             if (info.isActive()) {
                 activeCount++;
@@ -261,7 +261,7 @@ public class CoupGameMaster {
         return null;
     }
 
-    private void validateAction(CoupPlayer actingPlayer, CoupAction a) throws PlayerError {
+    private void validateAction(CoupCommunicationInterface actingPlayer, CoupAction a) throws PlayerError {
         if (!CoupAction.isValidPlayableAction(a.getActionType())) {
             String msg = "Player has attempted an non playable action : " + a.getActionType();
             log.error(msg);
@@ -277,7 +277,7 @@ public class CoupGameMaster {
      * @param actingPlayer  the player doing the action
      * @param currentAction the current action
      */
-    private void processAction(CoupPlayer actingPlayer, CoupAction currentAction) {
+    private void processAction(CoupCommunicationInterface actingPlayer, CoupAction currentAction) {
         ActionProcessor ap = actionProcessors.get(currentAction.getActionType());
         ap.process(actingPlayer, currentAction.getActionOn(), currentAction);
         updatePlayers();

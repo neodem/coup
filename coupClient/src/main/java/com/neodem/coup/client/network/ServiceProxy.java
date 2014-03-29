@@ -4,11 +4,13 @@ import com.google.common.collect.Multiset;
 import com.neodem.coup.common.game.CoupAction;
 import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCardType;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
-import com.neodem.coup.common.game.CoupPlayer;
 import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
 import com.neodem.coup.communications.ComBaseClient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static com.neodem.coup.common.messaging.MessageType.reply;
 
@@ -18,13 +20,27 @@ import static com.neodem.coup.common.messaging.MessageType.reply;
  */
 public class ServiceProxy extends ComBaseClient {
 
-    private final MessageTranslator messageTranslator;
-    private CoupPlayer player;
+    private static Logger log = LogManager.getLogger(ServiceProxy.class.getName());
 
-    public ServiceProxy(CoupPlayer target, MessageTranslator messageTranslator) {
+    private final MessageTranslator messageTranslator;
+    private CoupCommunicationInterface player;
+
+    public ServiceProxy(CoupCommunicationInterface target, MessageTranslator messageTranslator) {
         super("localhost");
         this.player = target;
         this.messageTranslator = messageTranslator;
+    }
+
+    @Override
+    protected Logger getLog() {
+        return log;
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        String m = messageTranslator.makeRegistrationMesage(player.getPlayerName());
+        send(Dest.Server, m);
     }
 
     @Override
@@ -33,14 +49,10 @@ public class ServiceProxy extends ComBaseClient {
 
         if (type.requiresReply()) {
             String reply = handleMessageWithReply(type, m);
-            sendReplyToServer(reply);
+            send(Dest.Server, reply);
         } else {
             handleAsynchonousMessage(type, m);
         }
-    }
-
-    private void sendReplyToServer(final String reply) {
-        sendTo(Dest.Server, reply);
     }
 
     public String handleMessageWithReply(MessageType type, String m) {

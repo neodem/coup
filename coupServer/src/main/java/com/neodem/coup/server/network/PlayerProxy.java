@@ -4,11 +4,10 @@ import com.google.common.collect.Multiset;
 import com.neodem.coup.common.game.CoupAction;
 import com.neodem.coup.common.game.CoupCard;
 import com.neodem.coup.common.game.CoupCardType;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
-import com.neodem.coup.common.game.CoupPlayer;
-import com.neodem.coup.common.messaging.CoupServer;
-import com.neodem.coup.common.messaging.Message;
 import com.neodem.coup.common.messaging.MessageTranslator;
+import com.neodem.coup.communications.ComBaseClient.Dest;
 
 import static com.neodem.coup.common.messaging.MessageType.*;
 
@@ -19,13 +18,13 @@ import static com.neodem.coup.common.messaging.MessageType.*;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public class CommunicatingPlayer implements CoupPlayer {
+public class PlayerProxy implements CoupCommunicationInterface {
     private String playerName;
     private MessageTranslator messageTranslator;
     private CoupServer coupServer;
-    private int id;
+    private Dest id;
 
-    public CommunicatingPlayer(String playerName, int id, MessageTranslator messageTranslator, CoupServer coupServer) {
+    public PlayerProxy(String playerName, Dest id, MessageTranslator messageTranslator, CoupServer coupServer) {
         this.playerName = playerName;
         this.id = id;
         this.messageTranslator = messageTranslator;
@@ -35,13 +34,21 @@ public class CommunicatingPlayer implements CoupPlayer {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CommunicatingPlayer)) return false;
+        if (!(o instanceof PlayerProxy)) return false;
 
-        CommunicatingPlayer that = (CommunicatingPlayer) o;
+        PlayerProxy that = (PlayerProxy) o;
 
         if (id != that.id) return false;
+        if (playerName != null ? !playerName.equals(that.playerName) : that.playerName != null) return false;
 
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = playerName != null ? playerName.hashCode() : 0;
+        result = 31 * result + id.hashCode();
+        return result;
     }
 
     @Override
@@ -50,33 +57,28 @@ public class CommunicatingPlayer implements CoupPlayer {
     }
 
     @Override
-    public int hashCode() {
-        return id;
-    }
-
-    @Override
     public CoupAction yourTurn(CoupGameContext gc) {
-        Message m = messageTranslator.makeMessage(yourTurn, gc);
-        Message reply = coupServer.sendAndGetReply(id, m);
+        String m = messageTranslator.makeMessage(yourTurn, gc);
+        String reply = coupServer.sendAndGetReply(id, m);
         return messageTranslator.getCoupAction(reply);
     }
 
     @Override
     public void updateContext(CoupGameContext gc) {
-        Message m = messageTranslator.makeMessage(updateContext, gc);
-        coupServer.send(id, m);
+        String m = messageTranslator.makeMessage(updateContext, gc);
+        coupServer.sendMessage(id, m);
     }
 
     @Override
     public void actionHappened(String playerName, CoupAction hisAction, CoupGameContext gc) {
-        Message m = messageTranslator.makeMessage(actionHappened, hisAction, playerName, gc);
-        coupServer.send(id, m);
+        String m = messageTranslator.makeMessage(actionHappened, hisAction, playerName, gc);
+        coupServer.sendMessage(id, m);
     }
 
     @Override
     public void tryAgain(String reason) {
-        Message m = messageTranslator.makeMessage(tryAgain, reason);
-        coupServer.send(id, m);
+        String m = messageTranslator.makeMessage(tryAgain, reason);
+        coupServer.sendMessage(id, m);
     }
 
     @Override
@@ -86,49 +88,49 @@ public class CommunicatingPlayer implements CoupPlayer {
 
     @Override
     public void initializePlayer(CoupGameContext g) {
-        Message m = messageTranslator.makeMessage(intializePlayer, g);
-        coupServer.send(id, m);
+        String m = messageTranslator.makeMessage(intializePlayer, g);
+        coupServer.sendMessage(id, m);
     }
 
     @Override
     public boolean doYouWantToCounterThisAction(CoupAction theAction, String thePlayer, CoupGameContext gc) {
-        Message m = messageTranslator.makeMessage(counterAction, theAction, thePlayer, gc);
-        Message reply = coupServer.sendAndGetReply(id, m);
+        String m = messageTranslator.makeMessage(counterAction, theAction, thePlayer, gc);
+        String reply = coupServer.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);
     }
 
     @Override
     public boolean doYouWantToChallengeThisAction(CoupAction theAction, String thePlayer, CoupGameContext gc) {
-        Message m = messageTranslator.makeMessage(challengeAction, theAction, thePlayer, gc);
-        Message reply = coupServer.sendAndGetReply(id, m);
+        String m = messageTranslator.makeMessage(challengeAction, theAction, thePlayer, gc);
+        String reply = coupServer.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);
     }
 
     @Override
     public boolean doYouWantToChallengeThisCounter(String playerCountering) {
-        Message m = messageTranslator.makeMessage(challengeCounter, playerCountering);
-        Message reply = coupServer.sendAndGetReply(id, m);
+        String m = messageTranslator.makeMessage(challengeCounter, playerCountering);
+        String reply = coupServer.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);
     }
 
     @Override
     public boolean doYouWantToProveYouHaveACardOfThisType(CoupCardType challengedCardType) {
-        Message m = messageTranslator.makeMessage(proveCard, challengedCardType);
-        Message reply = coupServer.sendAndGetReply(id, m);
+        String m = messageTranslator.makeMessage(proveCard, challengedCardType);
+        String reply = coupServer.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);
     }
 
     @Override
     public Multiset<CoupCard> exchangeCards(Multiset<CoupCard> cards) {
-        Message m = messageTranslator.makeMessage(exchangeCards, cards);
-        Message reply = coupServer.sendAndGetReply(id, m);
+        String m = messageTranslator.makeMessage(exchangeCards, cards);
+        String reply = coupServer.sendAndGetReply(id, m);
         return messageTranslator.getCardMultiset(reply);
     }
 
     @Override
     public CoupCard youMustLooseAnInfluence() {
-        Message m = messageTranslator.makeMessage(looseInfluence);
-        Message reply = coupServer.sendAndGetReply(id, m);
+        String m = messageTranslator.makeMessage(looseInfluence);
+        String reply = coupServer.sendAndGetReply(id, m);
         return messageTranslator.getCoupCard(reply);
     }
 }

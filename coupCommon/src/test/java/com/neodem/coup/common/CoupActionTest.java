@@ -1,7 +1,7 @@
 package com.neodem.coup.common;
 
 import com.neodem.coup.common.game.CoupAction;
-import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import org.apache.commons.lang.SerializationUtils;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class CoupActionTest {
 
     @Test
     public void coupActionShouldSerializeCorrectly() {
-        CoupPlayer p = new DoNothingCoupPlayer();
+        CoupCommunicationInterface p = new DoNothingCoupPlayer();
         Serializable original = new CoupAction(p.getPlayerName(), Coup);
         Serializable copy = (Serializable) SerializationUtils.clone(original);
         assertThat(original, equalTo(copy));

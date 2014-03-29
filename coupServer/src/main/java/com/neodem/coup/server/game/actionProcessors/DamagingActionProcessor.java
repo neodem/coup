@@ -1,7 +1,7 @@
 package com.neodem.coup.server.game.actionProcessors;
 
 import com.neodem.coup.common.game.CoupCard;
-import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.server.game.PlayerInfoState;
 import com.neodem.coup.server.game.ServerSideGameContext;
 
@@ -27,7 +27,7 @@ public abstract class DamagingActionProcessor extends BaseActionProcessor {
             getLog().info(losingPlayerName + " has only one down card left so they are forced to turn it over and become inactive. :-(");
             card = playerInfoState.getDownCards().iterator().next();
         } else {
-            CoupPlayer losingPlayer = context.getCoupPlayer(losingPlayerName);
+            CoupCommunicationInterface losingPlayer = context.getCoupPlayer(losingPlayerName);
             // let them choose the card to turn over.
             do {
                 card = losingPlayer.youMustLooseAnInfluence();

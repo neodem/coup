@@ -47,4 +47,6 @@ public interface MessageTranslator {
     CoupCardType getCoupCardType(String m);
 
     MessageType getType(String m);
+
+    String makeRegistrationMesage(String playerName);
 }

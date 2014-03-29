@@ -1,7 +1,7 @@
 package com.neodem.coup.server.game.actionProcessors;
 
 import com.neodem.coup.common.game.CoupAction;
-import com.neodem.coup.common.game.CoupPlayer;
+import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.server.game.ServerSideGameContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +23,7 @@ public class IncomeProcessor extends BaseActionProcessor implements ActionProces
     }
 
     @Override
-    public void process(CoupPlayer actingPlayer, String targetPlayerName, CoupAction currentAction) {
+    public void process(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) {
         switch (currentAction.getActionType()) {
             case Income:
                 getLog().info(actingPlayer + " gets one coin");
