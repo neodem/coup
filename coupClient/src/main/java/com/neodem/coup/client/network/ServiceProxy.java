@@ -35,6 +35,7 @@ public class ServiceProxy extends ComBaseClient {
     public void init() {
         super.init();
         String m = messageTranslator.makeRegistrationMesage(player.getPlayerName());
+        log.debug("{} : registering with the server : {}", player.getPlayerName(), reply);
         send(Dest.Server, m);
     }
 

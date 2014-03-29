@@ -188,6 +188,19 @@ public class JsonMessageTranslator implements MessageTranslator {
         }
     }
 
+    protected String getCoupPlayerNameFromJSONObject(JSONObject j) {
+        String result = null;
+        if (j != null) {
+            try {
+                result = j.getString(PLAYER);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
     public String getPlayerName(String m) {
         JSONObject j;
         String result = null;
@@ -253,8 +266,11 @@ public class JsonMessageTranslator implements MessageTranslator {
         if (m != null) {
             try {
                 j = new JSONObject(m);
-                String type = j.getString(ACTIONTYPE);
-                String playerName = getPlayerName(m);
+
+                JSONObject action = j.getJSONObject(ACTION);
+
+                String type = action.getString(ACTIONTYPE);
+                String playerName = getCoupPlayerNameFromJSONObject(action);
                 result = new CoupAction(playerName, CoupAction.ActionType.valueOf(type));
             } catch (JSONException e) {
                 e.printStackTrace();

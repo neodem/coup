@@ -4,6 +4,7 @@ import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
 import com.neodem.coup.communications.ComBaseClient;
 import com.neodem.coup.communications.ComBaseClient.Dest;
+import com.neodem.coup.communications.ComServer;
 import com.neodem.coup.server.game.CoupGameMaster;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,15 +18,13 @@ import java.util.Map;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public final class CoupServer {
-
+public final class CoupServer extends ComServer {
 
     private static Logger log = LogManager.getLogger(CoupServer.class.getName());
     protected Map<Dest, PlayerProxy> registeredPlayers;
     private MessageHandler messageHandler;
     private CoupGameMaster cgm;
     private MessageTranslator messageTranslator;
-
 
     public class MessageHandler extends ComBaseClient implements Runnable {
 
@@ -71,10 +70,10 @@ public final class CoupServer {
     }
 
     public CoupServer() {
+        super(6969);
+
         registeredPlayers = new HashMap<>();
-
         messageHandler = new MessageHandler("localhost", 6969, this);
-
         (new Thread(messageHandler)).start();
     }
 
