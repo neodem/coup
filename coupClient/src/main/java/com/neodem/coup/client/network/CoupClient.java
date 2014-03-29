@@ -36,7 +36,7 @@ public class CoupClient {
     }
 
     private void setupPlayer(CoupPlayer player) {
-        ServiceProxy sp = new ServiceProxy(player, messageTranslator, jmsTemplate);
+        ServiceProxy sp = new ServiceProxy(player, messageTranslator);
         sp.init();
     }
 

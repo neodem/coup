@@ -8,15 +8,7 @@ import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayer;
 import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
-
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.Session;
-import javax.jms.TextMessage;
+import com.neodem.coup.communications.ComBaseClient;
 
 import static com.neodem.coup.common.messaging.MessageType.reply;
 
@@ -24,36 +16,19 @@ import static com.neodem.coup.common.messaging.MessageType.reply;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public class ServiceProxy implements MessageListener {
+public class ServiceProxy extends ComBaseClient {
 
     private final MessageTranslator messageTranslator;
     private CoupPlayer player;
-    private JmsTemplate jms;
-    private Destination server;
 
-    public ServiceProxy(CoupPlayer target, MessageTranslator messageTranslator, JmsTemplate jmsTemplate) {
+    public ServiceProxy(CoupPlayer target, MessageTranslator messageTranslator) {
+        super("localhost");
         this.player = target;
         this.messageTranslator = messageTranslator;
-        jms = jmsTemplate;
-
-        //TODO server init?
-    }
-
-    public void init() {
-        //TODO connect up with/register with server
     }
 
     @Override
-    public void onMessage(Message message) {
-        try {
-            String content = ((TextMessage) message).getText();
-            handleMessage(content);
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void handleMessage(String m) {
+    public void handleMessage(String m) {
         MessageType type = messageTranslator.getType(m);
 
         if (type.requiresReply()) {
@@ -65,12 +40,7 @@ public class ServiceProxy implements MessageListener {
     }
 
     private void sendReplyToServer(final String reply) {
-        jms.send(server, new MessageCreator() {
-            @Override
-            public Message createMessage(Session session) throws JMSException {
-                return session.createTextMessage(reply);
-            }
-        });
+        sendTo(Dest.Server, reply);
     }
 
     public String handleMessageWithReply(MessageType type, String m) {

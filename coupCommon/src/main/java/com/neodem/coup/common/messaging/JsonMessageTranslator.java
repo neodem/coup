@@ -44,76 +44,76 @@ public class JsonMessageTranslator implements MessageTranslator {
     private static final String CARD2 = "Card2";
 
     @Override
-    public Message makeMessage(MessageType type) {
+    public String makeMessage(MessageType type) {
         JSONObject j = new JSONObject();
         setType(type, j);
-        return new Message(j.toString());
+        return j.toString();
     }
 
     @Override
-    public Message makeMessage(MessageType type, CoupGameContext gc) {
+    public String makeMessage(MessageType type, CoupGameContext gc) {
         JSONObject j = new JSONObject();
         setType(type, j);
         setCoupGameContext(gc, j);
-        return new Message(j.toString());
+        return j.toString();
     }
 
     @Override
-    public Message makeMessage(MessageType type, String message) {
+    public String makeMessage(MessageType type, String message) {
         JSONObject j = new JSONObject();
         setType(type, j);
         setString(message, j);
-        return new Message(j.toString());
+        return j.toString();
     }
 
     @Override
-    public Message makeMessage(MessageType type, CoupAction a, String playerName, CoupGameContext gc) {
+    public String makeMessage(MessageType type, CoupAction a, String playerName, CoupGameContext gc) {
         JSONObject j = new JSONObject();
         setType(type, j);
         setCoupAction(a, j);
         setCoupPlayerName(playerName, j);
         setCoupGameContext(gc, j);
-        return new Message(j.toString());
+        return j.toString();
     }
 
     @Override
-    public Message makeMessage(MessageType type, CoupAction a) {
+    public String makeMessage(MessageType type, CoupAction a) {
         JSONObject j = new JSONObject();
         setType(type, j);
         setCoupAction(a, j);
-        return new Message(j.toString());
+        return j.toString();
     }
 
     @Override
-    public Message makeMessage(MessageType type, CoupCardType c) {
+    public String makeMessage(MessageType type, CoupCardType c) {
         JSONObject j = new JSONObject();
         setType(type, j);
         setCoupCardType(c, j);
-        return new Message(j.toString());
+        return j.toString();
     }
 
     @Override
-    public Message makeMessage(MessageType type, Multiset<CoupCard> cards) {
+    public String makeMessage(MessageType type, Multiset<CoupCard> cards) {
         JSONObject j = new JSONObject();
         setType(type, j);
         setCardMultiset(cards, j);
-        return new Message(j.toString());
+        return j.toString();
     }
 
     @Override
-    public Message makeMessage(MessageType type, CoupCard card) {
+    public String makeMessage(MessageType type, CoupCard card) {
         JSONObject j = new JSONObject();
         setType(type, j);
         setCoupCard(card, j);
-        return new Message(j.toString());
+        return j.toString();
     }
 
     @Override
-    public Message makeMessage(MessageType type, boolean bool) {
+    public String makeMessage(MessageType type, boolean bool) {
         JSONObject j = new JSONObject();
         setType(type, j);
         setBoolean(bool, j);
-        return new Message(j.toString());
+        return j.toString();
     }
 
     protected void setBoolean(boolean bool, JSONObject j) {
@@ -127,13 +127,13 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public Boolean getBoolean(Message m) {
+    public Boolean getBoolean(String m) {
         JSONObject j;
         Boolean result = null;
 
         if (m != null) {
             try {
-                j = new JSONObject(m.content);
+                j = new JSONObject(m);
                 result = j.getBoolean(BOOL);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -154,14 +154,13 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public String getString(Message m) {
+    public String getString(String m) {
         JSONObject j;
         String result = null;
 
-
         if (m != null) {
             try {
-                j = new JSONObject(m.content);
+                j = new JSONObject(m);
                 result = j.getString(MESSAGE);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -181,13 +180,13 @@ public class JsonMessageTranslator implements MessageTranslator {
         }
     }
 
-    public String getPlayerName(Message m) {
+    public String getPlayerName(String m) {
         JSONObject j;
         String result = null;
 
         if (m != null) {
             try {
-                j = new JSONObject(m.content);
+                j = new JSONObject(m);
                 result = j.getString(PLAYER);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -208,14 +207,14 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public CoupCardType getCoupCardType(Message m) {
+    public CoupCardType getCoupCardType(String m) {
         JSONObject j;
         CoupCardType result = CoupCardType.Unknown;
 
 
         if (m != null) {
             try {
-                j = new JSONObject(m.content);
+                j = new JSONObject(m);
                 result = getCoupCardTypeFromJSONObject(j);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -239,14 +238,14 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public CoupAction getCoupAction(Message m) {
+    public CoupAction getCoupAction(String m) {
         JSONObject j;
         CoupAction result = null;
 
 
         if (m != null) {
             try {
-                j = new JSONObject(m.content);
+                j = new JSONObject(m);
                 String type = j.getString(ACTIONTYPE);
                 String playerName = getPlayerName(m);
                 result = new CoupAction(playerName, CoupAction.ActionType.valueOf(type));
@@ -269,14 +268,13 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public MessageType getType(Message m) {
+    public MessageType getType(String m) {
         JSONObject j;
         MessageType result = MessageType.unknown;
 
-
         if (m != null) {
             try {
-                j = new JSONObject(m.content);
+                j = new JSONObject(m);
                 String type = j.getString(TYPE);
                 result = MessageType.valueOf(type);
             } catch (JSONException e) {
@@ -299,14 +297,14 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public CoupCard getCoupCard(Message m) {
+    public CoupCard getCoupCard(String m) {
         JSONObject j;
         CoupCard result = null;
 
 
         if (m != null) {
             try {
-                j = new JSONObject(m.content);
+                j = new JSONObject(m);
                 JSONObject card = j.getJSONObject(CARD);
                 result = getCardFromJSONObject(card);
             } catch (JSONException e) {
@@ -331,13 +329,13 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public Multiset<CoupCard> getCardMultiset(Message m) {
+    public Multiset<CoupCard> getCardMultiset(String m) {
         Multiset<CoupCard> result = HashMultiset.create();
         JSONObject j;
 
         if (m != null) {
             try {
-                j = new JSONObject(m.content);
+                j = new JSONObject(m);
                 JSONArray array = j.getJSONArray(CARDS);
                 int len = array.length();
                 for (int i = 0; i < len; i++) {
@@ -372,13 +370,13 @@ public class JsonMessageTranslator implements MessageTranslator {
     }
 
     @Override
-    public CoupGameContext getCoupGameContext(Message m) {
+    public CoupGameContext getCoupGameContext(String m) {
         CoupGameContext result = null;
         JSONObject j;
 
         if (m != null) {
             try {
-                j = new JSONObject(m.content);
+                j = new JSONObject(m);
 
                 JSONObject context = j.getJSONObject(CONTEXT);
                 JSONArray players = context.getJSONArray(PLAYERS);

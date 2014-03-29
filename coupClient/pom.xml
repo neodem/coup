@@ -18,5 +18,10 @@
             <artifactId>coupCommon</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.neodem</groupId>
+            <artifactId>communications</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

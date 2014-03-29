@@ -12,7 +12,7 @@
         <property name="registryPort" value="1199"/>
     </bean>
 
-    <bean id="coupServer" class="com.neodem.coup.server.network.RmiCoupServer">
+    <bean id="coupServer" class="com.neodem.coup.server.network.CoupServer">
         <property name="messageTranslator" ref="messageTranslator"/>
         <property name="cgm" ref="coupGameMaster"/>
     </bean>

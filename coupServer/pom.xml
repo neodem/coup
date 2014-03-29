@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.neodem</groupId>
-            <artifactId>coupClient</artifactId>
+            <artifactId>communications</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
