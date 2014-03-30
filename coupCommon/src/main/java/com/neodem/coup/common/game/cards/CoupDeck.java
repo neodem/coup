@@ -17,25 +17,27 @@ import static com.neodem.coup.common.game.cards.CoupCardType.Duke;
  */
 public class CoupDeck {
 
+
+    private final Random r = new Random(System.currentTimeMillis());
+
     private final List<CoupCard> actualDeck = new ArrayList<>();
 
     public CoupDeck() {
-        int id = 0;
-        actualDeck.add(new CoupCard(id++, Assasin));
-        actualDeck.add(new CoupCard(id++, Assasin));
-        actualDeck.add(new CoupCard(id++, Assasin));
-        actualDeck.add(new CoupCard(id++, Captain));
-        actualDeck.add(new CoupCard(id++, Captain));
-        actualDeck.add(new CoupCard(id++, Captain));
-        actualDeck.add(new CoupCard(id++, Contessa));
-        actualDeck.add(new CoupCard(id++, Contessa));
-        actualDeck.add(new CoupCard(id++, Contessa));
-        actualDeck.add(new CoupCard(id++, Duke));
-        actualDeck.add(new CoupCard(id++, Duke));
-        actualDeck.add(new CoupCard(id++, Duke));
-        actualDeck.add(new CoupCard(id++, Ambassador));
-        actualDeck.add(new CoupCard(id++, Ambassador));
-        actualDeck.add(new CoupCard(id, Ambassador));
+        actualDeck.add(new CoupCard(r.nextInt(), Assasin));
+        actualDeck.add(new CoupCard(r.nextInt(), Assasin));
+        actualDeck.add(new CoupCard(r.nextInt(), Assasin));
+        actualDeck.add(new CoupCard(r.nextInt(), Captain));
+        actualDeck.add(new CoupCard(r.nextInt(), Captain));
+        actualDeck.add(new CoupCard(r.nextInt(), Captain));
+        actualDeck.add(new CoupCard(r.nextInt(), Contessa));
+        actualDeck.add(new CoupCard(r.nextInt(), Contessa));
+        actualDeck.add(new CoupCard(r.nextInt(), Contessa));
+        actualDeck.add(new CoupCard(r.nextInt(), Duke));
+        actualDeck.add(new CoupCard(r.nextInt(), Duke));
+        actualDeck.add(new CoupCard(r.nextInt(), Duke));
+        actualDeck.add(new CoupCard(r.nextInt(), Ambassador));
+        actualDeck.add(new CoupCard(r.nextInt(), Ambassador));
+        actualDeck.add(new CoupCard(r.nextInt(), Ambassador));
 
         shuffleDeck();
     }
