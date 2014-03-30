@@ -1,4 +1,4 @@
-package com.neodem.coup.common;
+package com.neodem.coup.common.util;
 
 import com.neodem.coup.common.game.actions.CoupAction;
 

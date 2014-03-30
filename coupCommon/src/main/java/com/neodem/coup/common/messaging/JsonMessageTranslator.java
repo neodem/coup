@@ -44,232 +44,99 @@ public class JsonMessageTranslator implements MessageTranslator {
     private static final String COINCOUNT = "CoinCount";
     private static final String CARD1 = "Card1";
     private static final String CARD2 = "Card2";
+    private static final String CARDID = "CardId";
 
     @Override
-    public String makeMessage(MessageType type) {
+    public String marshalMessage(MessageType type) {
         JSONObject j = new JSONObject();
-        setType(type, j);
+        setMessageTypeIntoJSONObject(type, j);
         return j.toString();
     }
 
     @Override
-    public String makeMessage(MessageType type, CoupGameContext gc) {
+    public String marshalMessage(MessageType type, CoupGameContext gc) {
         JSONObject j = new JSONObject();
-        setType(type, j);
-        setCoupGameContext(gc, j);
+        setMessageTypeIntoJSONObject(type, j);
+        setCoupGameContextIntoJSONObject(gc, j);
         return j.toString();
     }
 
     @Override
-    public String makeMessage(MessageType type, String message) {
+    public String marshalMessage(MessageType type, String message) {
         JSONObject j = new JSONObject();
-        setType(type, j);
-        setString(message, j);
+        setMessageTypeIntoJSONObject(type, j);
+        setStringIntoJSONObject(message, j);
         return j.toString();
     }
 
     @Override
-    public String makePlayerMessage(MessageType type, String playerName) {
+    public String marshalPlayerMessage(MessageType type, String playerName) {
         JSONObject j = new JSONObject();
-        setType(type, j);
-        setPlayerName(playerName, j);
+        setMessageTypeIntoJSONObject(type, j);
+        setPlayerNameIntoJSONObject(playerName, j);
         return j.toString();
     }
 
     @Override
-    public String makeRegistrationMesage(String playerName) {
+    public String marshalRegistrationMesage(String playerName) {
         JSONObject j = new JSONObject();
-        setType(MessageType.register, j);
-        setPlayerName(playerName, j);
+        setMessageTypeIntoJSONObject(MessageType.register, j);
+        setPlayerNameIntoJSONObject(playerName, j);
         return j.toString();
     }
 
     @Override
-    public String makeMessage(MessageType type, CoupAction a, String playerName, CoupGameContext gc) {
+    public String marshalMessage(MessageType type, CoupAction a, String playerName, CoupGameContext gc) {
         JSONObject j = new JSONObject();
-        setType(type, j);
-        setCoupAction(a, j);
-        setPlayerName(playerName, j);
-        setCoupGameContext(gc, j);
+        setMessageTypeIntoJSONObject(type, j);
+        setCoupActionIntoJSONObject(a, j);
+        setPlayerNameIntoJSONObject(playerName, j);
+        setCoupGameContextIntoJSONObject(gc, j);
         return j.toString();
     }
 
     @Override
-    public String makeMessage(MessageType type, CoupAction a) {
+    public String marshalMessage(MessageType type, CoupAction a) {
         JSONObject j = new JSONObject();
-        setType(type, j);
-        setCoupAction(a, j);
+        setMessageTypeIntoJSONObject(type, j);
+        setCoupActionIntoJSONObject(a, j);
         return j.toString();
     }
 
     @Override
-    public String makeMessage(MessageType type, CoupCardType c) {
+    public String marshalMessage(MessageType type, CoupCardType c) {
         JSONObject j = new JSONObject();
-        setType(type, j);
-        setCoupCardType(c, j);
+        setMessageTypeIntoJSONObject(type, j);
+        setCoupCardTypeIntoJSONObject(c, j);
         return j.toString();
     }
 
     @Override
-    public String makeMessage(MessageType type, Multiset<CoupCard> cards) {
+    public String marshalMessage(MessageType type, Multiset<CoupCard> cards) {
         JSONObject j = new JSONObject();
-        setType(type, j);
-        setCardMultiset(cards, j);
+        setMessageTypeIntoJSONObject(type, j);
+        setCardMultisetIntoJSONObject(cards, j);
         return j.toString();
     }
 
     @Override
-    public String makeMessage(MessageType type, CoupCard card) {
+    public String marshalMessage(MessageType type, CoupCard card) {
         JSONObject j = new JSONObject();
-        setType(type, j);
-        setCoupCard(card, j);
+        setMessageTypeIntoJSONObject(type, j);
+        setCoupCardIntoJSONObject(card, j);
         return j.toString();
     }
 
     @Override
-    public String makeMessage(MessageType type, boolean bool) {
+    public String marshalMessage(MessageType type, boolean bool) {
         JSONObject j = new JSONObject();
-        setType(type, j);
-        setBoolean(bool, j);
+        setMessageTypeIntoJSONObject(type, j);
+        setBooleanIntoJSONObject(bool, j);
         return j.toString();
     }
 
-    protected void setBoolean(boolean bool, JSONObject j) {
-        if (j != null) {
-            try {
-                j.put(BOOL, Boolean.valueOf(bool));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     @Override
-    public Boolean getBoolean(String m) {
-        JSONObject j;
-        Boolean result = null;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-                result = j.getBoolean(BOOL);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    protected void setString(String message, JSONObject j) {
-        if (message != null && j != null) {
-            try {
-                j.put(MESSAGE, message);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public String getString(String m) {
-        JSONObject j;
-        String result = null;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-                result = j.getString(MESSAGE);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    protected void setPlayerName(String playerName, JSONObject j) {
-        if (playerName != null && j != null) {
-            try {
-                j.put(PLAYER, playerName);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    protected String getPlayerNameFromJSONObject(JSONObject j) {
-        String result = null;
-        if (j != null) {
-            try {
-                result = j.getString(PLAYER);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    public String getPlayerName(String m) {
-        JSONObject j;
-        String result = null;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-                result = j.getString(PLAYER);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    protected void setCoupCardType(CoupCardType c, JSONObject j) {
-        if (c != null && j != null) {
-            try {
-                j.put(CARDTYPE, c.name());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public CoupCardType getCoupCardType(String m) {
-        JSONObject j;
-        CoupCardType result = CoupCardType.Unknown;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-                result = getCoupCardTypeFromJSONObject(j);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    protected void setCoupAction(CoupAction a, JSONObject j) {
-        if (a != null && j != null) {
-            JSONObject action = new JSONObject();
-            try {
-                action.put(ACTIONTYPE, a.getActionType().name());
-                if (a instanceof ComplexCoupAction)
-                    setPlayerName(((ComplexCoupAction) a).getActionOn(), action);
-                j.put(ACTION, action);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public CoupAction getCoupAction(String m) {
+    public CoupAction unmarshalCoupActionFromMessage(String m) {
         JSONObject j;
         CoupAction result = null;
 
@@ -285,7 +152,7 @@ public class JsonMessageTranslator implements MessageTranslator {
                 if (actionType.isSimple()) {
                     result = CoupActionFactory.newAction(actionType, null);
                 } else {
-                    String playerName = getPlayerNameFromJSONObject(action);
+                    String playerName = unmarshalPlayerNameFromJSONObject(action);
                     result = CoupActionFactory.newAction(actionType, playerName);
                 }
             } catch (JSONException e) {
@@ -296,18 +163,142 @@ public class JsonMessageTranslator implements MessageTranslator {
         return result;
     }
 
-    protected void setType(MessageType type, JSONObject j) {
-        if (type != null && j != null) {
+    @Override
+    public Boolean unmarshalBooleanFromMessage(String m) {
+        JSONObject j;
+        Boolean result = null;
+
+        if (m != null) {
             try {
-                j.put(TYPE, type.name());
+                j = new JSONObject(m);
+                result = j.getBoolean(BOOL);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
+        return result;
     }
 
     @Override
-    public MessageType getType(String m) {
+    public CoupCard unmarshalCoupCardFromMessage(String m) {
+        JSONObject j;
+        CoupCard result = null;
+
+        if (m != null) {
+            try {
+                j = new JSONObject(m);
+                JSONObject card = j.getJSONObject(CARD);
+                result = unmarshalCoupCardFromJSONObject(card);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public Multiset<CoupCard> unmarshalCardMultisetFromMessage(String m) {
+        Multiset<CoupCard> result = HashMultiset.create();
+        JSONObject j;
+
+        if (m != null) {
+            try {
+                j = new JSONObject(m);
+                JSONArray array = j.getJSONArray(CARDS);
+                int len = array.length();
+                for (int i = 0; i < len; i++) {
+                    JSONObject jcard = array.getJSONObject(i);
+                    CoupCard card = unmarshalCoupCardFromJSONObject(jcard);
+                    result.add(card);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public CoupGameContext unmarshalCoupGameContextFromMessage(String m) {
+        CoupGameContext result = null;
+        JSONObject j;
+
+        if (m != null) {
+            try {
+                j = new JSONObject(m);
+
+                JSONObject context = j.getJSONObject(CONTEXT);
+                JSONArray players = context.getJSONArray(PLAYERS);
+                List<String> playerList = unmarshalPlayerListFromJSONObject(players);
+
+                JSONObject playerInfos = context.getJSONObject(PLAYERINFOS);
+                Map<String, CoupPlayerInfo> playerInfoMap = unmarshalPlayerInfoMapFromJSONObject(playerInfos);
+
+                result = new CoupGameContext(playerList, playerInfoMap);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public String unmarshalStringFromMessage(String m) {
+        JSONObject j;
+        String result = null;
+
+        if (m != null) {
+            try {
+                j = new JSONObject(m);
+                result = j.getString(MESSAGE);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public String unmarshalPlayerNameFromMessage(String m) {
+        JSONObject j;
+        String result = null;
+
+        if (m != null) {
+            try {
+                j = new JSONObject(m);
+                result = j.getString(PLAYER);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public CoupCardType unmarshalCoupCardTypeFromMessage(String m) {
+        JSONObject j;
+        CoupCardType result = CoupCardType.Unknown;
+
+        if (m != null) {
+            try {
+                j = new JSONObject(m);
+                result = unmarshalCoupCardTypeFromJSONObject(j);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public MessageType unmarshalMessageTypeFromMessage(String m) {
         JSONObject j;
         MessageType result = MessageType.unknown;
 
@@ -324,115 +315,7 @@ public class JsonMessageTranslator implements MessageTranslator {
         return result;
     }
 
-    protected void setCoupCard(CoupCard card, JSONObject j) {
-        if (card != null && j != null) {
-            try {
-                JSONObject jcard = makeCard(card);
-                j.put(CARD, jcard);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public CoupCard getCoupCard(String m) {
-        JSONObject j;
-        CoupCard result = null;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-                JSONObject card = j.getJSONObject(CARD);
-                result = getCardFromJSONObject(card);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    protected void setCardMultiset(Multiset<CoupCard> cards, JSONObject j) {
-        if (cards != null && j != null) {
-            try {
-                JSONArray array = new JSONArray();
-                for (CoupCard c : cards)
-                    array.put(makeCard(c));
-                j.put(CARDS, array);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public Multiset<CoupCard> getCardMultiset(String m) {
-        Multiset<CoupCard> result = HashMultiset.create();
-        JSONObject j;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-                JSONArray array = j.getJSONArray(CARDS);
-                int len = array.length();
-                for (int i = 0; i < len; i++) {
-                    JSONObject jcard = array.getJSONObject(i);
-                    CoupCard card = getCardFromJSONObject(jcard);
-                    result.add(card);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    protected void setCoupGameContext(CoupGameContext gc, JSONObject j) {
-        if (gc != null && j != null) {
-            try {
-                JSONObject playerInfos = makePlayerInfos(gc.getCoupPlayerInfos());
-                JSONArray players = makePlayers(gc.getPlayers());
-
-                JSONObject context = new JSONObject();
-                context.put(PLAYERS, players);
-                context.put(PLAYERINFOS, playerInfos);
-
-                j.put(CONTEXT, context);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public CoupGameContext getCoupGameContext(String m) {
-        CoupGameContext result = null;
-        JSONObject j;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-
-                JSONObject context = j.getJSONObject(CONTEXT);
-                JSONArray players = context.getJSONArray(PLAYERS);
-                List<String> playerList = makePlayerListFromJSONObject(players);
-
-                JSONObject playerInfos = context.getJSONObject(PLAYERINFOS);
-                Map<String, CoupPlayerInfo> playerInfoMap = makePlayerInfoMapFromJSONObject(playerInfos);
-
-                result = new CoupGameContext(playerList, playerInfoMap);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    private JSONArray makePlayers(List<String> players) {
+    protected JSONArray marshalPlayerListToJSONArray(List<String> players) {
         JSONArray j = new JSONArray();
 
         for (String p : players)
@@ -441,7 +324,7 @@ public class JsonMessageTranslator implements MessageTranslator {
         return j;
     }
 
-    private List<String> makePlayerListFromJSONObject(JSONArray j) {
+    protected List<String> unmarshalPlayerListFromJSONObject(JSONArray j) {
         List<String> result = Lists.newArrayList();
 
         if (j != null) {
@@ -459,13 +342,13 @@ public class JsonMessageTranslator implements MessageTranslator {
         return result;
     }
 
-    private JSONObject makePlayerInfos(Map<String, CoupPlayerInfo> coupPlayerInfos) {
+    protected JSONObject marshalPlayerInfosToJSONObject(Map<String, CoupPlayerInfo> coupPlayerInfos) {
         JSONObject j = new JSONObject();
         try {
             JSONArray a = new JSONArray();
             for (String playerName : coupPlayerInfos.keySet()) {
                 CoupPlayerInfo info = coupPlayerInfos.get(playerName);
-                JSONObject playerInfo = makePlayerInfo(info);
+                JSONObject playerInfo = marshalPlayerInfoToJSONObject(info);
 
                 JSONObject element = new JSONObject();
                 element.put(playerName, playerInfo);
@@ -480,7 +363,7 @@ public class JsonMessageTranslator implements MessageTranslator {
         return j;
     }
 
-    private Map<String, CoupPlayerInfo> makePlayerInfoMapFromJSONObject(JSONObject j) {
+    protected Map<String, CoupPlayerInfo> unmarshalPlayerInfoMapFromJSONObject(JSONObject j) {
         Map<String, CoupPlayerInfo> result = Maps.newHashMap();
 
         if (j != null) {
@@ -491,7 +374,7 @@ public class JsonMessageTranslator implements MessageTranslator {
                     String playerName = (String) element.keys().next();
                     JSONObject playerInfoJSON = element.getJSONObject(playerName);
 
-                    CoupPlayerInfo playerInfo = makePlayerInfoFromJSONObject(playerInfoJSON);
+                    CoupPlayerInfo playerInfo = unmarshalPlayerInfoFromJSONObject(playerInfoJSON);
 
                     result.put(playerName, playerInfo);
                 }
@@ -503,13 +386,13 @@ public class JsonMessageTranslator implements MessageTranslator {
         return result;
     }
 
-    private JSONObject makePlayerInfo(CoupPlayerInfo coupPlayerInfo) {
+    protected JSONObject marshalPlayerInfoToJSONObject(CoupPlayerInfo coupPlayerInfo) {
         JSONObject j = new JSONObject();
         try {
             j.put(ACTIVE, coupPlayerInfo.active);
             j.put(COINCOUNT, coupPlayerInfo.coins);
-            j.put(CARD1, makeCard(coupPlayerInfo.cardOne));
-            j.put(CARD2, makeCard(coupPlayerInfo.cardTwo));
+            j.put(CARD1, marshalCoupCardToJSONObject(coupPlayerInfo.cardOne));
+            j.put(CARD2, marshalCoupCardToJSONObject(coupPlayerInfo.cardTwo));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -517,14 +400,14 @@ public class JsonMessageTranslator implements MessageTranslator {
         return j;
     }
 
-    private CoupPlayerInfo makePlayerInfoFromJSONObject(JSONObject j) {
+    protected CoupPlayerInfo unmarshalPlayerInfoFromJSONObject(JSONObject j) {
         CoupPlayerInfo result = null;
         if (j != null) {
             try {
                 boolean active = j.getBoolean(ACTIVE);
                 int coins = j.getInt(COINCOUNT);
-                CoupCard card1 = getCardFromJSONObject(j.getJSONObject(CARD1));
-                CoupCard card2 = getCardFromJSONObject(j.getJSONObject(CARD2));
+                CoupCard card1 = unmarshalCoupCardFromJSONObject(j.getJSONObject(CARD1));
+                CoupCard card2 = unmarshalCoupCardFromJSONObject(j.getJSONObject(CARD2));
 
                 result = new CoupPlayerInfo(active, coins, card1, card2);
             } catch (JSONException e) {
@@ -535,7 +418,7 @@ public class JsonMessageTranslator implements MessageTranslator {
         return result;
     }
 
-    private CoupCardType getCoupCardTypeFromJSONObject(JSONObject j) {
+    protected CoupCardType unmarshalCoupCardTypeFromJSONObject(JSONObject j) {
 
         CoupCardType result = CoupCardType.Unknown;
         if (j != null) {
@@ -550,16 +433,17 @@ public class JsonMessageTranslator implements MessageTranslator {
         return result;
     }
 
-    private CoupCard getCardFromJSONObject(JSONObject j) {
+    protected CoupCard unmarshalCoupCardFromJSONObject(JSONObject j) {
         CoupCardType cardType;
-        CoupCard result = new CoupCard(CoupCardType.Unknown);
+        CoupCard result = CoupCard.makeUnknown();
         boolean faceUp;
 
         if (j != null) {
             try {
-                cardType = getCoupCardTypeFromJSONObject(j);
+                cardType = unmarshalCoupCardTypeFromJSONObject(j);
                 faceUp = j.getBoolean(FACEUP);
-                result = new CoupCard(cardType, faceUp);
+                int id = j.getInt(CARDID);
+                result = new CoupCard(id, cardType, faceUp);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -568,18 +452,138 @@ public class JsonMessageTranslator implements MessageTranslator {
         return result;
     }
 
-    private JSONObject makeCard(CoupCard c) {
+    protected String unmarshalPlayerNameFromJSONObject(JSONObject j) {
+        String result = null;
+        if (j != null) {
+            try {
+                result = j.getString(PLAYER);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    protected JSONObject marshalCoupCardToJSONObject(CoupCard c) {
 
         JSONObject j = new JSONObject();
         if (c != null) {
             try {
-                setCoupCardType(c.type, j);
+                setCoupCardTypeIntoJSONObject(c.type, j);
                 j.put(FACEUP, c.faceUp);
+                j.put(CARDID, c.cardId);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
         return j;
+    }
+
+    protected void setBooleanIntoJSONObject(boolean bool, JSONObject j) {
+        if (j != null) {
+            try {
+                j.put(BOOL, Boolean.valueOf(bool));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void setStringIntoJSONObject(String message, JSONObject j) {
+        if (message != null && j != null) {
+            try {
+                j.put(MESSAGE, message);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void setPlayerNameIntoJSONObject(String playerName, JSONObject j) {
+        if (playerName != null && j != null) {
+            try {
+                j.put(PLAYER, playerName);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void setCoupCardTypeIntoJSONObject(CoupCardType c, JSONObject j) {
+        if (c != null && j != null) {
+            try {
+                j.put(CARDTYPE, c.name());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void setCoupActionIntoJSONObject(CoupAction a, JSONObject j) {
+        if (a != null && j != null) {
+            JSONObject action = new JSONObject();
+            try {
+                action.put(ACTIONTYPE, a.getActionType().name());
+                if (a instanceof ComplexCoupAction)
+                    setPlayerNameIntoJSONObject(((ComplexCoupAction) a).getActionOn(), action);
+                j.put(ACTION, action);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void setMessageTypeIntoJSONObject(MessageType type, JSONObject j) {
+        if (type != null && j != null) {
+            try {
+                j.put(TYPE, type.name());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void setCoupCardIntoJSONObject(CoupCard card, JSONObject j) {
+        if (card != null && j != null) {
+            try {
+                JSONObject jcard = marshalCoupCardToJSONObject(card);
+                j.put(CARD, jcard);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void setCardMultisetIntoJSONObject(Multiset<CoupCard> cards, JSONObject j) {
+        if (cards != null && j != null) {
+            try {
+                JSONArray array = new JSONArray();
+                for (CoupCard c : cards)
+                    array.put(marshalCoupCardToJSONObject(c));
+                j.put(CARDS, array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void setCoupGameContextIntoJSONObject(CoupGameContext gc, JSONObject j) {
+        if (gc != null && j != null) {
+            try {
+                JSONObject playerInfos = marshalPlayerInfosToJSONObject(gc.getCoupPlayerInfos());
+                JSONArray players = marshalPlayerListToJSONArray(gc.getPlayers());
+
+                JSONObject context = new JSONObject();
+                context.put(PLAYERS, players);
+                context.put(PLAYERINFOS, playerInfos);
+
+                j.put(CONTEXT, context);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

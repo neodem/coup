@@ -1,10 +1,10 @@
 package com.neodem.coup.client;
 
-import com.neodem.coup.client.network.ServiceProxy;
 import com.neodem.coup.client.players.RandomCoupPlayer;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.messaging.JsonMessageTranslator;
 import com.neodem.coup.common.messaging.MessageTranslator;
+import com.neodem.coup.common.proxy.ServiceProxy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

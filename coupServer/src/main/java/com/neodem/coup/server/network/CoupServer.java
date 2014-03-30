@@ -2,9 +2,11 @@ package com.neodem.coup.server.network;
 
 import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
-import com.neodem.coup.communications.ComBaseClient;
-import com.neodem.coup.communications.ComBaseClient.Dest;
-import com.neodem.coup.communications.ComServer;
+import com.neodem.coup.common.network.ComBaseClient;
+import com.neodem.coup.common.network.ComBaseClient.Dest;
+import com.neodem.coup.common.network.ComInterface;
+import com.neodem.coup.common.network.ComServer;
+import com.neodem.coup.common.proxy.PlayerProxy;
 import com.neodem.coup.server.game.CoupGameMaster;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +20,7 @@ import java.util.Map;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public final class CoupServer {
+public final class CoupServer implements ComInterface {
 
     private static Logger log = LogManager.getLogger(CoupServer.class.getName());
     protected Map<Dest, PlayerProxy> registeredPlayers;
@@ -44,9 +46,9 @@ public final class CoupServer {
         @Override
         protected void handleMessage(String msg) {
             log.trace("Server : handle message : " + msg);
-            MessageType type = messageTranslator.getType(msg);
+            MessageType type = messageTranslator.unmarshalMessageTypeFromMessage(msg);
             if (type == MessageType.register) {
-                String playerName = messageTranslator.getPlayerName(msg);
+                String playerName = messageTranslator.unmarshalPlayerNameFromMessage(msg);
                 Dest dest = Dest.valueOf(playerName);
                 PlayerProxy proxy = new PlayerProxy(playerName, dest, messageTranslator, server);
                 registeredPlayers.put(dest, proxy);

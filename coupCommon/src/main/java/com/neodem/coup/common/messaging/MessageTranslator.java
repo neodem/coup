@@ -12,45 +12,43 @@ import com.neodem.coup.common.game.cards.CoupCardType;
  */
 public interface MessageTranslator {
 
-    String makeMessage(MessageType type);
+    String marshalMessage(MessageType type);
 
-    String makeMessage(MessageType type, CoupGameContext gc);
+    String marshalMessage(MessageType type, CoupGameContext gc);
 
-    String makeMessage(MessageType type, String message);
+    String marshalMessage(MessageType type, String message);
 
-    String makeMessage(MessageType type, CoupAction a);
+    String marshalMessage(MessageType type, CoupAction a);
 
-    String makeMessage(MessageType type, CoupAction a, String playerName, CoupGameContext gc);
+    String marshalMessage(MessageType type, CoupAction a, String playerName, CoupGameContext gc);
 
-    String makeMessage(MessageType type, CoupCardType c);
+    String marshalMessage(MessageType type, CoupCardType c);
 
-    String makeMessage(MessageType type, Multiset<CoupCard> cards);
+    String marshalMessage(MessageType type, Multiset<CoupCard> cards);
 
-    String makeMessage(MessageType type, CoupCard card);
+    String marshalMessage(MessageType type, CoupCard card);
 
-    String makeMessage(MessageType type, boolean bool);
+    String marshalMessage(MessageType type, boolean bool);
 
-    String makePlayerMessage(MessageType type, String playerName);
+    String marshalPlayerMessage(MessageType type, String playerName);
 
-    CoupAction getCoupAction(String m);
+    String marshalRegistrationMesage(String playerName);
 
-    Boolean getBoolean(String m);
+    CoupAction unmarshalCoupActionFromMessage(String m);
 
-    CoupCard getCoupCard(String m);
+    Boolean unmarshalBooleanFromMessage(String m);
 
-    Multiset<CoupCard> getCardMultiset(String m);
+    CoupCard unmarshalCoupCardFromMessage(String m);
 
-    CoupGameContext getCoupGameContext(String m);
+    Multiset<CoupCard> unmarshalCardMultisetFromMessage(String m);
 
-    String getString(String m);
+    CoupGameContext unmarshalCoupGameContextFromMessage(String m);
 
-    String getPlayerName(String m);
+    String unmarshalStringFromMessage(String m);
 
-    CoupCardType getCoupCardType(String m);
+    String unmarshalPlayerNameFromMessage(String m);
 
-    MessageType getType(String m);
+    CoupCardType unmarshalCoupCardTypeFromMessage(String m);
 
-    String makeRegistrationMesage(String playerName);
-
-
+    MessageType unmarshalMessageTypeFromMessage(String m);
 }

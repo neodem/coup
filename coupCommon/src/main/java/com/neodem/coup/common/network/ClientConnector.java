@@ -1,6 +1,5 @@
-package com.neodem.coup.communications;
+package com.neodem.coup.common.network;
 
-import com.neodem.coup.communications.ComBaseClient.Dest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,9 +17,9 @@ public class ClientConnector extends Thread {
     private Socket socket = null;
     private DataInputStream streamIn = null;
     private DataOutputStream streamOut = null;
-    private Dest d;
+    private ComBaseClient.Dest d;
 
-    public ClientConnector(ComServer _server, Socket _socket, Dest d) {
+    public ClientConnector(ComServer _server, Socket _socket, ComBaseClient.Dest d) {
         super();
         server = _server;
         socket = _socket;

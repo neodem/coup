@@ -3,7 +3,6 @@ package com.neodem.coup.client.players;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.neodem.common.utility.collections.Lists;
-import com.neodem.coup.common.DisplayUtils;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.actions.CoupAction;
@@ -13,6 +12,7 @@ import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.common.game.cards.CoupCardType;
 import com.neodem.coup.common.game.player.BaseCoupPlayer;
 import com.neodem.coup.common.game.player.CoupPlayerInfo;
+import com.neodem.coup.common.util.DisplayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -20,21 +20,22 @@ public class CoupDeck {
     private List<CoupCard> actualDeck = new ArrayList<>();
 
     public CoupDeck() {
-        actualDeck.add(new CoupCard(Assasin));
-        actualDeck.add(new CoupCard(Assasin));
-        actualDeck.add(new CoupCard(Assasin));
-        actualDeck.add(new CoupCard(Captain));
-        actualDeck.add(new CoupCard(Captain));
-        actualDeck.add(new CoupCard(Captain));
-        actualDeck.add(new CoupCard(Contessa));
-        actualDeck.add(new CoupCard(Contessa));
-        actualDeck.add(new CoupCard(Contessa));
-        actualDeck.add(new CoupCard(Duke));
-        actualDeck.add(new CoupCard(Duke));
-        actualDeck.add(new CoupCard(Duke));
-        actualDeck.add(new CoupCard(Ambassador));
-        actualDeck.add(new CoupCard(Ambassador));
-        actualDeck.add(new CoupCard(Ambassador));
+        int id = 0;
+        actualDeck.add(new CoupCard(id++, Assasin));
+        actualDeck.add(new CoupCard(id++, Assasin));
+        actualDeck.add(new CoupCard(id++, Assasin));
+        actualDeck.add(new CoupCard(id++, Captain));
+        actualDeck.add(new CoupCard(id++, Captain));
+        actualDeck.add(new CoupCard(id++, Captain));
+        actualDeck.add(new CoupCard(id++, Contessa));
+        actualDeck.add(new CoupCard(id++, Contessa));
+        actualDeck.add(new CoupCard(id++, Contessa));
+        actualDeck.add(new CoupCard(id++, Duke));
+        actualDeck.add(new CoupCard(id++, Duke));
+        actualDeck.add(new CoupCard(id++, Duke));
+        actualDeck.add(new CoupCard(id++, Ambassador));
+        actualDeck.add(new CoupCard(id++, Ambassador));
+        actualDeck.add(new CoupCard(id++, Ambassador));
 
         shuffleDeck();
     }

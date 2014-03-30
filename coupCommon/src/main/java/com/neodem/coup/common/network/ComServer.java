@@ -1,6 +1,6 @@
-package com.neodem.coup.communications;
+package com.neodem.coup.common.network;
 
-import com.neodem.coup.communications.ComBaseClient.Dest;
+import com.neodem.coup.common.network.ComBaseClient.Dest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

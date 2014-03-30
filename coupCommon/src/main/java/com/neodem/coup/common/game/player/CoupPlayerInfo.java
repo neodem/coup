@@ -12,8 +12,8 @@ import java.io.Serializable;
 public class CoupPlayerInfo implements Serializable {
     public boolean active = true;
     public int coins = 0;
-    public CoupCard cardOne = new CoupCard(CoupCardType.Unknown);
-    public CoupCard cardTwo = new CoupCard(CoupCardType.Unknown);
+    public CoupCard cardOne = CoupCard.makeUnknown();
+    public CoupCard cardTwo = CoupCard.makeUnknown();
 
     public CoupPlayerInfo() {
     }

@@ -8,17 +8,26 @@ import java.io.Serializable;
  */
 public class CoupCard implements Serializable {
 
-    public CoupCardType type = CoupCardType.Unknown;
-    public boolean faceUp = false;
+    public CoupCardType type;
+    public boolean faceUp;
+    public int cardId;
 
-    public CoupCard(CoupCardType type) {
-        this.type = type;
-        faceUp = false;
+    public static CoupCard makeUnknown() {
+        return new CoupCard(-1, CoupCardType.Unknown);
     }
 
-    public CoupCard(CoupCardType type, boolean faceUp) {
+    public CoupCard(int cardId) {
+        this(cardId, CoupCardType.Unknown, false);
+    }
+
+    public CoupCard(int cardId, CoupCardType type) {
+        this(cardId, type, false);
+    }
+
+    public CoupCard(int cardId, CoupCardType type, boolean faceUp) {
         this.faceUp = faceUp;
         this.type = type;
+        this.cardId = cardId;
     }
 
     @Override
@@ -33,14 +42,14 @@ public class CoupCard implements Serializable {
 
         CoupCard coupCard = (CoupCard) o;
 
-        if (type != coupCard.type) return false;
+        if (cardId != coupCard.cardId) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return type.hashCode();
+        return cardId;
     }
 
     public String displayCard() {
@@ -49,4 +58,6 @@ public class CoupCard implements Serializable {
         }
         return "(FACE DOWN)";
     }
+
+
 }

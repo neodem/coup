@@ -1,4 +1,4 @@
-package com.neodem.coup.communications;
+package com.neodem.coup.common.network;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -57,7 +57,6 @@
         <module>coupServer</module>
         <module>coupClient</module>
         <module>coupCommon</module>
-        <module>communications</module>
     </modules>
 
     <dependencies>

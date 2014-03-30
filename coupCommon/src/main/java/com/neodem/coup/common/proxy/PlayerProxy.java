@@ -1,4 +1,4 @@
-package com.neodem.coup.server.network;
+package com.neodem.coup.common.proxy;
 
 import com.google.common.collect.Multiset;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
@@ -7,7 +7,8 @@ import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.common.game.cards.CoupCardType;
 import com.neodem.coup.common.messaging.MessageTranslator;
-import com.neodem.coup.communications.ComBaseClient.Dest;
+import com.neodem.coup.common.network.ComBaseClient.Dest;
+import com.neodem.coup.common.network.ComInterface;
 
 import static com.neodem.coup.common.messaging.MessageType.*;
 
@@ -21,10 +22,10 @@ import static com.neodem.coup.common.messaging.MessageType.*;
 public class PlayerProxy implements CoupCommunicationInterface {
     private String playerName;
     private MessageTranslator messageTranslator;
-    private CoupServer coupServer;
+    private ComInterface coupServer;
     private Dest id;
 
-    public PlayerProxy(String playerName, Dest id, MessageTranslator messageTranslator, CoupServer coupServer) {
+    public PlayerProxy(String playerName, Dest id, MessageTranslator messageTranslator, ComInterface coupServer) {
         this.playerName = playerName;
         this.id = id;
         this.messageTranslator = messageTranslator;
@@ -58,32 +59,32 @@ public class PlayerProxy implements CoupCommunicationInterface {
 
     @Override
     public CoupAction yourTurn(CoupGameContext gc) {
-        String m = messageTranslator.makeMessage(yourTurn, gc);
+        String m = messageTranslator.marshalMessage(yourTurn, gc);
         String reply = coupServer.sendAndGetReply(id, m);
-        return messageTranslator.getCoupAction(reply);
+        return messageTranslator.unmarshalCoupActionFromMessage(reply);
     }
 
     @Override
     public void updateContext(CoupGameContext gc) {
-        String m = messageTranslator.makeMessage(updateContext, gc);
+        String m = messageTranslator.marshalMessage(updateContext, gc);
         coupServer.sendMessage(id, m);
     }
 
     @Override
     public void actionHappened(String playerName, CoupAction hisAction, CoupGameContext gc) {
-        String m = messageTranslator.makeMessage(actionHappened, hisAction, playerName, gc);
+        String m = messageTranslator.marshalMessage(actionHappened, hisAction, playerName, gc);
         coupServer.sendMessage(id, m);
     }
 
     @Override
     public void tryAgain(String reason) {
-        String m = messageTranslator.makeMessage(tryAgain, reason);
+        String m = messageTranslator.marshalMessage(tryAgain, reason);
         coupServer.sendMessage(id, m);
     }
 
     @Override
     public void messageFromGM(String message) {
-        String m = messageTranslator.makeMessage(gmMessage, message);
+        String m = messageTranslator.marshalMessage(gmMessage, message);
         coupServer.sendMessage(id, m);
     }
 
@@ -94,49 +95,49 @@ public class PlayerProxy implements CoupCommunicationInterface {
 
     @Override
     public void initializePlayer(CoupGameContext g) {
-        String m = messageTranslator.makeMessage(intializePlayer, g);
+        String m = messageTranslator.marshalMessage(intializePlayer, g);
         coupServer.sendMessage(id, m);
     }
 
     @Override
     public boolean doYouWantToCounterThisAction(CoupAction theAction, String thePlayer, CoupGameContext gc) {
-        String m = messageTranslator.makeMessage(counterAction, theAction, thePlayer, gc);
+        String m = messageTranslator.marshalMessage(counterAction, theAction, thePlayer, gc);
         String reply = coupServer.sendAndGetReply(id, m);
-        return messageTranslator.getBoolean(reply);
+        return messageTranslator.unmarshalBooleanFromMessage(reply);
     }
 
     @Override
     public boolean doYouWantToChallengeThisAction(CoupAction theAction, String thePlayer, CoupGameContext gc) {
-        String m = messageTranslator.makeMessage(challengeAction, theAction, thePlayer, gc);
+        String m = messageTranslator.marshalMessage(challengeAction, theAction, thePlayer, gc);
         String reply = coupServer.sendAndGetReply(id, m);
-        return messageTranslator.getBoolean(reply);
+        return messageTranslator.unmarshalBooleanFromMessage(reply);
     }
 
     @Override
     public boolean doYouWantToChallengeThisCounter(String playerCountering) {
-        String m = messageTranslator.makePlayerMessage(challengeCounter, playerCountering);
+        String m = messageTranslator.marshalPlayerMessage(challengeCounter, playerCountering);
         String reply = coupServer.sendAndGetReply(id, m);
-        return messageTranslator.getBoolean(reply);
+        return messageTranslator.unmarshalBooleanFromMessage(reply);
     }
 
     @Override
     public boolean doYouWantToProveYouHaveACardOfThisType(CoupCardType challengedCardType) {
-        String m = messageTranslator.makeMessage(proveCard, challengedCardType);
+        String m = messageTranslator.marshalMessage(proveCard, challengedCardType);
         String reply = coupServer.sendAndGetReply(id, m);
-        return messageTranslator.getBoolean(reply);
+        return messageTranslator.unmarshalBooleanFromMessage(reply);
     }
 
     @Override
     public Multiset<CoupCard> exchangeCards(Multiset<CoupCard> cards) {
-        String m = messageTranslator.makeMessage(exchangeCards, cards);
+        String m = messageTranslator.marshalMessage(exchangeCards, cards);
         String reply = coupServer.sendAndGetReply(id, m);
-        return messageTranslator.getCardMultiset(reply);
+        return messageTranslator.unmarshalCardMultisetFromMessage(reply);
     }
 
     @Override
     public CoupCard youMustLooseAnInfluence() {
-        String m = messageTranslator.makeMessage(looseInfluence);
+        String m = messageTranslator.marshalMessage(looseInfluence);
         String reply = coupServer.sendAndGetReply(id, m);
-        return messageTranslator.getCoupCard(reply);
+        return messageTranslator.unmarshalCoupCardFromMessage(reply);
     }
 }

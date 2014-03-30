@@ -1,6 +1,6 @@
-package com.neodem.coup.communications;
+package com.neodem.coup.common.network;
 
-import com.neodem.coup.communications.ComBaseClient.Dest;
+import com.neodem.coup.common.network.ComBaseClient.Dest;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com

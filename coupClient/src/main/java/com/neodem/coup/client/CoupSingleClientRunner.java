@@ -1,8 +1,8 @@
 package com.neodem.coup.client;
 
-import com.neodem.coup.client.network.ServiceProxy;
 import com.neodem.coup.client.players.RandomCoupPlayer;
 import com.neodem.coup.common.messaging.JsonMessageTranslator;
+import com.neodem.coup.common.proxy.ServiceProxy;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com

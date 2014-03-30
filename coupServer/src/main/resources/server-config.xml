@@ -13,6 +13,6 @@
 
     <bean id="messageTranslator" class="com.neodem.coup.common.messaging.JsonMessageTranslator"/>
 
-    <bean id="communicationsServer" class="com.neodem.coup.communications.ComServer" init-method="startComServer"/>
+    <bean id="communicationsServer" class="com.neodem.coup.common.network.ComServer" init-method="startComServer"/>
 
 </beans>
