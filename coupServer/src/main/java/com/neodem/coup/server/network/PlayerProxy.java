@@ -94,8 +94,6 @@ public class PlayerProxy implements CoupCommunicationInterface {
 
     @Override
     public boolean doYouWantToCounterThisAction(CoupAction theAction, String thePlayer, CoupGameContext gc) {
-
-
         String m = messageTranslator.makeMessage(counterAction, theAction, thePlayer, gc);
         String reply = coupServer.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);
@@ -110,7 +108,7 @@ public class PlayerProxy implements CoupCommunicationInterface {
 
     @Override
     public boolean doYouWantToChallengeThisCounter(String playerCountering) {
-        String m = messageTranslator.makeMessage(challengeCounter, playerCountering);
+        String m = messageTranslator.makePlayerMessage(challengeCounter, playerCountering);
         String reply = coupServer.sendAndGetReply(id, m);
         return messageTranslator.getBoolean(reply);
     }

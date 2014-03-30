@@ -8,7 +8,6 @@ import com.neodem.coup.common.game.PlayerError;
 import com.neodem.coup.common.game.actions.ComplexCoupAction;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.actions.CoupAction.ActionType;
-import com.neodem.coup.common.game.actions.SimpleCoupAction;
 import com.neodem.coup.server.game.actionProcessors.ActionProcessor;
 import com.neodem.coup.server.game.actionProcessors.AssasinationProcessor;
 import com.neodem.coup.server.game.actionProcessors.CoupActionProcessor;
@@ -274,10 +273,11 @@ public class CoupGameMaster implements Runnable {
         }
 
         for (ActionProcessor ap : actionProcessors.values()) {
-            if (a instanceof SimpleCoupAction)
-                ap.validate(actingPlayer, null, a);
-            else
+            if (a instanceof ComplexCoupAction)
                 ap.validate(actingPlayer, ((ComplexCoupAction) a).getActionOn(), a);
+            else
+                ap.validate(actingPlayer, null, a);
+
         }
     }
 
@@ -288,10 +288,10 @@ public class CoupGameMaster implements Runnable {
     private void processAction(CoupCommunicationInterface actingPlayer, CoupAction currentAction) {
         ActionProcessor ap = actionProcessors.get(currentAction.getActionType());
 
-        if (currentAction instanceof SimpleCoupAction)
-            ap.process(actingPlayer, null, currentAction);
-        else
+        if (currentAction instanceof ComplexCoupAction)
             ap.process(actingPlayer, ((ComplexCoupAction) currentAction).getActionOn(), currentAction);
+        else
+            ap.process(actingPlayer, null, currentAction);
 
         updatePlayers();
     }

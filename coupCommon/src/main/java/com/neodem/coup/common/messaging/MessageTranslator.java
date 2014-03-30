@@ -30,6 +30,8 @@ public interface MessageTranslator {
 
     String makeMessage(MessageType type, boolean bool);
 
+    String makePlayerMessage(MessageType type, String playerName);
+
     CoupAction getCoupAction(String m);
 
     Boolean getBoolean(String m);
@@ -49,4 +51,6 @@ public interface MessageTranslator {
     MessageType getType(String m);
 
     String makeRegistrationMesage(String playerName);
+
+
 }
