@@ -16,7 +16,7 @@ public class ComServer implements Runnable {
     private final ComMessageTranslator mt = new DefaultComMessageTranslator();
     private final Map<Dest, ClientConnector> clientMap = new HashMap<>();
     private ServerSocket server = null;
-    private Thread thread = null;
+    private volatile Thread serverThread = null;
     private int clientCount = 0;
     private int port = 6969;
 
@@ -25,37 +25,36 @@ public class ComServer implements Runnable {
             log.info("Binding to port " + port + ", please wait  ...");
             server = new ServerSocket(port);
             log.info("Server started: " + server);
-            start();
+            startServerThread();
         } catch (IOException ioe) {
             log.error("Can not bind to port " + port + ": " + ioe.getMessage());
         }
     }
 
+    @Override
     public void run() {
-        while (thread != null) {
+        Thread thisThread = Thread.currentThread();
+        while (serverThread == thisThread) {
             try {
                 log.info("Waiting for a client ...");
                 addThread(server.accept());
             } catch (IOException ioe) {
                 log.error("Server accept error: " + ioe);
-                stop();
+                stopServerThread();
             }
         }
     }
 
-    void start() {
-        if (thread == null) {
-            thread = new Thread(this);
-            thread.setName("ComServer-main");
-            thread.start();
+    private void startServerThread() {
+        if (serverThread == null) {
+            serverThread = new Thread(this);
+            serverThread.setName("ComServer-main");
+            serverThread.start();
         }
     }
 
-    void stop() {
-        if (thread != null) {
-            thread.stop();
-            thread = null;
-        }
+    private void stopServerThread() {
+        serverThread = null;
     }
 
     public synchronized void handle(Dest from, String input) {
@@ -98,13 +97,13 @@ public class ComServer implements Runnable {
             //todo make this dynamic
             Dest dest = getNextDest();
 
-            ClientConnector serverThread = new ClientConnector(this, socket, dest);
+            ClientConnector clientConnectorThread = new ClientConnector(this, socket, dest);
 
-            clientMap.put(dest, serverThread);
+            clientMap.put(dest, clientConnectorThread);
 
             try {
-                serverThread.open();
-                serverThread.start();
+                clientConnectorThread.open();
+                clientConnectorThread.start();
                 clientCount++;
             } catch (IOException ioe) {
                 log.error("Error opening thread: " + ioe);

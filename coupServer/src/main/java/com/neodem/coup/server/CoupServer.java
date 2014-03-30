@@ -75,7 +75,7 @@ public final class CoupServer implements ComInterface {
 
     public void startCoupServer() {
         Thread mt = new Thread(messageHandler);
-        mt.setName("Coup Server MessageHandler");
+        mt.setName("MessageHandler");
         mt.start();
     }
 

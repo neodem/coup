@@ -12,14 +12,53 @@ import java.net.UnknownHostException;
 public abstract class ComBaseClient {
 
     private static final Logger log = LogManager.getLogger(ComBaseClient.class.getName());
-
     private final String serverName;
     private final int port;
-    private Socket socket = null;
     private final DataInputStream console = null;
-    private DataOutputStream streamOut = null;
-    private ComClientThread client = null;
     private final ComMessageTranslator mt = new DefaultComMessageTranslator();
+    private Socket socket = null;
+    private DataOutputStream streamOut = null;
+    private volatile ComClientThread clientThread = null;
+
+    public enum Dest {
+        Broadcast, Server, Player1, Player2, Player3, Player4, Unknown
+    }
+
+    /**
+     * for handling the client stream data. It will wait until
+     * a UTF datagram is received and then call handleMessage()
+     */
+    private class ComClientThread extends Thread {
+        private DataInputStream streamIn = null;
+
+        public void openCommunications() {
+            try {
+                streamIn = new DataInputStream(socket.getInputStream());
+            } catch (IOException ioe) {
+                log.error("Error getting input stream: " + ioe);
+                stopClientThread();
+            }
+        }
+
+        public void closeCommunications() {
+            try {
+                if (streamIn != null) streamIn.close();
+            } catch (IOException ioe) {
+                log.error("Error closing input stream: " + ioe);
+            }
+        }
+
+        public void run() {
+            Thread thisThread = Thread.currentThread();
+            while (clientThread == thisThread)
+                try {
+                    handleMessage(streamIn.readUTF());
+                } catch (IOException ioe) {
+                    log.error("Listening error: " + ioe.getMessage());
+                    stopClientThread();
+                }
+        }
+    }
 
     public ComBaseClient(String host, int port) {
         this.serverName = host;
@@ -32,11 +71,20 @@ public abstract class ComBaseClient {
             socket = new Socket(serverName, port);
             log.info("Connected to ComServer : " + socket);
             streamOut = new DataOutputStream(socket.getOutputStream());
-            client = new ComClientThread(this, socket);
+            startClientThread();
         } catch (UnknownHostException uhe) {
             log.error("Host unknown: " + uhe.getMessage());
         } catch (IOException ioe) {
             log.error("Unexpected exception: " + ioe.getMessage());
+        }
+    }
+
+    protected void startClientThread() {
+        if (clientThread == null) {
+            clientThread = new ComClientThread();
+            clientThread.setName("ComClientThread");
+            clientThread.openCommunications();
+            clientThread.start();
         }
     }
 
@@ -56,13 +104,13 @@ public abstract class ComBaseClient {
             streamOut.flush();
         } catch (IOException ioe) {
             log.error("Sending error: " + ioe.getMessage());
-            stop();
+            stopClientThread();
         }
     }
 
     protected abstract void handleMessage(String msg);
 
-    public void stop() {
+    public void stopClientThread() {
         try {
             if (console != null) console.close();
             if (streamOut != null) streamOut.close();
@@ -70,11 +118,7 @@ public abstract class ComBaseClient {
         } catch (IOException ioe) {
             log.error("Error closing ...");
         }
-        client.close();
-        client.stop();
-    }
-
-    public enum Dest {
-        Broadcast, Server, Player1, Player2, Player3, Player4, Unknown
+        clientThread.closeCommunications();
+        clientThread = null;
     }
 }

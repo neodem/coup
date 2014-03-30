@@ -18,6 +18,5 @@
             <artifactId>coupCommon</artifactId>
             <version>${project.version}</version>
         </dependency>
-
     </dependencies>
 </project>
