@@ -27,6 +27,7 @@ public final class CoupServer implements ComInterface {
     private final Map<Dest, PlayerProxy> registeredPlayers = new HashMap<>();
     private CoupGameMaster cgm;
     private MessageTranslator messageTranslator;
+    private Thread gameThread;
 
     public class MessageHandler extends ComBaseClient implements Runnable {
 
@@ -74,6 +75,10 @@ public final class CoupServer implements ComInterface {
     }
 
     public void startCoupServer() {
+        startMessageHandler();
+    }
+
+    private void startMessageHandler() {
         Thread mt = new Thread(messageHandler);
         mt.setName("MessageHandler");
         mt.start();
@@ -102,9 +107,9 @@ public final class CoupServer implements ComInterface {
         cgm.initGame(new ArrayList(registeredPlayers.values()));
 
         log.info("Starting Game");
-        Thread game = new Thread(cgm);
-        game.setName("Coup GameMaster");
-        game.start();
+        gameThread = new Thread(cgm);
+        gameThread.setName("Coup GameMaster");
+        gameThread.start();
     }
 
     public void setCgm(CoupGameMaster cgm) {
