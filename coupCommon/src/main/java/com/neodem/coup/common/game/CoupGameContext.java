@@ -1,5 +1,8 @@
 package com.neodem.coup.common.game;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.neodem.coup.common.game.player.CoupPlayerInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,6 +46,16 @@ public class CoupGameContext implements Serializable {
 
     public List<String> getPlayers() {
         return players;
+    }
+
+    public List<String> getActivePlayers() {
+        return Lists.newArrayList(Iterables.filter(players, new Predicate<String>() {
+            @Override
+            public boolean apply(String player) {
+                CoupPlayerInfo info = playerInfos.get(player);
+                return info.active;
+            }
+        }));
     }
 
     @Override

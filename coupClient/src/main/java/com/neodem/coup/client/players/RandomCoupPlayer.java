@@ -154,7 +154,7 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicatio
         } while ((actionType == Assassinate && myState.coins < 3) || (actionType == Coup && myState.coins < 7));
 
         if (actionType == Assassinate || actionType == Steal || actionType == Coup) {
-            List<String> players = currentGameContext.getPlayers();
+            List<String> players = currentGameContext.getActivePlayers();
             actionOn = Lists.getRandomElement(players, playerName);
         }
 
@@ -184,6 +184,6 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicatio
 
     @Override
     public void tryAgain(String reason) {
-        getLog().info(String.format("%s : I have to try again because : %s", playerName, reason));
+        getLog().debug(String.format("%s : I have to try again because : %s", playerName, reason));
     }
 }
