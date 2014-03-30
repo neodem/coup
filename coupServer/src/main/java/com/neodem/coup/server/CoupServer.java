@@ -3,7 +3,6 @@ package com.neodem.coup.server;
 import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
 import com.neodem.coup.common.network.ComBaseClient;
-import com.neodem.coup.common.network.ComBaseClient.Dest;
 import com.neodem.coup.common.network.ComInterface;
 import com.neodem.coup.common.network.ComServer;
 import com.neodem.coup.common.proxy.PlayerProxy;
@@ -24,7 +23,7 @@ public final class CoupServer implements ComInterface {
 
     private static final Logger log = LogManager.getLogger(CoupServer.class.getName());
     private final MessageHandler messageHandler = new MessageHandler("localhost", 6969, this);
-    private final Map<Dest, PlayerProxy> registeredPlayers = new HashMap<>();
+    private final Map<Integer, PlayerProxy> registeredPlayers = new HashMap<>();
     private CoupGameMaster cgm;
     private MessageTranslator messageTranslator;
     private Thread gameThread;
@@ -49,9 +48,8 @@ public final class CoupServer implements ComInterface {
             MessageType type = messageTranslator.unmarshalMessageTypeFromMessage(msg);
             if (type == MessageType.register) {
                 String playerName = messageTranslator.unmarshalPlayerNameFromMessage(msg);
-                Dest dest = Dest.valueOf(playerName);
-                PlayerProxy proxy = new PlayerProxy(playerName, dest, messageTranslator, server);
-                registeredPlayers.put(dest, proxy);
+                PlayerProxy proxy = new PlayerProxy(playerName, myId, messageTranslator, server);
+                registeredPlayers.put(myId, proxy);
                 if (registeredPlayers.size() == 4) {
                     startGame();
                 }
@@ -84,11 +82,18 @@ public final class CoupServer implements ComInterface {
         mt.start();
     }
 
-    public void sendMessage(Dest dest, String msg) {
+    @Override
+    public void sendMessage(int dest, String msg) {
         messageHandler.send(dest, msg);
     }
 
-    public String sendAndGetReply(Dest dest, String msg) {
+    @Override
+    public void sendBroadcastMessage(String msg) {
+        messageHandler.broadcast(msg);
+    }
+
+    @Override
+    public String sendAndGetReply(int dest, String msg) {
         messageHandler.send(dest, msg);
 
         synchronized (messageHandler) {

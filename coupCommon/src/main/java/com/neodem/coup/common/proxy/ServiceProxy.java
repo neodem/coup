@@ -9,6 +9,7 @@ import com.neodem.coup.common.game.cards.CoupCardType;
 import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
 import com.neodem.coup.common.network.ComBaseClient;
+import com.neodem.coup.common.network.ComServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,7 +36,7 @@ public class ServiceProxy extends ComBaseClient {
         super.init();
         String m = messageTranslator.marshalRegistrationMesage(player.getPlayerName());
         log.debug("{} : registering with the server : {}", player.getPlayerName(), reply);
-        send(Dest.Server, m);
+        send(ComServer.Server, m);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class ServiceProxy extends ComBaseClient {
         if (type.requiresReply()) {
             String reply = handleMessageWithReply(type, m);
             log.trace("{} : replying to server : {}", player.getPlayerName(), reply);
-            send(Dest.Server, reply);
+            send(ComServer.Server, reply);
         } else {
             handleAsynchonousMessage(type, m);
         }

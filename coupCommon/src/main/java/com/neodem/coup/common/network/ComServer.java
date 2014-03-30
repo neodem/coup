@@ -1,6 +1,5 @@
 package com.neodem.coup.common.network;
 
-import com.neodem.coup.common.network.ComBaseClient.Dest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,46 +17,51 @@ public class ComServer implements Runnable {
 
     private static final Logger log = LogManager.getLogger(ComServer.class.getName());
     private final ComMessageTranslator mt = new DefaultComMessageTranslator();
-    private volatile Map<Dest, ClientConnector> clientMap = new HashMap<>();
+    private volatile Map<Integer, ClientConnector> clientMap = new HashMap<>();
     private volatile Thread serverThread = null;
     private ServerSocket server = null;
     private int clientCount = 0;
     private int port = 6969;
 
+    // special destinations
+    public static final int Broadcast = -1;
+    public static final int Server = -2;
+    public static final int Unknown = -3;
+
     public class ClientConnector extends Thread {
 
-        private final Dest d;
+        private int clientId;
         private Socket socket = null;
         private DataInputStream streamIn = null;
         private DataOutputStream streamOut = null;
 
-        public ClientConnector(Socket socket, Dest d) {
+        public ClientConnector(Socket socket, int id) {
             super();
             this.socket = socket;
-            this.d = d;
+            this.clientId = id;
         }
 
         public void send(String msg) {
-            log.trace("send message to {} : {}", d, msg);
+            log.trace("send message to {} : {}", clientId, msg);
             try {
                 streamOut.writeUTF(msg);
                 streamOut.flush();
             } catch (IOException ioe) {
-                log.error(d + " ERROR sending: " + ioe.getMessage());
-                remove(d);
+                log.error(clientId + " ERROR sending: " + ioe.getMessage());
+                removeClientConnector(clientId);
             }
         }
 
         public void run() {
-            log.info("Server Thread connected to: " + d);
+            log.info("Server Thread connected. Id = {}", clientId);
 
             Thread thisThread = Thread.currentThread();
-            while (clientMap.get(d) == thisThread) {
+            while (clientMap.get(clientId) == thisThread) {
                 try {
-                    handle(d, streamIn.readUTF());
+                    handle(clientId, streamIn.readUTF());
                 } catch (IOException ioe) {
-                    System.out.println(d + " ERROR reading: " + ioe.getMessage());
-                    remove(d);
+                    System.out.println(clientId + " ERROR reading: " + ioe.getMessage());
+                    removeClientConnector(clientId);
                 }
             }
         }
@@ -113,16 +117,18 @@ public class ComServer implements Runnable {
         serverThread = null;
     }
 
-    public synchronized void handle(Dest from, String input) {
+    public synchronized void handle(int from, String input) {
         if (input.equals(".bye")) {
             clientMap.get(from).send(".bye");
-            remove(from);
+            removeClientConnector(from);
         } else {
-            Dest to = mt.getDest(input);
+            int to = mt.getDest(input);
             String payload = mt.getPayload(input);
             log.debug("relaying message from {} to {} : {}", from, to, payload);
 
-            if (to == Dest.Broadcast) {
+            //todo add the from here??
+
+            if (to == Broadcast) {
                 for (ClientConnector c : clientMap.values()) {
                     c.send(payload);
                 }
@@ -133,16 +139,16 @@ public class ComServer implements Runnable {
         }
     }
 
-    public synchronized void remove(Dest d) {
-        ClientConnector toTerminate = clientMap.get(d);
-        log.info("Removing client thread " + d);
+    public synchronized void removeClientConnector(int id) {
+        ClientConnector toTerminate = clientMap.get(id);
+        log.info("Removing client thread " + id);
         clientCount--;
         try {
             toTerminate.closeCommunication();
         } catch (IOException ioe) {
             log.error("Error closing thread: " + ioe);
         }
-        clientMap.put(d, null);
+        clientMap.put(id, null);
     }
 
     private void addClientThread(Socket socket) {
@@ -150,7 +156,7 @@ public class ComServer implements Runnable {
             log.info("Client accepted: " + socket);
 
             //todo make this dynamic
-            Dest dest = getNextDest();
+            int dest = getNextDest();
 
             // make thread
             ClientConnector clientConnectorThread = new ClientConnector(socket, dest);
@@ -172,13 +178,9 @@ public class ComServer implements Runnable {
             log.warn("Client refused: maximum 5 reached.");
     }
 
-    private Dest getNextDest() {
-        if (clientCount == 0) return Dest.Server;
-        if (clientCount == 1) return Dest.Player1;
-        if (clientCount == 2) return Dest.Player2;
-        if (clientCount == 3) return Dest.Player3;
-        if (clientCount == 4) return Dest.Player4;
-        return null;
+    private int getNextDest() {
+        if (clientCount == 0) return Server;
+        return clientCount;
     }
 
 }

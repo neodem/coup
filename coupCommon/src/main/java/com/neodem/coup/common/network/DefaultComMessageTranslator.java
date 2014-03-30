@@ -1,6 +1,5 @@
 package com.neodem.coup.common.network;
 
-import com.neodem.coup.common.network.ComBaseClient.Dest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,44 +10,26 @@ import org.json.JSONObject;
 public class DefaultComMessageTranslator implements ComMessageTranslator {
 
     private static final String DEST = "to";
-    private static final String ORIG = "from";
     private static final String PAYLOAD = "p";
 
-    @Override
-    public Dest getDest(String m) {
-        JSONObject j;
-        Dest result = Dest.Broadcast;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-                String d = j.getString(DEST);
-                result = Dest.valueOf(d);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
+    DefaultComMessageTranslator() {
     }
 
     @Override
-    public Dest getFrom(String m) {
+    public int getDest(String m) {
         JSONObject j;
-        Dest result = Dest.Unknown;
+        int result = ComServer.Unknown;
 
         if (m != null) {
             try {
                 j = new JSONObject(m);
-                String d = j.getString(ORIG);
-                result = Dest.valueOf(d);
+                result = j.getInt(DEST);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
         return result;
-
     }
 
     @Override
@@ -69,33 +50,22 @@ public class DefaultComMessageTranslator implements ComMessageTranslator {
     }
 
     @Override
-    public String makeMessage(Dest to, String payload) {
-        return makeMessage(to, null, payload);
-    }
-
-    @Override
-    public String makeMessage(Dest to, Dest from, String payload) {
+    public String makeMessage(int to, String payload) {
         JSONObject j = new JSONObject();
         setDest(to, j);
-        setFrom(from, j);
         setPayload(payload, j);
         return j.toString();
     }
 
-    protected void setDest(Dest d, JSONObject j) {
-        if (d != null && j != null) {
-            try {
-                j.put(DEST, d.name());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+    @Override
+    public String makeBroadcastMessage(String payload) {
+        return makeMessage(ComServer.Broadcast, payload);
     }
 
-    protected void setFrom(Dest d, JSONObject j) {
-        if (d != null && j != null) {
+    protected void setDest(int d, JSONObject j) {
+        if (j != null) {
             try {
-                j.put(ORIG, d.name());
+                j.put(DEST, d);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

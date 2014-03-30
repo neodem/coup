@@ -5,7 +5,9 @@ package com.neodem.coup.common.network;
  * Created Date: 3/30/14
  */
 public interface ComInterface {
-    String sendAndGetReply(ComBaseClient.Dest id, String m);
+    String sendAndGetReply(int id, String m);
 
-    void sendMessage(ComBaseClient.Dest id, String m);
+    void sendMessage(int id, String m);
+
+    void sendBroadcastMessage(String m);
 }

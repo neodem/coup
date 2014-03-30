@@ -20,10 +20,6 @@ public abstract class ComBaseClient {
     private DataOutputStream streamOut = null;
     private volatile ComClientThread clientThread = null;
 
-    public enum Dest {
-        Broadcast, Server, Player1, Player2, Player3, Player4, Unknown
-    }
-
     /**
      * for handling the client stream data. It will wait until
      * a UTF datagram is received and then call handleMessage()
@@ -52,7 +48,7 @@ public abstract class ComBaseClient {
             Thread thisThread = Thread.currentThread();
             while (clientThread == thisThread)
                 try {
-                    handleMessage(streamIn.readUTF());
+                    handle(streamIn.readUTF());
                 } catch (IOException ioe) {
                     log.error("Listening error: " + ioe.getMessage());
                     stopClientThread();
@@ -94,7 +90,7 @@ public abstract class ComBaseClient {
      * @param destination the dest to send the message to
      * @param message     the message to send
      */
-    public void send(Dest destination, String message) {
+    public void send(int destination, String message) {
         String m = mt.makeMessage(destination, message);
 
         log.trace("send to ComServer to route to {} : {}", destination, message);
@@ -108,6 +104,19 @@ public abstract class ComBaseClient {
         }
     }
 
+    public void broadcast(String message) {
+        send(ComServer.Broadcast, message);
+    }
+
+    private final void handle(String netMessage) {
+        handleMessage(netMessage);
+    }
+
+    /**
+     * clients need to implement this to deal with messages that it gets
+     *
+     * @param msg
+     */
     protected abstract void handleMessage(String msg);
 
     public void stopClientThread() {
