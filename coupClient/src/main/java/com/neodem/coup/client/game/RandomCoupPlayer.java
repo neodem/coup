@@ -124,6 +124,12 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicatio
     }
 
     @Override
+    public void messageFromGM(String message) {
+        String msg = String.format("%s : GameMaster said : '%s'", playerName, message);
+        log.debug(msg);
+    }
+
+    @Override
     public CoupCard youMustLooseAnInfluence() {
         if (myState.cardOne.faceUp) {
             return myState.cardTwo;
@@ -137,10 +143,13 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicatio
         updateContext(gc);
 
         getLog().debug(playerName + " : my turn");
-        //getLog().debug(gc);
 
         String actionOn = null;
-        ActionType actionType = ActionType.values()[r.nextInt(ActionType.values().length)];
+        ActionType actionType;
+
+        do {
+            actionType = chooseRandomAction();
+        } while ((actionType == Assassinate && myState.coins < 3) || (actionType == Coup && myState.coins < 7));
 
         if (actionType == Assassinate || actionType == Steal || actionType == Coup) {
             List<String> players = currentGameContext.getPlayers();
@@ -151,6 +160,17 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicatio
         getLog().debug(playerName + " : I will try : " + action);
 
         return action;
+    }
+
+    private ActionType chooseRandomAction() {
+        ActionType actionType;
+
+        if (myState.coins >= 10) {
+            actionType = ActionType.Coup;
+        } else do {
+            actionType = ActionType.values()[r.nextInt(ActionType.values().length)];
+        } while (!actionType.isValidPlayableAction());
+        return actionType;
     }
 
     @Override

@@ -33,6 +33,11 @@ public class StealActionProcessor extends BaseActionProcessor implements ActionP
                 getLog().error(msg);
                 throw new PlayerError(msg);
             }
+            if (targetPlayerName.equals(actingPlayer.getPlayerName())) {
+                String msg = "Player has attempted to Steal from himself. Technically this is allowed but I'm not down so try again.";
+                getLog().error(msg);
+                throw new PlayerError(msg);
+            }
         }
     }
 

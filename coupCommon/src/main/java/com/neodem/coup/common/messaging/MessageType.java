@@ -17,6 +17,7 @@ public enum MessageType {
     looseInfluence,
     exchangeCards,
     reply,
+    gmMessage,
     register,
     unknown;
 

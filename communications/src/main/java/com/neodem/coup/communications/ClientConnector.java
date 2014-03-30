@@ -30,7 +30,7 @@ public class ClientConnector extends Thread {
     }
 
     public void send(String msg) {
-        log.debug("send message to {} : {}", d, msg);
+        log.trace("send message to {} : {}", d, msg);
         try {
             streamOut.writeUTF(msg);
             streamOut.flush();

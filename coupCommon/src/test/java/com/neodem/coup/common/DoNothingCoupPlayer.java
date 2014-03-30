@@ -51,6 +51,11 @@ public class DoNothingCoupPlayer implements CoupCommunicationInterface, Serializ
     }
 
     @Override
+    public void messageFromGM(String message) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public void actionHappened(String player, CoupAction hisAction, CoupGameContext gc) {
         //To change body of implemented methods use File | Settings | File Templates.
     }

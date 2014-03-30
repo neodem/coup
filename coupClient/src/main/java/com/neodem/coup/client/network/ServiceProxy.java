@@ -133,6 +133,9 @@ public class ServiceProxy extends ComBaseClient {
                 gc = messageTranslator.getCoupGameContext(m);
                 player.initializePlayer(gc);
                 break;
+            case gmMessage:
+                message = messageTranslator.getString(m);
+                player.messageFromGM(message);
         }
     }
 }

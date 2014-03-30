@@ -24,6 +24,13 @@ public interface CoupCommunicationInterface {
     public CoupAction yourTurn(CoupGameContext gc);
 
     /**
+     * when the GM wants to send you a text
+     *
+     * @param message the message string
+     */
+    public void messageFromGM(String message);
+
+    /**
      * something changed, the GameMaster wants to let you know
      *
      * @param gc the current game context

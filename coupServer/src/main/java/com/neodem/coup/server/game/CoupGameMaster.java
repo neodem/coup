@@ -106,7 +106,12 @@ public class CoupGameMaster implements Runnable {
                 }
             }
         }
-        log.info("The game is over : " + winningPlayer.getPlayerName() + " was the winner!");
+        String msg = "The game is over : " + winningPlayer.getPlayerName() + " was the winner!";
+        log.info(msg);
+
+        for (CoupCommunicationInterface p : context.getPlayerList()) {
+            p.messageFromGM(msg);
+        }
     }
 
     public CoupGameContext getCurrentGameContext(CoupCommunicationInterface p) {

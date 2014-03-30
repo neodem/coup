@@ -82,6 +82,12 @@ public class PlayerProxy implements CoupCommunicationInterface {
     }
 
     @Override
+    public void messageFromGM(String message) {
+        String m = messageTranslator.makeMessage(gmMessage, message);
+        coupServer.sendMessage(id, m);
+    }
+
+    @Override
     public String getPlayerName() {
         return playerName;
     }
