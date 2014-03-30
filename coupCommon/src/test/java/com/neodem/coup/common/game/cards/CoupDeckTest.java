@@ -1,6 +1,5 @@
-package com.neodem.coup.common;
+package com.neodem.coup.common.game.cards;
 
-import com.neodem.coup.common.game.cards.CoupDeck;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

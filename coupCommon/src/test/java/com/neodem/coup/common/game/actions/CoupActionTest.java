@@ -1,4 +1,4 @@
-package com.neodem.coup.common;
+package com.neodem.coup.common.game.actions;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com

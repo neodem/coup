@@ -81,12 +81,12 @@ public class CoupGameMaster implements Runnable {
     public void run() {
         CoupCommunicationInterface winningPlayer = null;
         while (winningPlayer == null) {
-            for (CoupCommunicationInterface currentPlayer : context.getPlayerList()) {
-                PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
 
+            for (CoupCommunicationInterface currentPlayer : context.getPlayerList()) {
+                log.info(context.generateCurrentPublicGameContext());
+                PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
                 if (currentPlayerInfo.isActive()) {
 
-                    log.info(context.generateCurrentPublicGameContext());
                     log.info("It is " + currentPlayer.getPlayerName() + "'s turn");
 
                     CoupAction currentAction = getValidCoupAction(currentPlayer);
@@ -101,12 +101,13 @@ public class CoupGameMaster implements Runnable {
 
                     // evaluate end players (is there a winner?)
                     winningPlayer = evaluateGame();
+                    if (winningPlayer != null) break;
                 } else {
                     log.info(currentPlayer.getPlayerName() + " is not active.");
                 }
             }
         }
-        String msg = "The players is over : " + winningPlayer.getPlayerName() + " was the winner!";
+        String msg = "The game is over : " + winningPlayer.getPlayerName() + " was the winner!";
         log.info(msg);
 
         for (CoupCommunicationInterface p : context.getPlayerList()) {
@@ -160,9 +161,11 @@ public class CoupGameMaster implements Runnable {
 
         // go to each one in turn and see if they want to challenge it
         if (currentAction.getActionType().isChallengeable()) {
+            boolean someoneChallenged = false;
             log.debug("determining if players want to challenge this action...");
             for (CoupCommunicationInterface op : orderedPlayers) {
                 if (op.doYouWantToChallengeThisAction(currentAction, currentPlayer.getPlayerName(), getCurrentGameContext(op))) {
+                    someoneChallenged = true;
                     log.debug("{} is going to challenge this action", op.getPlayerName());
                     if (challengeResolver.resolveChallenge(op, currentPlayer, currentAction.getActionCard())) {
                         // if we are here, the challenge succeeded, thus the action failed
@@ -174,6 +177,9 @@ public class CoupGameMaster implements Runnable {
                     }
                 }
             }
+            if (!someoneChallenged) {
+                log.info("No one decided to Challenge this action.");
+            }
         } else {
             log.debug(currentAction + " is not Challengeable");
         }
@@ -182,9 +188,11 @@ public class CoupGameMaster implements Runnable {
         if (currentAction.getActionType().isCounterable()) {
 
             if (currentAction.getActionType().isCounterableByGroup()) {
+                boolean someoneCountered = false;
                 log.debug("determining if players want to counter this action...");
                 for (CoupCommunicationInterface op : orderedPlayers) {
                     if (op.doYouWantToCounterThisAction(currentAction, currentPlayer.getPlayerName(), getCurrentGameContext(op))) {
+                        someoneCountered = true;
                         log.debug("{} is going to counter this action", op.getPlayerName());
                         if (counterResolver.resolveCounter(currentPlayer, op, currentAction)) {
                             // if we are here, the counter succeeded, thus the action was blocked/failed
@@ -192,6 +200,9 @@ public class CoupGameMaster implements Runnable {
                             return false;
                         }
                     }
+                }
+                if (!someoneCountered) {
+                    log.info("No one attempted to Counter this action.");
                 }
             } else {
                 CoupCommunicationInterface actionOn = context.getCoupPlayer(((ComplexCoupAction) currentAction).getActionOn());

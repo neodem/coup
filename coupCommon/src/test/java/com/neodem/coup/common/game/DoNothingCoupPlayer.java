@@ -1,8 +1,6 @@
-package com.neodem.coup.common;
+package com.neodem.coup.common.game;
 
 import com.google.common.collect.Multiset;
-import com.neodem.coup.common.game.CoupCommunicationInterface;
-import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.actions.SimpleCoupAction;
 import com.neodem.coup.common.game.cards.CoupCard;

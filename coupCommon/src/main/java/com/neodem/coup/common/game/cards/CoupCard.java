@@ -32,7 +32,7 @@ public class CoupCard implements Serializable {
 
     @Override
     public String toString() {
-        return type.name();
+        return String.format("%s : %s", type.name(), faceUp ? "up" : "down");
     }
 
     @Override

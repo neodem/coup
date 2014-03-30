@@ -1,8 +1,5 @@
-package com.neodem.coup.common;
+package com.neodem.coup.common.game;
 
-import com.neodem.coup.common.game.cards.CoupCard;
-import com.neodem.coup.common.game.cards.CoupCardType;
-import com.neodem.coup.common.game.player.CoupPlayerInfo;
 import org.apache.commons.lang.SerializationUtils;
 import org.junit.Test;
 
@@ -15,14 +12,16 @@ import static org.hamcrest.Matchers.equalTo;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/26/14
  */
-public class CoupPlayerInfoTest {
+public class CoupGameContextTest {
 
     @SuppressWarnings("UnnecessaryLocalVariable")
     @Test
-    public void coupPlayerInfoShouldSerializeCorrectly() {
-        CoupPlayerInfo cpi = new CoupPlayerInfo(true, 0, new CoupCard(1, CoupCardType.Duke), new CoupCard(2, CoupCardType.Duke));
+    public void coupGameContextShouldSerializeCorrectly() {
+        CoupCommunicationInterface p = new DoNothingCoupPlayer();
+        CoupGameContext gc = new CoupGameContext();
+        gc.addPlayer(p.getPlayerName());
 
-        Serializable original = cpi;
+        Serializable original = gc;
         Serializable copy = (Serializable) SerializationUtils.clone(original);
         assertThat(original, equalTo(copy));
     }
