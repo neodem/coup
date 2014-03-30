@@ -21,7 +21,7 @@ public class CoupPlayerInfoTest {
     public void coupPlayerInfoShouldSerializeCorrectly() {
         CoupPlayerInfo cpi = new CoupPlayerInfo();
         cpi.active = true;
-        cpi.addUpCard(new CoupCard(CoupCardType.Duke));
+        cpi.addUpCard(new CoupCard(1, CoupCardType.Duke));
 
         Serializable original = cpi;
         Serializable copy = (Serializable) SerializationUtils.clone(original);

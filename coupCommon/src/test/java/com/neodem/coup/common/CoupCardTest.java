@@ -18,7 +18,7 @@ public class CoupCardTest {
 
     @Test
     public void coupCardShouldSerializeCorrectly() {
-        Serializable original = new CoupCard(Captain);
+        Serializable original = new CoupCard(1, Captain);
         Serializable copy = (Serializable) SerializationUtils.clone(original);
         assertThat(original, equalTo(copy));
     }
