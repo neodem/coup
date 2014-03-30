@@ -5,7 +5,7 @@
 
     <bean id="coupGameMaster" class="com.neodem.coup.server.game.CoupGameMaster"/>
 
-    <bean id="coupServer" class="com.neodem.coup.server.network.CoupServer" init-method="startCoupServer">
+    <bean id="coupServer" class="com.neodem.coup.server.CoupServer" init-method="startCoupServer">
         <property name="messageTranslator" ref="messageTranslator"/>
         <property name="cgm" ref="coupGameMaster"/>
         <property name="comServer" ref="communicationsServer"/>

@@ -1,4 +1,4 @@
-package com.neodem.coup.server.network;
+package com.neodem.coup.server;
 
 import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
@@ -74,8 +74,6 @@ public final class CoupServer implements ComInterface {
     }
 
     public void startCoupServer() {
-
-
         Thread mt = new Thread(messageHandler);
         mt.setName("Coup Server MessageHandler");
         mt.start();
@@ -118,6 +116,6 @@ public final class CoupServer implements ComInterface {
     }
 
     public void setComServer(ComServer comServer) {
-
+        // having this here makes sure that the comServer is up and running (due to it's init method) before we start up the CoupServer
     }
 }

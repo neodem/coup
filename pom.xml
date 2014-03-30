@@ -62,9 +62,9 @@
     <dependencies>
 
         <dependency>
-            <groupId>neodem.com</groupId>
+            <groupId>com.neodem</groupId>
             <artifactId>neodem-common</artifactId>
-            <version>1.1.1-SNAPSHOT</version>
+            <version>1.1.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>

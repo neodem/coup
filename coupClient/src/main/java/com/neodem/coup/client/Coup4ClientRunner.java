@@ -9,6 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
+ * Will start up 4 clients.
+ * <p/>
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
@@ -33,9 +35,5 @@ public class Coup4ClientRunner {
         log.info("Starting player : " + player);
         ServiceProxy sp = new ServiceProxy(player, messageTranslator, "localhost", 6969);
         sp.init();
-    }
-
-    public void setMessageTranslator(MessageTranslator messageTranslator) {
-        this.messageTranslator = messageTranslator;
     }
 }

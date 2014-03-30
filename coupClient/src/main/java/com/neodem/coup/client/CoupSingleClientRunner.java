@@ -5,6 +5,8 @@ import com.neodem.coup.common.messaging.JsonMessageTranslator;
 import com.neodem.coup.common.proxy.ServiceProxy;
 
 /**
+ * Fires up a single client
+ * <p/>
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
