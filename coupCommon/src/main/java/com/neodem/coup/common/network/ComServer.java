@@ -4,6 +4,10 @@ import com.neodem.coup.common.network.ComBaseClient.Dest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -14,11 +18,63 @@ public class ComServer implements Runnable {
 
     private static final Logger log = LogManager.getLogger(ComServer.class.getName());
     private final ComMessageTranslator mt = new DefaultComMessageTranslator();
-    private final Map<Dest, ClientConnector> clientMap = new HashMap<>();
-    private ServerSocket server = null;
+    private volatile Map<Dest, ClientConnector> clientMap = new HashMap<>();
     private volatile Thread serverThread = null;
+    private ServerSocket server = null;
     private int clientCount = 0;
     private int port = 6969;
+
+    public class ClientConnector extends Thread {
+
+        private final Dest d;
+        private Socket socket = null;
+        private DataInputStream streamIn = null;
+        private DataOutputStream streamOut = null;
+
+        public ClientConnector(Socket socket, Dest d) {
+            super();
+            this.socket = socket;
+            this.d = d;
+        }
+
+        public void send(String msg) {
+            log.trace("send message to {} : {}", d, msg);
+            try {
+                streamOut.writeUTF(msg);
+                streamOut.flush();
+            } catch (IOException ioe) {
+                log.error(d + " ERROR sending: " + ioe.getMessage());
+                remove(d);
+            }
+        }
+
+        public void run() {
+            log.info("Server Thread connected to: " + d);
+
+            Thread thisThread = Thread.currentThread();
+            while (clientMap.get(d) == thisThread) {
+                try {
+                    handle(d, streamIn.readUTF());
+                } catch (IOException ioe) {
+                    System.out.println(d + " ERROR reading: " + ioe.getMessage());
+                    remove(d);
+                }
+            }
+        }
+
+        public void openCommunication() throws IOException {
+            streamIn = new DataInputStream(new
+                    BufferedInputStream(socket.getInputStream()));
+            streamOut = new DataOutputStream(new
+                    BufferedOutputStream(socket.getOutputStream()));
+        }
+
+        public void closeCommunication() throws IOException {
+            if (socket != null) socket.close();
+            if (streamIn != null) streamIn.close();
+            if (streamOut != null) streamOut.close();
+        }
+    }
 
     public void startComServer() {
         try {
@@ -37,7 +93,7 @@ public class ComServer implements Runnable {
         while (serverThread == thisThread) {
             try {
                 log.info("Waiting for a client ...");
-                addThread(server.accept());
+                addClientThread(server.accept());
             } catch (IOException ioe) {
                 log.error("Server accept error: " + ioe);
                 stopServerThread();
@@ -82,7 +138,7 @@ public class ComServer implements Runnable {
         log.info("Removing client thread " + d);
         clientCount--;
         try {
-            toTerminate.close();
+            toTerminate.closeCommunication();
         } catch (IOException ioe) {
             log.error("Error closing thread: " + ioe);
         }
@@ -90,24 +146,29 @@ public class ComServer implements Runnable {
         clientMap.put(d, null);
     }
 
-    private void addThread(Socket socket) {
+    private void addClientThread(Socket socket) {
         if (clientCount < 5) {
             log.info("Client accepted: " + socket);
 
             //todo make this dynamic
             Dest dest = getNextDest();
 
-            ClientConnector clientConnectorThread = new ClientConnector(this, socket, dest);
+            // make thread
+            ClientConnector clientConnectorThread = new ClientConnector(socket, dest);
+            clientConnectorThread.setName("ClientConnectionThread-" + dest);
 
+            // add to map
             clientMap.put(dest, clientConnectorThread);
 
+            // start thread
             try {
-                clientConnectorThread.open();
+                clientConnectorThread.openCommunication();
                 clientConnectorThread.start();
-                clientCount++;
             } catch (IOException ioe) {
                 log.error("Error opening thread: " + ioe);
             }
+
+            clientCount++;
         } else
             log.warn("Client refused: maximum 5 reached.");
     }

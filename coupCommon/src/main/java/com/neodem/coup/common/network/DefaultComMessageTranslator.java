@@ -15,7 +15,7 @@ public class DefaultComMessageTranslator implements ComMessageTranslator {
     private static final String PAYLOAD = "p";
 
     @Override
-    public ComBaseClient.Dest getDest(String m) {
+    public Dest getDest(String m) {
         JSONObject j;
         Dest result = Dest.Broadcast;
 
