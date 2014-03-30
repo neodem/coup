@@ -49,12 +49,9 @@ public class PlayerInfoState {
      * @return a CPI that can be seen by anyone
      */
     public CoupPlayerInfo makePublicPlayerInfo() {
-        CoupPlayerInfo pi = new CoupPlayerInfo();
-        pi.active = active;
-        pi.coins = coinCount;
-
-        if (card1.faceUp) pi.addUpCard(card1);
-        if (card2.faceUp) pi.addUpCard(card2);
+        CoupPlayerInfo pi = new CoupPlayerInfo(active, coinCount);
+        if (card1.isFaceUp()) pi.addUpCard(card1);
+        if (card2.isFaceUp()) pi.addUpCard(card2);
 
         return pi;
     }
@@ -65,14 +62,7 @@ public class PlayerInfoState {
      * @return a CPI for only the actual player
      */
     public CoupPlayerInfo makePrivatePlayerInfo() {
-        CoupPlayerInfo cpi = new CoupPlayerInfo();
-        cpi.active = active;
-        cpi.coins = coinCount;
-
-        cpi.cardOne = card1;
-        cpi.cardTwo = card2;
-
-        return cpi;
+        return new CoupPlayerInfo(active, coinCount, card1, card2);
     }
 
     public int removeCoins(int i) {
@@ -91,7 +81,7 @@ public class PlayerInfoState {
     }
 
     public boolean hasCard(CoupCardType card) {
-        return card1.type.equals(card) || card2.type.equals(card);
+        return card1.getCardType().equals(card) || card2.getCardType().equals(card);
     }
 
     /**
@@ -102,8 +92,8 @@ public class PlayerInfoState {
      */
     public boolean validInfluence(CoupCard testCard) {
         if (testCard == null) return false;
-        if (card1.equals(testCard) && !card1.faceUp) return true;
-        return card2.equals(testCard) && !card2.faceUp;
+        if (card1.equals(testCard) && !card1.isFaceUp()) return true;
+        return card2.equals(testCard) && !card2.isFaceUp();
     }
 
     /**
@@ -113,16 +103,18 @@ public class PlayerInfoState {
      */
     public void turnFaceUp(CoupCard testCard) {
         if (testCard == null) return;
-        if (card1.equals(testCard)) card1.faceUp = true;
-        else if (card2.equals(testCard)) card2.faceUp = true;
 
-        if (card1.faceUp && card2.faceUp) active = false;
+        if (card1.equals(testCard)) card1.setFaceUp();
+        else if (card2.equals(testCard)) card2.setFaceUp();
+        ;
+
+        if (card1.isFaceUp() && card2.isFaceUp()) active = false;
     }
 
     public Collection<CoupCard> getDownCards() {
         Collection<CoupCard> downCards = new ArrayList<>();
-        if (!card1.faceUp) downCards.add(card1);
-        if (!card2.faceUp) downCards.add(card2);
+        if (!card1.isFaceUp()) downCards.add(card1);
+        if (!card2.isFaceUp()) downCards.add(card2);
         return downCards;
     }
 
@@ -138,12 +130,12 @@ public class PlayerInfoState {
         Iterator<CoupCard> i = newDownCards.iterator();
 
         if (newDownCards.size() == 1) {
-            if (card1.faceUp) card2 = i.next();
-            else if (card2.faceUp) card1 = i.next();
+            if (card1.isFaceUp()) card2 = i.next();
+            else if (card2.isFaceUp()) card1 = i.next();
             else
                 throw new IllegalArgumentException("There are 2 face down cards and only 1 in the new down cards collection");
         } else {
-            if (card1.faceUp || card2.faceUp)
+            if (card1.isFaceUp() || card2.isFaceUp())
                 throw new IllegalArgumentException("There is at least 1 face up cards and 2 in the new down cards collection");
 
             card1 = i.next();
@@ -160,10 +152,10 @@ public class PlayerInfoState {
         CoupCard cardToReturn = null;
 
         if (card != null) {
-            if (card1.type.equals(card)) {
+            if (card1.getCardType().equals(card)) {
                 cardToReturn = card1;
                 card1 = null;
-            } else if (card2.type.equals(card)) {
+            } else if (card2.getCardType().equals(card)) {
                 cardToReturn = card2;
                 card2 = null;
             }
@@ -184,7 +176,7 @@ public class PlayerInfoState {
     }
 
     public boolean hasOneInfluenceLeft() {
-        return card1.faceUp || card2.faceUp;
+        return card1.isFaceUp() || card2.isFaceUp();
     }
 
     public boolean isActive() {

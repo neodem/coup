@@ -142,7 +142,6 @@ public class ComServer implements Runnable {
         } catch (IOException ioe) {
             log.error("Error closing thread: " + ioe);
         }
-        toTerminate.stop();
         clientMap.put(d, null);
     }
 

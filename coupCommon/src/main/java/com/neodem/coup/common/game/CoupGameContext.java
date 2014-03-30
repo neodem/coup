@@ -51,7 +51,7 @@ public class CoupGameContext implements Serializable {
             @Override
             public boolean apply(String player) {
                 CoupPlayerInfo info = playerInfos.get(player);
-                return info.active;
+                return info.isActive();
             }
         }));
     }

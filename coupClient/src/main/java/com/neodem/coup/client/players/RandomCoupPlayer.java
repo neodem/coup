@@ -133,11 +133,11 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicatio
 
     @Override
     public CoupCard youMustLooseAnInfluence() {
-        if (myState.cardOne.faceUp) {
-            return myState.cardTwo;
+        if (myState.getCardOne().isFaceUp()) {
+            return myState.getCardTwo();
         }
 
-        return myState.cardOne;
+        return myState.getCardOne();
     }
 
     @Override
@@ -151,7 +151,8 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicatio
 
         do {
             actionType = chooseRandomAction();
-        } while ((actionType == Assassinate && myState.coins < 3) || (actionType == Coup && myState.coins < 7));
+        }
+        while ((actionType == Assassinate && myState.getCoinCount() < 3) || (actionType == Coup && myState.getCoinCount() < 7));
 
         if (actionType == Assassinate || actionType == Steal || actionType == Coup) {
             List<String> players = currentGameContext.getActivePlayers();
@@ -167,7 +168,7 @@ public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicatio
     private ActionType chooseRandomAction() {
         ActionType actionType;
 
-        if (myState.coins >= 10) {
+        if (myState.getCoinCount() >= 10) {
             actionType = ActionType.Coup;
         } else do {
             actionType = ActionType.values()[r.nextInt(ActionType.values().length)];

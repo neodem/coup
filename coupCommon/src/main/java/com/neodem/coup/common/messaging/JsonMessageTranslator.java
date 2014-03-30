@@ -389,10 +389,10 @@ public class JsonMessageTranslator implements MessageTranslator {
     protected JSONObject marshalPlayerInfoToJSONObject(CoupPlayerInfo coupPlayerInfo) {
         JSONObject j = new JSONObject();
         try {
-            j.put(ACTIVE, coupPlayerInfo.active);
-            j.put(COINCOUNT, coupPlayerInfo.coins);
-            j.put(CARD1, marshalCoupCardToJSONObject(coupPlayerInfo.cardOne));
-            j.put(CARD2, marshalCoupCardToJSONObject(coupPlayerInfo.cardTwo));
+            j.put(ACTIVE, coupPlayerInfo.isActive());
+            j.put(COINCOUNT, coupPlayerInfo.getCoinCount());
+            j.put(CARD1, marshalCoupCardToJSONObject(coupPlayerInfo.getCardOne()));
+            j.put(CARD2, marshalCoupCardToJSONObject(coupPlayerInfo.getCardTwo()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -435,7 +435,7 @@ public class JsonMessageTranslator implements MessageTranslator {
 
     protected CoupCard unmarshalCoupCardFromJSONObject(JSONObject j) {
         CoupCardType cardType;
-        CoupCard result = CoupCard.makeUnknown();
+        CoupCard result = CoupCard.newUnknownCard();
         boolean faceUp;
 
         if (j != null) {
@@ -470,9 +470,9 @@ public class JsonMessageTranslator implements MessageTranslator {
         JSONObject j = new JSONObject();
         if (c != null) {
             try {
-                setCoupCardTypeIntoJSONObject(c.type, j);
-                j.put(FACEUP, c.faceUp);
-                j.put(CARDID, c.cardId);
+                setCoupCardTypeIntoJSONObject(c.getCardType(), j);
+                j.put(FACEUP, c.isFaceUp());
+                j.put(CARDID, c.getCardId());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -8,11 +8,11 @@ import java.io.Serializable;
  */
 public class CoupCard implements Serializable {
 
-    public final CoupCardType type;
-    public boolean faceUp;
-    public final int cardId;
+    private final CoupCardType type;
+    private boolean faceUp;
+    private final int cardId;
 
-    public static CoupCard makeUnknown() {
+    public static CoupCard newUnknownCard() {
         return new CoupCard(-1, CoupCardType.Unknown);
     }
 
@@ -57,5 +57,23 @@ public class CoupCard implements Serializable {
         return "(FACE DOWN)";
     }
 
+    public CoupCardType getCardType() {
+        return type;
+    }
 
+    public boolean isFaceUp() {
+        return faceUp;
+    }
+
+    public void setFaceUp() {
+        this.faceUp = true;
+    }
+
+    public void setFaceDown() {
+        this.faceUp = false;
+    }
+
+    public int getCardId() {
+        return cardId;
+    }
 }

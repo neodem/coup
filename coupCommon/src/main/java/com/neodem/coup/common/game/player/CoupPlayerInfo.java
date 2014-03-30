@@ -10,12 +10,14 @@ import java.io.Serializable;
  * Date: 2/28/14
  */
 public class CoupPlayerInfo implements Serializable {
-    public boolean active = true;
-    public int coins = 0;
-    public CoupCard cardOne = CoupCard.makeUnknown();
-    public CoupCard cardTwo = CoupCard.makeUnknown();
+    private boolean active = true;
+    private int coins = 0;
+    private CoupCard cardOne = CoupCard.newUnknownCard();
+    private CoupCard cardTwo = CoupCard.newUnknownCard();
 
-    public CoupPlayerInfo() {
+    public CoupPlayerInfo(boolean active, int coins) {
+        this.active = active;
+        this.coins = coins;
     }
 
     public CoupPlayerInfo(boolean active, int coins, CoupCard cardOne, CoupCard cardTwo) {
@@ -26,7 +28,7 @@ public class CoupPlayerInfo implements Serializable {
     }
 
     public void addUpCard(CoupCard card) {
-        if (cardOne.type == CoupCardType.Unknown) {
+        if (cardOne.getCardType() == CoupCardType.Unknown) {
             cardOne = card;
         } else {
             cardTwo = card;
@@ -80,5 +82,21 @@ public class CoupPlayerInfo implements Serializable {
         b.append('\n');
 
         return b.toString();
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public int getCoinCount() {
+        return coins;
+    }
+
+    public CoupCard getCardOne() {
+        return cardOne;
+    }
+
+    public CoupCard getCardTwo() {
+        return cardTwo;
     }
 }

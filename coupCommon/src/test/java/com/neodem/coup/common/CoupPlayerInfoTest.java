@@ -20,9 +20,7 @@ public class CoupPlayerInfoTest {
     @SuppressWarnings("UnnecessaryLocalVariable")
     @Test
     public void coupPlayerInfoShouldSerializeCorrectly() {
-        CoupPlayerInfo cpi = new CoupPlayerInfo();
-        cpi.active = true;
-        cpi.addUpCard(new CoupCard(1, CoupCardType.Duke));
+        CoupPlayerInfo cpi = new CoupPlayerInfo(true, 0, new CoupCard(1, CoupCardType.Duke), new CoupCard(2, CoupCardType.Duke));
 
         Serializable original = cpi;
         Serializable copy = (Serializable) SerializationUtils.clone(original);
