@@ -27,8 +27,8 @@ public class CoupActionProcessor extends DamagingActionProcessor implements Acti
 
     @Override
     public void validate(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
+        PlayerInfoState info = context.getPlayerInfo(actingPlayer);
         if (currentAction.getActionType() == SimpleCoupAction.ActionType.Coup) {
-            PlayerInfoState info = context.getPlayerInfo(actingPlayer);
 
             if (info.getCoinCount() < 7) {
                 String msg = "Player has attempted a Coup but they only have " + info.getCoinCount() + " coins (they need 7).";
@@ -36,14 +36,14 @@ public class CoupActionProcessor extends DamagingActionProcessor implements Acti
                 throw new PlayerError(msg);
             }
 
-            if (info.getCoinCount() >= 10) {
-                String msg = "Player has more than 10 coins and they need to Coup someone. Yet they didn't";
+            if (targetPlayerName != null && !context.isPlayerActive(targetPlayerName)) {
+                String msg = "Player has attempted to Coup an inactive player : " + targetPlayerName;
                 log.error(msg);
                 throw new PlayerError(msg);
             }
-
-            if (targetPlayerName != null && !context.isPlayerActive(targetPlayerName)) {
-                String msg = "Player has attempted to Coup an inactive player : " + targetPlayerName;
+        } else {
+            if (info.getCoinCount() >= 10) {
+                String msg = "Player has more than 10 coins and they need to Coup someone. Yet they didn't";
                 log.error(msg);
                 throw new PlayerError(msg);
             }
