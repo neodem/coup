@@ -109,15 +109,18 @@ public abstract class ComBaseClient {
     }
 
     private final void handle(String netMessage) {
-        handleMessage(netMessage);
+        int id = mt.getFrom(netMessage);
+        String message = mt.getPayload(netMessage);
+        handleMessage(id, message);
     }
 
     /**
      * clients need to implement this to deal with messages that it gets
      *
-     * @param msg
+     * @param from the id this message was from
+     * @param msg  the message
      */
-    protected abstract void handleMessage(String msg);
+    protected abstract void handleMessage(int from, String msg);
 
     public void stopClientThread() {
         try {

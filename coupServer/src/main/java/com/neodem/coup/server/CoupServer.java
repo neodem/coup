@@ -27,6 +27,7 @@ public final class CoupServer implements ComInterface {
     private CoupGameMaster cgm;
     private MessageTranslator messageTranslator;
     private Thread gameThread;
+    private ComServer comServer;
 
     public class MessageHandler extends ComBaseClient implements Runnable {
 
@@ -43,13 +44,13 @@ public final class CoupServer implements ComInterface {
         }
 
         @Override
-        protected void handleMessage(String msg) {
+        protected void handleMessage(int from, String msg) {
             log.trace("Server : handle message : " + msg);
             MessageType type = messageTranslator.unmarshalMessageTypeFromMessage(msg);
             if (type == MessageType.register) {
                 String playerName = messageTranslator.unmarshalPlayerNameFromMessage(msg);
-                PlayerProxy proxy = new PlayerProxy(playerName, myId, messageTranslator, server);
-                registeredPlayers.put(myId, proxy);
+                PlayerProxy proxy = new PlayerProxy(playerName, from, messageTranslator, server);
+                registeredPlayers.put(from, proxy);
                 if (registeredPlayers.size() == 4) {
                     startGame();
                 }
@@ -73,6 +74,7 @@ public final class CoupServer implements ComInterface {
     }
 
     public void startCoupServer() {
+        comServer.startComServer();
         startMessageHandler();
     }
 
@@ -126,6 +128,6 @@ public final class CoupServer implements ComInterface {
     }
 
     public void setComServer(ComServer comServer) {
-        // having this here makes sure that the comServer is up and running (due to it's init method) before we start up the CoupServer
+        this.comServer = comServer;
     }
 }

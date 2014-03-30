@@ -17,12 +17,10 @@ public interface ComMessageTranslator {
      */
     String makeMessage(int to, String payload);
 
-    /**
-     * send to all clients
-     *
-     * @param payload the message
-     * @return a marshaled message
-     */
-    String makeBroadcastMessage(String payload);
+    ///********
 
+    int getFrom(String netMessage);
+
+
+    String addFrom(int from, String message);
 }

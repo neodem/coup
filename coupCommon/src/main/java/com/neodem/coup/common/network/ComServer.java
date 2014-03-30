@@ -15,6 +15,10 @@ import java.util.Map;
 
 public class ComServer implements Runnable {
 
+    // special destinations
+    public static final int Broadcast = -1;
+    public static final int Server = -2;
+    public static final int Unknown = -3;
     private static final Logger log = LogManager.getLogger(ComServer.class.getName());
     private final ComMessageTranslator mt = new DefaultComMessageTranslator();
     private volatile Map<Integer, ClientConnector> clientMap = new HashMap<>();
@@ -22,11 +26,6 @@ public class ComServer implements Runnable {
     private ServerSocket server = null;
     private int clientCount = 0;
     private int port = 6969;
-
-    // special destinations
-    public static final int Broadcast = -1;
-    public static final int Server = -2;
-    public static final int Unknown = -3;
 
     public class ClientConnector extends Thread {
 
@@ -117,26 +116,17 @@ public class ComServer implements Runnable {
         serverThread = null;
     }
 
-    public synchronized void handle(int from, String input) {
-        if (input.equals(".bye")) {
-            clientMap.get(from).send(".bye");
-            removeClientConnector(from);
-        } else {
-            int to = mt.getDest(input);
-            String payload = mt.getPayload(input);
-            log.debug("relaying message from {} to {} : {}", from, to, payload);
+    public synchronized void handle(int from, String message) {
+        int to = mt.getDest(message);
+        String payload = mt.getPayload(message);
+        log.debug("relaying message from {} to {} : {}", from, to, payload);
 
-            //todo add the from here??
+        // add the from
+        String frommedMessage = mt.addFrom(from, message);
 
-            if (to == Broadcast) {
-                for (ClientConnector c : clientMap.values()) {
-                    c.send(payload);
-                }
-            } else {
-                ClientConnector c = clientMap.get(to);
-                c.send(payload);
-            }
-        }
+        // send the message
+        ClientConnector c = clientMap.get(to);
+        c.send(frommedMessage);
     }
 
     public synchronized void removeClientConnector(int id) {

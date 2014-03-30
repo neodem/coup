@@ -10,6 +10,7 @@ import org.json.JSONObject;
 public class DefaultComMessageTranslator implements ComMessageTranslator {
 
     private static final String DEST = "to";
+    private static final String FROM = "from";
     private static final String PAYLOAD = "p";
 
     DefaultComMessageTranslator() {
@@ -24,6 +25,23 @@ public class DefaultComMessageTranslator implements ComMessageTranslator {
             try {
                 j = new JSONObject(m);
                 result = j.getInt(DEST);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public int getFrom(String m) {
+        JSONObject j;
+        int result = ComServer.Unknown;
+
+        if (m != null) {
+            try {
+                j = new JSONObject(m);
+                result = j.getInt(FROM);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -58,9 +76,23 @@ public class DefaultComMessageTranslator implements ComMessageTranslator {
     }
 
     @Override
-    public String makeBroadcastMessage(String payload) {
-        return makeMessage(ComServer.Broadcast, payload);
+    public String addFrom(int from, String m) {
+        JSONObject j;
+        String result = m;
+
+        if (m != null) {
+            try {
+                j = new JSONObject(m);
+                j.put(FROM, from);
+                result = j.toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
     }
+
 
     protected void setDest(int d, JSONObject j) {
         if (j != null) {
