@@ -3,8 +3,6 @@ package com.neodem.coup.server.game;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.cards.CoupDeck;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,13 +14,13 @@ import java.util.Map;
  * Created Date: 3/25/14
  */
 public class ServerSideGameContext {
-    private static Logger log = LogManager.getLogger(ServerSideGameContext.class.getName());
+    //private static Logger log = LogManager.getLogger(ServerSideGameContext.class.getName());
     // the players in the players (in play order)
-    private List<CoupCommunicationInterface> playerList;
+    private final List<CoupCommunicationInterface> playerList;
     // keeps track of the state of the players
-    private Map<CoupCommunicationInterface, PlayerInfoState> playerInfoMap;
+    private final Map<CoupCommunicationInterface, PlayerInfoState> playerInfoMap;
     // the deck we are using
-    private CoupDeck deck;
+    private final CoupDeck deck;
 
     public ServerSideGameContext(Map<CoupCommunicationInterface, PlayerInfoState> playerInfoMap, CoupDeck deck) {
         this.playerInfoMap = playerInfoMap;

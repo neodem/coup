@@ -38,7 +38,7 @@ import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Tax;
  */
 public class CoupGameMaster implements Runnable {
 
-    private static Logger log = LogManager.getLogger(CoupGameMaster.class.getName());
+    private static final Logger log = LogManager.getLogger(CoupGameMaster.class.getName());
     private ServerSideGameContext context;
     private Map<ActionType, ActionProcessor> actionProcessors;
     private ChallengeResolver challengeResolver;
@@ -69,7 +69,7 @@ public class CoupGameMaster implements Runnable {
 
         // setup resolvers
         challengeResolver = new ChallengeResolver(context);
-        counterResolver = new CounterResolver(context, challengeResolver);
+        counterResolver = new CounterResolver(challengeResolver);
 
         // initialize players
         for (CoupCommunicationInterface p : context.getPlayerList()) {

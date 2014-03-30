@@ -8,9 +8,9 @@ import java.io.Serializable;
  */
 public class CoupCard implements Serializable {
 
-    public CoupCardType type;
+    public final CoupCardType type;
     public boolean faceUp;
-    public int cardId;
+    public final int cardId;
 
     public static CoupCard makeUnknown() {
         return new CoupCard(-1, CoupCardType.Unknown);
@@ -42,9 +42,7 @@ public class CoupCard implements Serializable {
 
         CoupCard coupCard = (CoupCard) o;
 
-        if (cardId != coupCard.cardId) return false;
-
-        return true;
+        return cardId == coupCard.cardId;
     }
 
     @Override

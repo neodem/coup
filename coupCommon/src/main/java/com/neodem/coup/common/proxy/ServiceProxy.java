@@ -20,9 +20,9 @@ import static com.neodem.coup.common.messaging.MessageType.reply;
  */
 public class ServiceProxy extends ComBaseClient {
 
-    private static Logger log = LogManager.getLogger(ServiceProxy.class.getName());
+    private static final Logger log = LogManager.getLogger(ServiceProxy.class.getName());
     private final MessageTranslator messageTranslator;
-    private CoupCommunicationInterface player;
+    private final CoupCommunicationInterface player;
 
     public ServiceProxy(CoupCommunicationInterface target, MessageTranslator messageTranslator, String host, int port) {
         super(host, port);

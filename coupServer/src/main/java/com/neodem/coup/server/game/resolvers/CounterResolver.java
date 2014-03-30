@@ -3,9 +3,6 @@ package com.neodem.coup.server.game.resolvers;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.cards.CoupCardType;
-import com.neodem.coup.server.game.ServerSideGameContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 
@@ -14,12 +11,10 @@ import java.util.Collection;
  * Created Date: 3/24/14
  */
 public class CounterResolver {
-    private static Logger log = LogManager.getLogger(CounterResolver.class.getName());
+    //private static Logger log = LogManager.getLogger(CounterResolver.class.getName());
     private final ChallengeResolver challengeResolver;
-    private ServerSideGameContext context;
 
-    public CounterResolver(ServerSideGameContext context, ChallengeResolver challengeResolver) {
-        this.context = context;
+    public CounterResolver(ChallengeResolver challengeResolver) {
         this.challengeResolver = challengeResolver;
     }
 

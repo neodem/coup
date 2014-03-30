@@ -7,8 +7,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ComClientThread extends Thread {
-    private static Logger log = LogManager.getLogger(ComClientThread.class.getName());
+class ComClientThread extends Thread {
+    private static final Logger log = LogManager.getLogger(ComClientThread.class.getName());
     private Socket socket = null;
     private ComBaseClient client = null;
     private DataInputStream streamIn = null;
@@ -21,7 +21,7 @@ public class ComClientThread extends Thread {
         start();
     }
 
-    public void open() {
+    void open() {
         try {
             streamIn = new DataInputStream(socket.getInputStream());
         } catch (IOException ioe) {
@@ -38,6 +38,7 @@ public class ComClientThread extends Thread {
         }
     }
 
+    @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
         while (true) {
             try {

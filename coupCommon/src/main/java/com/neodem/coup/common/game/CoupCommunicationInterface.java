@@ -65,16 +65,16 @@ public interface CoupCommunicationInterface {
     /**
      * will be called just before the players begins. This will allow the player to get set up
      *
-     * @param g
+     * @param gc the current game context
      */
-    public void initializePlayer(CoupGameContext g);
+    public void initializePlayer(CoupGameContext gc);
 
     /**
      * Called to ask the player if they want to counter the current action
      *
      * @param theAction     the action initiated
      * @param thePlayerName the player who initiated the action
-     * @param gc            the current players context
+     * @param gc            the current game context
      * @return true if the player wants to counter the current action
      */
     public boolean doYouWantToCounterThisAction(CoupAction theAction, String thePlayerName, CoupGameContext gc);
@@ -84,7 +84,7 @@ public interface CoupCommunicationInterface {
      *
      * @param theAction     the action initiated
      * @param thePlayerName the player who initiated the action
-     * @param gc            the current players context
+     * @param gc            the current game context
      * @return true if the player wants to challenge the current action
      */
     public boolean doYouWantToChallengeThisAction(CoupAction theAction, String thePlayerName, CoupGameContext gc);

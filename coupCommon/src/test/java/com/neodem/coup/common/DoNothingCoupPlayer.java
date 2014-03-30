@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 public class DoNothingCoupPlayer implements CoupCommunicationInterface, Serializable {
 
-    private String name = "DoNothingName";
+    private final String name = "DoNothingName";
 
     @Override
     public boolean equals(Object o) {
@@ -25,14 +25,14 @@ public class DoNothingCoupPlayer implements CoupCommunicationInterface, Serializ
 
         DoNothingCoupPlayer that = (DoNothingCoupPlayer) o;
 
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (!name.equals(that.name)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        return name.hashCode();
     }
 
     @Override

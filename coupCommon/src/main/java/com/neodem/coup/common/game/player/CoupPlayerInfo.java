@@ -38,12 +38,12 @@ public class CoupPlayerInfo implements Serializable {
         if (this == o) return true;
         if (!(o instanceof CoupPlayerInfo)) return false;
 
-        CoupPlayerInfo that = (CoupPlayerInfo) o;
+        CoupPlayerInfo info = (CoupPlayerInfo) o;
 
-        if (active != that.active) return false;
-        if (coins != that.coins) return false;
-        if (cardOne != null ? !cardOne.equals(that.cardOne) : that.cardOne != null) return false;
-        if (cardTwo != null ? !cardTwo.equals(that.cardTwo) : that.cardTwo != null) return false;
+        if (active != info.active) return false;
+        if (coins != info.coins) return false;
+        if (!cardOne.equals(info.cardOne)) return false;
+        if (!cardTwo.equals(info.cardTwo)) return false;
 
         return true;
     }
@@ -52,15 +52,15 @@ public class CoupPlayerInfo implements Serializable {
     public int hashCode() {
         int result = (active ? 1 : 0);
         result = 31 * result + coins;
-        result = 31 * result + (cardOne != null ? cardOne.hashCode() : 0);
-        result = 31 * result + (cardTwo != null ? cardTwo.hashCode() : 0);
+        result = 31 * result + cardOne.hashCode();
+        result = 31 * result + cardTwo.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
 
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
 
         if (!active) {
             b.append(">>> This player is not active <<<");

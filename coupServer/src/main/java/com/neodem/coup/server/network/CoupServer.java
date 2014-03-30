@@ -22,12 +22,11 @@ import java.util.Map;
  */
 public final class CoupServer implements ComInterface {
 
-    private static Logger log = LogManager.getLogger(CoupServer.class.getName());
-    protected Map<Dest, PlayerProxy> registeredPlayers;
-    private MessageHandler messageHandler;
+    private static final Logger log = LogManager.getLogger(CoupServer.class.getName());
+    private final MessageHandler messageHandler = new MessageHandler("localhost", 6969, this);
+    private final Map<Dest, PlayerProxy> registeredPlayers = new HashMap<>();
     private CoupGameMaster cgm;
     private MessageTranslator messageTranslator;
-    private ComServer comServer;
 
     public class MessageHandler extends ComBaseClient implements Runnable {
 
@@ -75,8 +74,7 @@ public final class CoupServer implements ComInterface {
     }
 
     public void startCoupServer() {
-        registeredPlayers = new HashMap<>();
-        messageHandler = new MessageHandler("localhost", 6969, this);
+
 
         Thread mt = new Thread(messageHandler);
         mt.setName("Coup Server MessageHandler");
@@ -120,6 +118,6 @@ public final class CoupServer implements ComInterface {
     }
 
     public void setComServer(ComServer comServer) {
-        this.comServer = comServer;
+
     }
 }

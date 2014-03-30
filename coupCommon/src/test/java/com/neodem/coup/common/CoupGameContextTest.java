@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class CoupGameContextTest {
 
+    @SuppressWarnings("UnnecessaryLocalVariable")
     @Test
     public void coupGameContextShouldSerializeCorrectly() {
         CoupCommunicationInterface p = new DoNothingCoupPlayer();

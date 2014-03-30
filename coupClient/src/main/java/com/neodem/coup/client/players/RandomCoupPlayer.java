@@ -31,10 +31,10 @@ import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Steal;
  * Date: 2/28/14
  */
 public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicationInterface {
-    private static Logger log = LogManager.getLogger(RandomCoupPlayer.class.getName());
+    private static final Logger log = LogManager.getLogger(RandomCoupPlayer.class.getName());
     protected CoupGameContext currentGameContext;
     private CoupPlayerInfo myState = null;
-    private Random r = new Random(System.currentTimeMillis());
+    private final Random r = new Random(System.currentTimeMillis());
 
     public RandomCoupPlayer(String name) {
         super(name);

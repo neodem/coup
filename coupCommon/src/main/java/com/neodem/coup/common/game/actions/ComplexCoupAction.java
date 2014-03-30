@@ -11,8 +11,8 @@ import org.apache.logging.log4j.Logger;
  */
 public class ComplexCoupAction extends SimpleCoupAction {
 
-    private static Logger log = LogManager.getLogger(ComplexCoupAction.class.getName());
-    private String actionOn;
+    private static final Logger log = LogManager.getLogger(ComplexCoupAction.class.getName());
+    private final String actionOn;
 
     ComplexCoupAction(String actionOn, ActionType actionType) {
         super(actionType);

@@ -6,6 +6,7 @@ import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.actions.SimpleCoupAction;
 import com.neodem.coup.server.game.PlayerInfoState;
 import com.neodem.coup.server.game.ServerSideGameContext;
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +15,7 @@ import org.apache.logging.log4j.Logger;
  * Created Date: 3/24/14
  */
 public class StealActionProcessor extends BaseActionProcessor implements ActionProcessor {
-    private static Logger log = LogManager.getLogger(StealActionProcessor.class.getName());
+    private static final Logger log = LogManager.getLogger(StealActionProcessor.class.getName());
 
     public StealActionProcessor(ServerSideGameContext context) {
         super(context);
@@ -27,6 +28,12 @@ public class StealActionProcessor extends BaseActionProcessor implements ActionP
 
     @Override
     public void validate(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
+        if (StringUtils.isBlank(targetPlayerName)) {
+            String msg = "invalid targetPlayerName";
+            getLog().error(msg);
+            throw new PlayerError(msg);
+        }
+
         if (currentAction.getActionType() == SimpleCoupAction.ActionType.Steal) {
             if (targetPlayerName != null && !context.isPlayerActive(targetPlayerName)) {
                 String msg = "Player has attempted to Steal from an inactive player : " + targetPlayerName;

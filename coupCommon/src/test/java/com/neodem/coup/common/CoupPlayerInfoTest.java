@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class CoupPlayerInfoTest {
 
+    @SuppressWarnings("UnnecessaryLocalVariable")
     @Test
     public void coupPlayerInfoShouldSerializeCorrectly() {
         CoupPlayerInfo cpi = new CoupPlayerInfo();

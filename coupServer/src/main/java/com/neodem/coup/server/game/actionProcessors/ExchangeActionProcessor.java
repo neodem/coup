@@ -18,7 +18,7 @@ import java.util.Iterator;
  * Created Date: 3/24/14
  */
 public class ExchangeActionProcessor extends BaseActionProcessor implements ActionProcessor {
-    private static Logger log = LogManager.getLogger(ExchangeActionProcessor.class.getName());
+    private static final Logger log = LogManager.getLogger(ExchangeActionProcessor.class.getName());
 
     public ExchangeActionProcessor(ServerSideGameContext context) {
         super(context);
@@ -43,7 +43,7 @@ public class ExchangeActionProcessor extends BaseActionProcessor implements Acti
         handCards.add(card2);
         handCards.addAll(currentPlayerInfo.getDownCards());
 
-        Multiset<CoupCard> returnedCards = getReturnedCards(actingPlayer, currentPlayerInfo, handCards);
+        Multiset<CoupCard> returnedCards = getReturnedCards(actingPlayer, handCards);
 
         getLog().debug(String.format("%s is putting back 2 cards", actingPlayer));
 
@@ -59,7 +59,7 @@ public class ExchangeActionProcessor extends BaseActionProcessor implements Acti
         context.getDeck().shuffleDeck();
     }
 
-    private Multiset<CoupCard> getReturnedCards(CoupCommunicationInterface p, PlayerInfoState info, Multiset<CoupCard> handCards) {
+    private Multiset<CoupCard> getReturnedCards(CoupCommunicationInterface p, Multiset<CoupCard> handCards) {
 
         // deal with exchange
         Multiset<CoupCard> returnedCards = p.exchangeCards(handCards);
@@ -67,14 +67,14 @@ public class ExchangeActionProcessor extends BaseActionProcessor implements Acti
         // collection must return 2 cards
         if (returnedCards.size() != 2) {
             p.tryAgain("You need to return " + 2 + " cards");
-            return getReturnedCards(p, info, handCards);
+            return getReturnedCards(p, handCards);
         }
 
         // the returned collection must have come from the handCards. (eg. all returned cards must be in handCards)
         if (!isReturnedCollectionOk(handCards, returnedCards)) {
             p.tryAgain("The returned cards need to come from the given hand cards");
 
-            return getReturnedCards(p, info, handCards);
+            return getReturnedCards(p, handCards);
         }
 
         return returnedCards;
@@ -86,16 +86,10 @@ public class ExchangeActionProcessor extends BaseActionProcessor implements Acti
         CoupCard card2 = i.next();
         if (card1.equals(card2)) {
             // this is a special case. We need to see if we have 2 of this card in the handCards set
-            if (handCards.count(card1) == 2) {
-                return true;
-            }
-            return false;
+            return handCards.count(card1) == 2;
         }
 
         Multiset<CoupCard> intersection = Multisets.intersection(handCards, returnedCards);
-        if (intersection.equals(returnedCards)) {
-            return true;
-        }
-        return false;
+        return intersection.equals(returnedCards);
     }
 }

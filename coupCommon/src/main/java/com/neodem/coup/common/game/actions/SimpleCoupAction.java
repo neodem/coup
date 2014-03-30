@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
  */
 public class SimpleCoupAction extends CoupAction {
 
-    public static SimpleCoupAction NoAction = new SimpleCoupAction(ActionType.NoAction);
-    private static Logger log = LogManager.getLogger(SimpleCoupAction.class.getName());
+    //public static SimpleCoupAction NoAction = new SimpleCoupAction(ActionType.NoAction);
+    private static final Logger log = LogManager.getLogger(SimpleCoupAction.class.getName());
 
     SimpleCoupAction(ActionType actionType) {
         super(actionType);

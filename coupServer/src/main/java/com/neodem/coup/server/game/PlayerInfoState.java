@@ -15,11 +15,11 @@ import java.util.Iterator;
  * Created Date: 3/24/14
  */
 public class PlayerInfoState {
+    private final String name;
     private int coinCount;
     private CoupCard card1;
     private CoupCard card2;
     private boolean active = true;
-    private String name;
 
     public PlayerInfoState(int coinCount, CoupCard card1, CoupCard card2, String myName) {
         this.coinCount = coinCount;
@@ -46,7 +46,7 @@ public class PlayerInfoState {
     /**
      * make a CPI that can be seen by anyone
      *
-     * @return
+     * @return a CPI that can be seen by anyone
      */
     public CoupPlayerInfo makePublicPlayerInfo() {
         CoupPlayerInfo pi = new CoupPlayerInfo();
@@ -60,9 +60,9 @@ public class PlayerInfoState {
     }
 
     /**
-     * make a CPI for only the actual player
+     * make a CPI for only the actual player (will contain card info)
      *
-     * @return
+     * @return a CPI for only the actual player
      */
     public CoupPlayerInfo makePrivatePlayerInfo() {
         CoupPlayerInfo cpi = new CoupPlayerInfo();
@@ -73,10 +73,6 @@ public class PlayerInfoState {
         cpi.cardTwo = card2;
 
         return cpi;
-    }
-
-    public void addCoin() {
-        coinCount++;
     }
 
     public int removeCoins(int i) {
@@ -107,8 +103,7 @@ public class PlayerInfoState {
     public boolean validInfluence(CoupCard testCard) {
         if (testCard == null) return false;
         if (card1.equals(testCard) && !card1.faceUp) return true;
-        if (card2.equals(testCard) && !card2.faceUp) return true;
-        return false;
+        return card2.equals(testCard) && !card2.faceUp;
     }
 
     /**
@@ -134,7 +129,7 @@ public class PlayerInfoState {
     /**
      * reset the hand to these cards
      *
-     * @param newDownCards
+     * @param newDownCards the cards we want to be set to 'down'
      */
     public void setDownCards(Collection<CoupCard> newDownCards) {
         if (newDownCards.size() != 2 && newDownCards.size() != 1)
@@ -159,7 +154,7 @@ public class PlayerInfoState {
     /**
      * if this card exists in the hand, remove it (set to null)
      *
-     * @param card
+     * @param card the card to test for
      */
     public CoupCard removeCardOfType(CoupCardType card) {
         CoupCard cardToReturn = null;
@@ -180,7 +175,7 @@ public class PlayerInfoState {
     /**
      * if there is an empty (null) spot, add this card else do nothing
      *
-     * @param card
+     * @param card the card to add to the hand
      */
     public void addCard(CoupCard card) {
         if (card == null) return;

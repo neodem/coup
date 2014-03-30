@@ -10,8 +10,8 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class BaseCoupPlayer implements CoupCommunicationInterface {
 
-    private static Logger log = LogManager.getLogger(BaseCoupPlayer.class.getName());
-    protected String playerName;
+    private static final Logger log = LogManager.getLogger(BaseCoupPlayer.class.getName());
+    protected final String playerName;
 
     public BaseCoupPlayer(String playerName) {
         this.playerName = playerName;
@@ -34,9 +34,7 @@ public abstract class BaseCoupPlayer implements CoupCommunicationInterface {
 
         BaseCoupPlayer that = (BaseCoupPlayer) o;
 
-        if (playerName != null ? !playerName.equals(that.playerName) : that.playerName != null) return false;
-
-        return true;
+        return !(playerName != null ? !playerName.equals(that.playerName) : that.playerName != null);
     }
 
     @Override

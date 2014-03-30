@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
  * Created Date: 3/24/14
  */
 public class CoupActionProcessor extends DamagingActionProcessor implements ActionProcessor {
-    private static Logger log = LogManager.getLogger(CoupActionProcessor.class.getName());
+    private static final Logger log = LogManager.getLogger(CoupActionProcessor.class.getName());
 
     public CoupActionProcessor(ServerSideGameContext context) {
         super(context);

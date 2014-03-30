@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
  * Created Date: 3/26/14
  */
 public abstract class BaseActionProcessor implements ActionProcessor {
-    protected ServerSideGameContext context;
+    protected final ServerSideGameContext context;
 
     public BaseActionProcessor(ServerSideGameContext context) {
         this.context = context;

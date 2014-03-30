@@ -12,12 +12,12 @@ import java.util.Map;
 
 public class ComServer implements Runnable {
 
-    private static Logger log = LogManager.getLogger(ComServer.class.getName());
+    private static final Logger log = LogManager.getLogger(ComServer.class.getName());
+    private final ComMessageTranslator mt = new DefaultComMessageTranslator();
+    private final Map<Dest, ClientConnector> clientMap = new HashMap<>();
     private ServerSocket server = null;
     private Thread thread = null;
     private int clientCount = 0;
-    private ComMessageTranslator mt = new DefaultComMessageTranslator();
-    private Map<Dest, ClientConnector> clientMap = new HashMap<>();
     private int port = 6969;
 
     public void startComServer() {
@@ -43,7 +43,7 @@ public class ComServer implements Runnable {
         }
     }
 
-    public void start() {
+    void start() {
         if (thread == null) {
             thread = new Thread(this);
             thread.setName("ComServer-main");
@@ -51,7 +51,7 @@ public class ComServer implements Runnable {
         }
     }
 
-    public void stop() {
+    void stop() {
         if (thread != null) {
             thread.stop();
             thread = null;
@@ -122,7 +122,4 @@ public class ComServer implements Runnable {
         return null;
     }
 
-    public void setPort(int port) {
-        this.port = port;
-    }
 }

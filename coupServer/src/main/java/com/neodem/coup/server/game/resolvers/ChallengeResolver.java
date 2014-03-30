@@ -19,7 +19,7 @@ import java.util.Set;
  * Created Date: 3/24/14
  */
 public class ChallengeResolver extends DamagingActionProcessor {
-    private static Logger log = LogManager.getLogger(ChallengeResolver.class.getName());
+    private static final Logger log = LogManager.getLogger(ChallengeResolver.class.getName());
 
     public ChallengeResolver(ServerSideGameContext context) {
         super(context);

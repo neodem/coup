@@ -17,7 +17,7 @@ import static com.neodem.coup.common.game.cards.CoupCardType.Duke;
  */
 public class CoupDeck {
 
-    private List<CoupCard> actualDeck = new ArrayList<>();
+    private final List<CoupCard> actualDeck = new ArrayList<>();
 
     public CoupDeck() {
         int id = 0;
@@ -35,7 +35,7 @@ public class CoupDeck {
         actualDeck.add(new CoupCard(id++, Duke));
         actualDeck.add(new CoupCard(id++, Ambassador));
         actualDeck.add(new CoupCard(id++, Ambassador));
-        actualDeck.add(new CoupCard(id++, Ambassador));
+        actualDeck.add(new CoupCard(id, Ambassador));
 
         shuffleDeck();
     }

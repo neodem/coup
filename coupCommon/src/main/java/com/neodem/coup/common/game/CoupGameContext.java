@@ -4,8 +4,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.neodem.coup.common.game.player.CoupPlayerInfo;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ import java.util.Map;
  */
 public class CoupGameContext implements Serializable {
 
-    private static Log log = LogFactory.getLog(CoupGameContext.class.getName());
+    //private static Log log = LogFactory.getLog(CoupGameContext.class.getName());
     private Map<String, CoupPlayerInfo> playerInfos = new HashMap<>();
     // a list of the players in the players (ordered by their position in the players)
     private List<String> players = new ArrayList<>();
@@ -66,9 +64,8 @@ public class CoupGameContext implements Serializable {
         CoupGameContext that = (CoupGameContext) o;
 
         if (playerInfos != null ? !playerInfos.equals(that.playerInfos) : that.playerInfos != null) return false;
-        if (players != null ? !players.equals(that.players) : that.players != null) return false;
 
-        return true;
+        return !(players != null ? !players.equals(that.players) : that.players != null);
     }
 
     @Override
@@ -81,7 +78,7 @@ public class CoupGameContext implements Serializable {
     @Override
     public String toString() {
 
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         b.append('\n');
         b.append('\n');
         b.append("Game Context\n");

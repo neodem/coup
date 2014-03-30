@@ -1,5 +1,6 @@
 package com.neodem.coup.common.network;
 
+import com.neodem.coup.common.network.ComBaseClient.Dest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,13 +12,13 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ClientConnector extends Thread {
-    private static Logger log = LogManager.getLogger(ClientConnector.class.getName());
+    private static final Logger log = LogManager.getLogger(ClientConnector.class.getName());
 
     private ComServer server = null;
     private Socket socket = null;
     private DataInputStream streamIn = null;
     private DataOutputStream streamOut = null;
-    private ComBaseClient.Dest d;
+    private final Dest d;
 
     public ClientConnector(ComServer _server, Socket _socket, ComBaseClient.Dest d) {
         super();
@@ -40,6 +41,7 @@ public class ClientConnector extends Thread {
         }
     }
 
+    @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
         log.info("Server Thread connected to: " + d);
         while (true) {

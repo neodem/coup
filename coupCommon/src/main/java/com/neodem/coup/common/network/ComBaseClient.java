@@ -11,15 +11,15 @@ import java.net.UnknownHostException;
 
 public abstract class ComBaseClient {
 
-    private static Logger log = LogManager.getLogger(ComBaseClient.class.getName());
+    private static final Logger log = LogManager.getLogger(ComBaseClient.class.getName());
 
     private final String serverName;
     private final int port;
     private Socket socket = null;
-    private DataInputStream console = null;
+    private final DataInputStream console = null;
     private DataOutputStream streamOut = null;
     private ComClientThread client = null;
-    private ComMessageTranslator mt = new DefaultComMessageTranslator();
+    private final ComMessageTranslator mt = new DefaultComMessageTranslator();
 
     public ComBaseClient(String host, int port) {
         this.serverName = host;

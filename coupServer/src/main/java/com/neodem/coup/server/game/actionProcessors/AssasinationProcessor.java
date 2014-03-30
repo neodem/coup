@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
  * Created Date: 3/25/14
  */
 public class AssasinationProcessor extends DamagingActionProcessor implements ActionProcessor {
-    private static Logger log = LogManager.getLogger(AssasinationProcessor.class.getName());
+    private static final Logger log = LogManager.getLogger(AssasinationProcessor.class.getName());
 
     public AssasinationProcessor(ServerSideGameContext context) {
         super(context);

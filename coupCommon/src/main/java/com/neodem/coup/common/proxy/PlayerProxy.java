@@ -20,10 +20,10 @@ import static com.neodem.coup.common.messaging.MessageType.*;
  * Created Date: 3/27/14
  */
 public class PlayerProxy implements CoupCommunicationInterface {
-    private String playerName;
-    private MessageTranslator messageTranslator;
-    private ComInterface coupServer;
-    private Dest id;
+    private final String playerName;
+    private final MessageTranslator messageTranslator;
+    private final ComInterface coupServer;
+    private final Dest id;
 
     public PlayerProxy(String playerName, Dest id, MessageTranslator messageTranslator, ComInterface coupServer) {
         this.playerName = playerName;
@@ -40,16 +40,13 @@ public class PlayerProxy implements CoupCommunicationInterface {
         PlayerProxy that = (PlayerProxy) o;
 
         if (id != that.id) return false;
-        if (playerName != null ? !playerName.equals(that.playerName) : that.playerName != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = playerName != null ? playerName.hashCode() : 0;
-        result = 31 * result + id.hashCode();
-        return result;
+        return id.hashCode();
     }
 
     @Override

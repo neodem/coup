@@ -11,7 +11,7 @@ import java.util.Collection;
  * Created Date: 2/28/14
  */
 public abstract class CoupAction {
-    protected ActionType actionType;
+    protected final ActionType actionType;
 
     public enum ActionType {
         Income,
@@ -70,7 +70,7 @@ public abstract class CoupAction {
          * Steal and Assasinate can only be countered by the individiual. Foreign Aid can be
          * countered by anyone
          *
-         * @return
+         * @return if this action type can be countered by players other than the one targeted
          */
         public boolean isCounterableByGroup() {
             return this == ForeignAid;
@@ -92,9 +92,7 @@ public abstract class CoupAction {
 
         CoupAction that = (CoupAction) o;
 
-        if (actionType != that.actionType) return false;
-
-        return true;
+        return actionType == that.actionType;
     }
 
     @Override

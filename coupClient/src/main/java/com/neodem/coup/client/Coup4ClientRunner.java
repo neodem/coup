@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class Coup4ClientRunner {
 
-    private static Logger log = LogManager.getLogger(Coup4ClientRunner.class.getName());
+    private static final Logger log = LogManager.getLogger(Coup4ClientRunner.class.getName());
     private MessageTranslator messageTranslator = new JsonMessageTranslator();
 
     public static void main(String[] args) {
