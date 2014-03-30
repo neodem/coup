@@ -6,7 +6,7 @@ import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.common.game.cards.CoupCardType;
 
 /**
- * note : Any time you get a CoupGameContext, it will show you the current game context and your specific info.
+ * note : Any time you get a CoupGameContext, it will show you the current players context and your specific info.
  * <p/>
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/24/14
@@ -15,10 +15,10 @@ public interface CoupCommunicationInterface {
 
     /**
      * called by the GameMaster when this Player has a turn to process.
-     * 'turn' may not be a game turn but it is at least a time that
+     * 'turn' may not be a players turn but it is at least a time that
      * the client has to do something
      *
-     * @param gc the current game context
+     * @param gc the current players context
      * @return the action the player wants to perform
      */
     public CoupAction yourTurn(CoupGameContext gc);
@@ -33,7 +33,7 @@ public interface CoupCommunicationInterface {
     /**
      * something changed, the GameMaster wants to let you know
      *
-     * @param gc the current game context
+     * @param gc the current players context
      */
     public void updateContext(CoupGameContext gc);
 
@@ -43,7 +43,7 @@ public interface CoupCommunicationInterface {
      *
      * @param playerName the player who initiated the action
      * @param hisAction  the action initiated
-     * @param gc         the current game context
+     * @param gc         the current players context
      */
     public void actionHappened(String playerName, CoupAction hisAction, CoupGameContext gc);
 
@@ -63,7 +63,7 @@ public interface CoupCommunicationInterface {
     public String getPlayerName();
 
     /**
-     * will be called just before the game begins. This will allow the player to get set up
+     * will be called just before the players begins. This will allow the player to get set up
      *
      * @param g
      */
@@ -74,7 +74,7 @@ public interface CoupCommunicationInterface {
      *
      * @param theAction     the action initiated
      * @param thePlayerName the player who initiated the action
-     * @param gc            the current game context
+     * @param gc            the current players context
      * @return true if the player wants to counter the current action
      */
     public boolean doYouWantToCounterThisAction(CoupAction theAction, String thePlayerName, CoupGameContext gc);
@@ -84,7 +84,7 @@ public interface CoupCommunicationInterface {
      *
      * @param theAction     the action initiated
      * @param thePlayerName the player who initiated the action
-     * @param gc            the current game context
+     * @param gc            the current players context
      * @return true if the player wants to challenge the current action
      */
     public boolean doYouWantToChallengeThisAction(CoupAction theAction, String thePlayerName, CoupGameContext gc);

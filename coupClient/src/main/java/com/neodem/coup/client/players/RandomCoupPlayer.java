@@ -1,4 +1,4 @@
-package com.neodem.coup.client.game;
+package com.neodem.coup.client.players;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -25,6 +25,8 @@ import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Coup;
 import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Steal;
 
 /**
+ * This player plays randomly
+ * <p/>
  * Author: vfumo
  * Date: 2/28/14
  */

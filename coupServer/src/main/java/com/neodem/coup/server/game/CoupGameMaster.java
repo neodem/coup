@@ -44,7 +44,6 @@ public class CoupGameMaster implements Runnable {
     private ChallengeResolver challengeResolver;
     private CounterResolver counterResolver;
     private AssasinationProcessor assasinationProcessor;
-    private CoupCommunicationInterface winningPlayer = null;
 
     public void initGame(List<CoupCommunicationInterface> registeredPlayers) {
 
@@ -80,6 +79,7 @@ public class CoupGameMaster implements Runnable {
 
     @Override
     public void run() {
+        CoupCommunicationInterface winningPlayer = null;
         while (winningPlayer == null) {
             for (CoupCommunicationInterface currentPlayer : context.getPlayerList()) {
                 PlayerInfoState currentPlayerInfo = context.getPlayerInfo(currentPlayer);
@@ -99,14 +99,14 @@ public class CoupGameMaster implements Runnable {
 
                     updatePlayers();
 
-                    // evaluate end game (is there a winner?)
+                    // evaluate end players (is there a winner?)
                     winningPlayer = evaluateGame();
                 } else {
                     log.info(currentPlayer.getPlayerName() + " is not active.");
                 }
             }
         }
-        String msg = "The game is over : " + winningPlayer.getPlayerName() + " was the winner!";
+        String msg = "The players is over : " + winningPlayer.getPlayerName() + " was the winner!";
         log.info(msg);
 
         for (CoupCommunicationInterface p : context.getPlayerList()) {
@@ -119,7 +119,7 @@ public class CoupGameMaster implements Runnable {
     }
 
     /**
-     * alert players of the current game context and their specific context
+     * alert players of the current players context and their specific context
      */
     private void updatePlayers() {
         for (CoupCommunicationInterface p : context.getPlayerList()) {
@@ -299,9 +299,5 @@ public class CoupGameMaster implements Runnable {
             ap.process(actingPlayer, null, currentAction);
 
         updatePlayers();
-    }
-
-    public CoupCommunicationInterface getWinningPlayer() {
-        return winningPlayer;
     }
 }

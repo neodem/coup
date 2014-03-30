@@ -18,7 +18,7 @@ public class CoupGameContext implements Serializable {
 
     private static Log log = LogFactory.getLog(CoupGameContext.class.getName());
     private Map<String, CoupPlayerInfo> playerInfos = new HashMap<>();
-    // a list of the players in the game (ordered by their position in the game)
+    // a list of the players in the players (ordered by their position in the players)
     private List<String> players = new ArrayList<>();
 
     public CoupGameContext(List<String> playerList, Map<String, CoupPlayerInfo> playerInfoMap) {

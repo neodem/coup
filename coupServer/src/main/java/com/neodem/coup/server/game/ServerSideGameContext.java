@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class ServerSideGameContext {
     private static Logger log = LogManager.getLogger(ServerSideGameContext.class.getName());
-    // the players in the game (in play order)
+    // the players in the players (in play order)
     private List<CoupCommunicationInterface> playerList;
     // keeps track of the state of the players
     private Map<CoupCommunicationInterface, PlayerInfoState> playerInfoMap;
