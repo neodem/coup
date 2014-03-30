@@ -23,6 +23,8 @@ public final class CoupServer implements ComInterface {
 
     private static final Logger log = LogManager.getLogger(CoupServer.class.getName());
     private final MessageHandler messageHandler = new MessageHandler("localhost", 6969, this);
+    //
+    // networked players registerd with this server. In the future They may or may not not be in a game
     private final Map<Integer, PlayerProxy> registeredPlayers = new HashMap<>();
     private CoupGameMaster cgm;
     private MessageTranslator messageTranslator;
@@ -51,6 +53,12 @@ public final class CoupServer implements ComInterface {
                 String playerName = messageTranslator.unmarshalPlayerNameFromMessage(msg);
                 PlayerProxy proxy = new PlayerProxy(playerName, from, messageTranslator, server);
                 registeredPlayers.put(from, proxy);
+
+                //checkForGameStart();
+                // note this code is temp. It starts the game when there are 4 players registerd.
+                // in the future I'd like to enable players to register with the server and then
+                // wait until a game is available for them. eg. the server will wait for 4 people,
+                // put them into a game and fire it off and then wait for 4 more, etc.
                 if (registeredPlayers.size() == 4) {
                     startGame();
                 }
@@ -64,6 +72,17 @@ public final class CoupServer implements ComInterface {
 
         public void run() {
             init();
+        }
+    }
+
+
+    // TODO
+    private void checkForGameStart() {
+
+        if (registeredPlayers.size() == 4) {
+            // move them into their own game
+            // the game will have it's own gamemaster (also on the chat channel)
+            //
         }
     }
 
