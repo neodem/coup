@@ -32,8 +32,8 @@
     </properties>
 
     <scm>
-        <connection>scm:git:git@dev.neodem.com:/opt/git/coup.git</connection>
-        <developerConnection>scm:git:git@dev.neodem.com:/opt/git/coup.git</developerConnection>
+        <connection>scm:git:ssh://dev.neodem.com/opt/git/coup.git</connection>
+        <developerConnection>scm:git:ssh://dev.neodem.com/opt/git/coup.git</developerConnection>
     </scm>
 
     <repositories>
@@ -65,12 +65,10 @@
     </modules>
 
     <dependencies>
-
-
         <dependency>
             <groupId>com.neodem</groupId>
             <artifactId>bandaid</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
+            <version>0.0.2</version>
         </dependency>
         <dependency>
             <groupId>com.neodem</groupId>
