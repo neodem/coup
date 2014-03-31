@@ -32,11 +32,9 @@
     </properties>
 
     <scm>
-        <connection>scm:git@dev.neodem.com:/opt/git/coup.git</connection>
-
-
+        <connection>scm:git:git@dev.neodem.com:/opt/git/coup.git</connection>
+        <developerConnection>scm:git:git@dev.neodem.com:/opt/git/coup.git</developerConnection>
     </scm>
-
 
     <repositories>
         <repository>
