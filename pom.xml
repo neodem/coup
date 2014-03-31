@@ -31,6 +31,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <scm>
+        <connection>scm:git@dev.neodem.com:/opt/git/coup.git</connection>
+
+
+    </scm>
+
+
     <repositories>
         <repository>
             <id>neodem-snapshots</id>
