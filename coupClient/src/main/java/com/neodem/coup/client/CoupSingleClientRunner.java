@@ -1,7 +1,7 @@
 package com.neodem.coup.client;
 
 import com.neodem.coup.client.players.RandomCoupPlayer;
-import com.neodem.coup.common.messaging.JsonMessageTranslator;
+import com.neodem.coup.common.messaging.JsonCoupMessageTranslator;
 import com.neodem.coup.common.proxy.ServiceProxy;
 
 /**
@@ -12,7 +12,7 @@ import com.neodem.coup.common.proxy.ServiceProxy;
  */
 public class CoupSingleClientRunner {
     public static void main(String[] args) {
-        ServiceProxy sp = new ServiceProxy(new RandomCoupPlayer("Player4"), new JsonMessageTranslator(), "localhost", 6969);
+        ServiceProxy sp = new ServiceProxy(new RandomCoupPlayer("Player4"), new JsonCoupMessageTranslator(), "localhost", 6969);
         sp.init();
     }
 }

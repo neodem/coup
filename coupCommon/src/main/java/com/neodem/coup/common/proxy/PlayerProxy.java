@@ -6,7 +6,7 @@ import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.common.game.cards.CoupCardType;
-import com.neodem.coup.common.messaging.MessageTranslator;
+import com.neodem.coup.common.messaging.CoupMessageTranslator;
 import com.neodem.coup.common.network.ComInterface;
 
 import static com.neodem.coup.common.messaging.MessageType.*;
@@ -20,11 +20,11 @@ import static com.neodem.coup.common.messaging.MessageType.*;
  */
 public class PlayerProxy implements CoupCommunicationInterface {
     private final String playerName;
-    private final MessageTranslator messageTranslator;
+    private final CoupMessageTranslator messageTranslator;
     private final ComInterface coupServer;
     private final int networkId;
 
-    public PlayerProxy(String playerName, int networkId, MessageTranslator messageTranslator, ComInterface coupServer) {
+    public PlayerProxy(String playerName, int networkId, CoupMessageTranslator messageTranslator, ComInterface coupServer) {
         this.playerName = playerName;
         this.networkId = networkId;
         this.messageTranslator = messageTranslator;

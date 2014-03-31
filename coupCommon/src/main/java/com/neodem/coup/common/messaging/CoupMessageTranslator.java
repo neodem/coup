@@ -10,7 +10,7 @@ import com.neodem.coup.common.game.cards.CoupCardType;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public interface MessageTranslator {
+public interface CoupMessageTranslator {
 
     String marshalMessage(MessageType type);
 

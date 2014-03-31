@@ -11,7 +11,7 @@
         <property name="comServer" ref="communicationsServer"/>
     </bean>
 
-    <bean id="messageTranslator" class="com.neodem.coup.common.messaging.JsonMessageTranslator"/>
+    <bean id="messageTranslator" class="com.neodem.coup.common.messaging.JsonCoupMessageTranslator"/>
 
     <bean id="communicationsServer" class="com.neodem.coup.common.network.ComServer"/>
 

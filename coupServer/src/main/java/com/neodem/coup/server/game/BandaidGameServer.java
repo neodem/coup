@@ -1,6 +1,6 @@
 package com.neodem.coup.server.game;
 
-import com.neodem.coup.common.messaging.MessageTranslator;
+import com.neodem.coup.common.messaging.CoupMessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
 import com.neodem.coup.common.network.ComBaseClient;
 import com.neodem.coup.common.network.ComInterface;
@@ -26,7 +26,7 @@ public final class BandaidGameServer implements ComInterface {
     // networked players registerd with this server. In the future They may or may not not be in a game
     private final Map<Integer, PlayerProxy> registeredPlayers = new HashMap<>();
     private GameMaster gameMaster;
-    private MessageTranslator messageTranslator;
+    private CoupMessageTranslator messageTranslator;
     private Thread gameThread;
     private ComServer comServer;
 
@@ -139,7 +139,7 @@ public final class BandaidGameServer implements ComInterface {
         this.gameMaster = cgm;
     }
 
-    public void setMessageTranslator(MessageTranslator messageTranslator) {
+    public void setMessageTranslator(CoupMessageTranslator messageTranslator) {
         this.messageTranslator = messageTranslator;
     }
 

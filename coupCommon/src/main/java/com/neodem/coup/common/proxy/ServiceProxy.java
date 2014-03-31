@@ -6,7 +6,7 @@ import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.common.game.cards.CoupCardType;
-import com.neodem.coup.common.messaging.MessageTranslator;
+import com.neodem.coup.common.messaging.CoupMessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
 import com.neodem.coup.common.network.ComBaseClient;
 import com.neodem.coup.common.network.ComServer;
@@ -22,10 +22,10 @@ import static com.neodem.coup.common.messaging.MessageType.reply;
 public class ServiceProxy extends ComBaseClient {
 
     private static final Logger log = LogManager.getLogger(ServiceProxy.class.getName());
-    private final MessageTranslator messageTranslator;
+    private final CoupMessageTranslator messageTranslator;
     private final CoupCommunicationInterface player;
 
-    public ServiceProxy(CoupCommunicationInterface target, MessageTranslator messageTranslator, String host, int port) {
+    public ServiceProxy(CoupCommunicationInterface target, CoupMessageTranslator messageTranslator, String host, int port) {
         super(host, port);
         this.player = target;
         this.messageTranslator = messageTranslator;

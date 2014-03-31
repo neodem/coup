@@ -25,7 +25,7 @@ import java.util.Map;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public class JsonMessageTranslator implements MessageTranslator {
+public class JsonCoupMessageTranslator implements CoupMessageTranslator {
 
     private static final String TYPE = "MessageType";
     private static final String CONTEXT = "GameContext";
