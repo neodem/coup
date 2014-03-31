@@ -4,6 +4,8 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multiset;
+import com.neodem.bandaid.messaging.JsonMessageTranslator;
+import com.neodem.bandaid.messaging.MessageType;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.actions.ComplexCoupAction;
 import com.neodem.coup.common.game.actions.CoupAction;
@@ -25,16 +27,12 @@ import java.util.Map;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public class JsonCoupMessageTranslator implements CoupMessageTranslator {
+public class JsonCoupMessageTranslator extends JsonMessageTranslator implements CoupMessageTranslator {
 
-    private static final String TYPE = "MessageType";
     private static final String CONTEXT = "GameContext";
-    private static final String MESSAGE = "Message";
-    private static final String PLAYER = "PlayerName";
     private static final String ACTION = "Action";
     private static final String CARDTYPE = "CardType";
     private static final String CARD = "Card";
-    private static final String BOOL = "TrueFalse";
     private static final String ACTIONTYPE = "ActionType";
     private static final String FACEUP = "FaceUp";
     private static final String CARDS = "CardCollection";
@@ -47,41 +45,10 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
     private static final String CARDID = "CardId";
 
     @Override
-    public String marshalMessage(MessageType type) {
-        JSONObject j = new JSONObject();
-        setMessageTypeIntoJSONObject(type, j);
-        return j.toString();
-    }
-
-    @Override
     public String marshalMessage(MessageType type, CoupGameContext gc) {
         JSONObject j = new JSONObject();
         setMessageTypeIntoJSONObject(type, j);
         setCoupGameContextIntoJSONObject(gc, j);
-        return j.toString();
-    }
-
-    @Override
-    public String marshalMessage(MessageType type, String message) {
-        JSONObject j = new JSONObject();
-        setMessageTypeIntoJSONObject(type, j);
-        setStringIntoJSONObject(message, j);
-        return j.toString();
-    }
-
-    @Override
-    public String marshalPlayerMessage(MessageType type, String playerName) {
-        JSONObject j = new JSONObject();
-        setMessageTypeIntoJSONObject(type, j);
-        setPlayerNameIntoJSONObject(playerName, j);
-        return j.toString();
-    }
-
-    @Override
-    public String marshalRegistrationMesage(String playerName) {
-        JSONObject j = new JSONObject();
-        setMessageTypeIntoJSONObject(MessageType.register, j);
-        setPlayerNameIntoJSONObject(playerName, j);
         return j.toString();
     }
 
@@ -128,14 +95,6 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
     }
 
     @Override
-    public String marshalMessage(MessageType type, boolean bool) {
-        JSONObject j = new JSONObject();
-        setMessageTypeIntoJSONObject(type, j);
-        setBooleanIntoJSONObject(bool, j);
-        return j.toString();
-    }
-
-    @Override
     public CoupAction unmarshalCoupActionFromMessage(String m) {
         JSONObject j;
         CoupAction result = null;
@@ -155,23 +114,6 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
                     String playerName = unmarshalPlayerNameFromJSONObject(action);
                     result = CoupActionFactory.newAction(actionType, playerName);
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public Boolean unmarshalBooleanFromMessage(String m) {
-        JSONObject j;
-        Boolean result = null;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-                result = j.getBoolean(BOOL);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -247,40 +189,6 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
     }
 
     @Override
-    public String unmarshalStringFromMessage(String m) {
-        JSONObject j;
-        String result = null;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-                result = j.getString(MESSAGE);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public String unmarshalPlayerNameFromMessage(String m) {
-        JSONObject j;
-        String result = null;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-                result = j.getString(PLAYER);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    @Override
     public CoupCardType unmarshalCoupCardTypeFromMessage(String m) {
         JSONObject j;
         CoupCardType result = CoupCardType.Unknown;
@@ -289,24 +197,6 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
             try {
                 j = new JSONObject(m);
                 result = unmarshalCoupCardTypeFromJSONObject(j);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public MessageType unmarshalMessageTypeFromMessage(String m) {
-        JSONObject j;
-        MessageType result = MessageType.unknown;
-
-        if (m != null) {
-            try {
-                j = new JSONObject(m);
-                String type = j.getString(TYPE);
-                result = MessageType.valueOf(type);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -374,7 +264,7 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
                     String playerName = (String) element.keys().next();
                     JSONObject playerInfoJSON = element.getJSONObject(playerName);
 
-                    CoupPlayerInfo playerInfo = unmarshalPlayerInfoFromJSONObject(playerInfoJSON);
+                    CoupPlayerInfo playerInfo = unmarshalCoupPlayerInfoFromJSONObject(playerInfoJSON);
 
                     result.put(playerName, playerInfo);
                 }
@@ -400,7 +290,7 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
         return j;
     }
 
-    protected CoupPlayerInfo unmarshalPlayerInfoFromJSONObject(JSONObject j) {
+    protected CoupPlayerInfo unmarshalCoupPlayerInfoFromJSONObject(JSONObject j) {
         CoupPlayerInfo result = null;
         if (j != null) {
             try {
@@ -452,19 +342,6 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
         return result;
     }
 
-    protected String unmarshalPlayerNameFromJSONObject(JSONObject j) {
-        String result = null;
-        if (j != null) {
-            try {
-                result = j.getString(PLAYER);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
-
     protected JSONObject marshalCoupCardToJSONObject(CoupCard c) {
 
         JSONObject j = new JSONObject();
@@ -479,36 +356,6 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
         }
 
         return j;
-    }
-
-    protected void setBooleanIntoJSONObject(boolean bool, JSONObject j) {
-        if (j != null) {
-            try {
-                j.put(BOOL, Boolean.valueOf(bool));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    protected void setStringIntoJSONObject(String message, JSONObject j) {
-        if (message != null && j != null) {
-            try {
-                j.put(MESSAGE, message);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    protected void setPlayerNameIntoJSONObject(String playerName, JSONObject j) {
-        if (playerName != null && j != null) {
-            try {
-                j.put(PLAYER, playerName);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     protected void setCoupCardTypeIntoJSONObject(CoupCardType c, JSONObject j) {
@@ -529,16 +376,6 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
                 if (a instanceof ComplexCoupAction)
                     setPlayerNameIntoJSONObject(((ComplexCoupAction) a).getActionOn(), action);
                 j.put(ACTION, action);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    protected void setMessageTypeIntoJSONObject(MessageType type, JSONObject j) {
-        if (type != null && j != null) {
-            try {
-                j.put(TYPE, type.name());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

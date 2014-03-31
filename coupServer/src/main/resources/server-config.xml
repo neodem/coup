@@ -5,14 +5,14 @@
 
     <bean id="coupGameMaster" class="com.neodem.coup.server.game.CoupGameMaster"/>
 
-    <bean id="coupServer" class="com.neodem.coup.server.game.BandaidGameServer" init-method="startCoupServer">
+    <bean id="coupServer" class="com.neodem.bandaid.server.BandaidGameServer" init-method="start">
         <property name="messageTranslator" ref="messageTranslator"/>
         <property name="gameMaster" ref="coupGameMaster"/>
         <property name="comServer" ref="communicationsServer"/>
     </bean>
 
-    <bean id="messageTranslator" class="com.neodem.coup.common.messaging.JsonCoupMessageTranslator"/>
+    <bean id="messageTranslator" class="com.neodem.bandaid.messaging.JsonMessageTranslator"/>
 
-    <bean id="communicationsServer" class="com.neodem.coup.common.network.ComServer"/>
+    <bean id="communicationsServer" class="com.neodem.bandaid.network.ComServer"/>
 
 </beans>

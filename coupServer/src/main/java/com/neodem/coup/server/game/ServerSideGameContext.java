@@ -1,7 +1,8 @@
 package com.neodem.coup.server.game;
 
-import com.neodem.coup.common.game.CoupCommunicationInterface;
+import com.neodem.bandaid.gameMaster.PlayerCallback;
 import com.neodem.coup.common.game.CoupGameContext;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.cards.CoupDeck;
 
 import java.util.ArrayList;
@@ -16,29 +17,31 @@ import java.util.Map;
 public class ServerSideGameContext {
     //private static Logger log = LogManager.getLogger(ServerSideGameContext.class.getName());
     // the players in the players (in play order)
-    private final List<CoupCommunicationInterface> playerList;
+    private final List<CoupPlayerCallback> playerList;
     // keeps track of the state of the players
-    private final Map<CoupCommunicationInterface, PlayerInfoState> playerInfoMap;
+    private final Map<CoupPlayerCallback, PlayerInfoState> playerInfoMap;
     // the deck we are using
     private final CoupDeck deck;
 
-    public ServerSideGameContext(Map<CoupCommunicationInterface, PlayerInfoState> playerInfoMap, CoupDeck deck) {
+    public ServerSideGameContext(Map<CoupPlayerCallback, PlayerInfoState> playerInfoMap, CoupDeck deck) {
         this.playerInfoMap = playerInfoMap;
         this.deck = deck;
         playerList = new ArrayList<>();
     }
 
     public ServerSideGameContext() {
-        this(new HashMap<CoupCommunicationInterface, PlayerInfoState>(), new CoupDeck());
+        this(new HashMap<CoupPlayerCallback, PlayerInfoState>(), new CoupDeck());
     }
 
-    public void addPlayer(CoupCommunicationInterface p) {
-        PlayerInfoState info = makeNewPlayerInfo(p);
-        playerInfoMap.put(p, info);
-        playerList.add(p);
+    public void addPlayer(PlayerCallback p) {
+        CoupPlayerCallback cpc = (CoupPlayerCallback) p;
+
+        PlayerInfoState info = makeNewPlayerInfo(cpc);
+        playerInfoMap.put(cpc, info);
+        playerList.add(cpc);
     }
 
-    private PlayerInfoState makeNewPlayerInfo(CoupCommunicationInterface p) {
+    private PlayerInfoState makeNewPlayerInfo(CoupPlayerCallback p) {
         return new PlayerInfoState(2, deck.takeCard(), deck.takeCard(), p.getPlayerName());
     }
 
@@ -46,11 +49,11 @@ public class ServerSideGameContext {
         return generatePrivateGameContext(null);
     }
 
-    public CoupGameContext generatePrivateGameContext(CoupCommunicationInterface privPlayer) {
+    public CoupGameContext generatePrivateGameContext(CoupPlayerCallback privPlayer) {
 
         CoupGameContext gc = new CoupGameContext();
 
-        for (CoupCommunicationInterface p : playerList) {
+        for (CoupPlayerCallback p : playerList) {
             String playerName = p.getPlayerName();
             gc.addPlayer(playerName);
             PlayerInfoState pi = getPlayerInfo(p);
@@ -70,7 +73,7 @@ public class ServerSideGameContext {
         return playerInfoMap.get(getCoupPlayer(playerName));
     }
 
-    public PlayerInfoState getPlayerInfo(CoupCommunicationInterface p) {
+    public PlayerInfoState getPlayerInfo(CoupPlayerCallback p) {
         return playerInfoMap.get(p);
     }
 
@@ -78,7 +81,7 @@ public class ServerSideGameContext {
         return deck;
     }
 
-    public List<CoupCommunicationInterface> getPlayerList() {
+    public List<CoupPlayerCallback> getPlayerList() {
         return playerList;
     }
 
@@ -87,13 +90,13 @@ public class ServerSideGameContext {
         return pis.isActive();
     }
 
-    public void addCoinsToPlayer(int coins, CoupCommunicationInterface p) {
+    public void addCoinsToPlayer(int coins, CoupPlayerCallback p) {
         playerInfoMap.get(p).addCoins(coins);
     }
 
-    public CoupCommunicationInterface getCoupPlayer(String playerName) {
+    public CoupPlayerCallback getCoupPlayer(String playerName) {
 
-        for (CoupCommunicationInterface p : playerInfoMap.keySet()) {
+        for (CoupPlayerCallback p : playerInfoMap.keySet()) {
             if (p.getPlayerName().equals(playerName)) {
                 return p;
             }

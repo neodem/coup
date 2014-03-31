@@ -1,6 +1,7 @@
 package com.neodem.coup.common.game;
 
 import com.google.common.collect.Multiset;
+import com.neodem.bandaid.gameMaster.PlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.common.game.cards.CoupCardType;
@@ -11,7 +12,7 @@ import com.neodem.coup.common.game.cards.CoupCardType;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/24/14
  */
-public interface CoupCommunicationInterface {
+public interface CoupPlayerCallback extends PlayerCallback {
 
     /**
      * called by the GameMaster when this Player has a turn to process.
@@ -54,13 +55,6 @@ public interface CoupCommunicationInterface {
      *               TODO replace reason with an enum
      */
     public void tryAgain(String reason);
-
-    /**
-     * get the name of the player
-     *
-     * @return the name of the player (should never change)
-     */
-    public String getPlayerName();
 
     /**
      * will be called just before the players begins. This will allow the player to get set up

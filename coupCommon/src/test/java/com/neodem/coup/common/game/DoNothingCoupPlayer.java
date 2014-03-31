@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class DoNothingCoupPlayer implements CoupCommunicationInterface, Serializable {
+public class DoNothingCoupPlayer implements CoupPlayerCallback, Serializable {
 
     private final String name = "DoNothingName";
 

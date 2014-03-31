@@ -1,7 +1,7 @@
 package com.neodem.coup.server.game.actionProcessors;
 
-import com.neodem.coup.common.game.CoupCommunicationInterface;
-import com.neodem.coup.common.game.PlayerError;
+import com.neodem.bandaid.gameMaster.PlayerError;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.actions.SimpleCoupAction;
 import com.neodem.coup.server.game.PlayerInfoState;
@@ -26,7 +26,7 @@ public class CoupActionProcessor extends DamagingActionProcessor implements Acti
     }
 
     @Override
-    public void validate(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
+    public void validate(CoupPlayerCallback actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
         PlayerInfoState info = context.getPlayerInfo(actingPlayer);
         if (currentAction.getActionType() == SimpleCoupAction.ActionType.Coup) {
 
@@ -51,7 +51,7 @@ public class CoupActionProcessor extends DamagingActionProcessor implements Acti
     }
 
     @Override
-    public void process(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) {
+    public void process(CoupPlayerCallback actingPlayer, String targetPlayerName, CoupAction currentAction) {
         log.debug(actingPlayer + " has to pay 7 coins to coup.");
 
         PlayerInfoState info = context.getPlayerInfo(actingPlayer);

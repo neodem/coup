@@ -1,32 +1,32 @@
 package com.neodem.coup.common.proxy;
 
 import com.google.common.collect.Multiset;
-import com.neodem.coup.common.game.CoupCommunicationInterface;
+import com.neodem.bandaid.network.ComServer;
+import com.neodem.bandaid.proxy.ServiceProxy;
 import com.neodem.coup.common.game.CoupGameContext;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.common.game.cards.CoupCardType;
 import com.neodem.coup.common.messaging.CoupMessageTranslator;
-import com.neodem.coup.common.messaging.MessageType;
-import com.neodem.coup.common.network.ComBaseClient;
-import com.neodem.coup.common.network.ComServer;
+import com.neodem.coup.common.messaging.CoupMessageType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static com.neodem.coup.common.messaging.MessageType.reply;
+import static com.neodem.coup.common.messaging.CoupMessageType.reply;
 
 /**
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public class ServiceProxy extends ComBaseClient {
+public class CoupServiceProxy extends ServiceProxy {
 
-    private static final Logger log = LogManager.getLogger(ServiceProxy.class.getName());
+    private static final Logger log = LogManager.getLogger(CoupServiceProxy.class.getName());
     private final CoupMessageTranslator messageTranslator;
-    private final CoupCommunicationInterface player;
+    private final CoupPlayerCallback player;
 
-    public ServiceProxy(CoupCommunicationInterface target, CoupMessageTranslator messageTranslator, String host, int port) {
-        super(host, port);
+    public CoupServiceProxy(CoupPlayerCallback target, CoupMessageTranslator messageTranslator, String host, int port) {
+        super(target, messageTranslator, host, port);
         this.player = target;
         this.messageTranslator = messageTranslator;
     }
@@ -43,7 +43,7 @@ public class ServiceProxy extends ComBaseClient {
     public void handleMessage(int from, String m) {
         log.trace("{} : message received from {} : {}", player.getPlayerName(), from, m);
 
-        MessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
+        CoupMessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
 
         if (type.requiresReply()) {
             String reply = handleMessageWithReply(type, m);
@@ -54,7 +54,7 @@ public class ServiceProxy extends ComBaseClient {
         }
     }
 
-    public String handleMessageWithReply(MessageType type, String m) {
+    public String handleMessageWithReply(CoupMessageType type, String m) {
         String replyMessage = null;
 
         CoupGameContext gc;
@@ -109,7 +109,7 @@ public class ServiceProxy extends ComBaseClient {
         return replyMessage;
     }
 
-    public void handleAsynchonousMessage(MessageType type, String m) {
+    public void handleAsynchonousMessage(CoupMessageType type, String m) {
         CoupGameContext gc;
         String playerNane;
         CoupAction a;

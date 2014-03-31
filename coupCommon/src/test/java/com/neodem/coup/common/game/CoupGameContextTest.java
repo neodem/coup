@@ -17,7 +17,7 @@ public class CoupGameContextTest {
     @SuppressWarnings("UnnecessaryLocalVariable")
     @Test
     public void coupGameContextShouldSerializeCorrectly() {
-        CoupCommunicationInterface p = new DoNothingCoupPlayer();
+        CoupPlayerCallback p = new DoNothingCoupPlayer();
         CoupGameContext gc = new CoupGameContext();
         gc.addPlayer(p.getPlayerName());
 

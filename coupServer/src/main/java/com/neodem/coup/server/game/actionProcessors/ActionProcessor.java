@@ -1,7 +1,7 @@
 package com.neodem.coup.server.game.actionProcessors;
 
-import com.neodem.coup.common.game.CoupCommunicationInterface;
-import com.neodem.coup.common.game.PlayerError;
+import com.neodem.bandaid.gameMaster.PlayerError;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
 
 /**
@@ -9,7 +9,7 @@ import com.neodem.coup.common.game.actions.CoupAction;
  * Created Date: 3/26/14
  */
 public interface ActionProcessor {
-    public void validate(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError;
+    public void validate(CoupPlayerCallback actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError;
 
-    public void process(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction);
+    public void process(CoupPlayerCallback actingPlayer, String targetPlayerName, CoupAction currentAction);
 }

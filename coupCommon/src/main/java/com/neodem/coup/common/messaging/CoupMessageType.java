@@ -4,7 +4,7 @@ package com.neodem.coup.common.messaging;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public enum MessageType {
+public enum CoupMessageType {
 
     //TODO figure out a way to abstract this out so we can have a base message type and a game specific one on top
 
