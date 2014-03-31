@@ -1,6 +1,5 @@
 package com.neodem.coup.server.game;
 
-import com.neodem.bandaid.gameMaster.BaseGameMaster;
 import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
