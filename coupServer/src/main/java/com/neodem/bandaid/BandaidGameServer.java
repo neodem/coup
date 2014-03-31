@@ -1,4 +1,4 @@
-package com.neodem.coup.server;
+package com.neodem.bandaid;
 
 import com.neodem.coup.common.messaging.MessageTranslator;
 import com.neodem.coup.common.messaging.MessageType;
@@ -6,7 +6,6 @@ import com.neodem.coup.common.network.ComBaseClient;
 import com.neodem.coup.common.network.ComInterface;
 import com.neodem.coup.common.network.ComServer;
 import com.neodem.coup.common.proxy.PlayerProxy;
-import com.neodem.coup.server.game.CoupGameMaster;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -19,24 +18,24 @@ import java.util.Map;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public final class CoupServer implements ComInterface {
+public final class BandaidGameServer implements ComInterface {
 
-    private static final Logger log = LogManager.getLogger(CoupServer.class.getName());
+    private static final Logger log = LogManager.getLogger(BandaidGameServer.class.getName());
     private final MessageHandler messageHandler = new MessageHandler("localhost", 6969, this);
     //
     // networked players registerd with this server. In the future They may or may not not be in a game
     private final Map<Integer, PlayerProxy> registeredPlayers = new HashMap<>();
-    private CoupGameMaster cgm;
+    private GameMaster gameMaster;
     private MessageTranslator messageTranslator;
     private Thread gameThread;
     private ComServer comServer;
 
     public class MessageHandler extends ComBaseClient implements Runnable {
 
-        private final CoupServer server;
+        private final BandaidGameServer server;
         private String mostRecentMessage = null;
 
-        public MessageHandler(String host, int port, CoupServer server) {
+        public MessageHandler(String host, int port, BandaidGameServer server) {
             super(host, port);
             this.server = server;
         }
@@ -130,16 +129,14 @@ public final class CoupServer implements ComInterface {
 
     private void startGame() {
         log.info("initializing Game");
-        cgm.initGame(new ArrayList(registeredPlayers.values()));
+        gameMaster.initGame(new ArrayList(registeredPlayers.values()));
 
         log.info("Starting Game");
-        gameThread = new Thread(cgm);
-        gameThread.setName("Coup GameMaster");
-        gameThread.start();
+        gameMaster.startGame();
     }
 
-    public void setCgm(CoupGameMaster cgm) {
-        this.cgm = cgm;
+    public void setGameMaster(GameMaster cgm) {
+        this.gameMaster = cgm;
     }
 
     public void setMessageTranslator(MessageTranslator messageTranslator) {

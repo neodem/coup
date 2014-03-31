@@ -1,5 +1,6 @@
 package com.neodem.coup.server.game;
 
+import com.neodem.bandaid.BaseGameMaster;
 import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
@@ -36,7 +37,7 @@ import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Tax;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class CoupGameMaster implements Runnable {
+public class CoupGameMaster extends BaseGameMaster {
 
     private static final Logger log = LogManager.getLogger(CoupGameMaster.class.getName());
     private ServerSideGameContext context;
@@ -45,6 +46,12 @@ public class CoupGameMaster implements Runnable {
     private CounterResolver counterResolver;
     private AssasinationProcessor assasinationProcessor;
 
+    @Override
+    protected Logger getLog() {
+        return log;
+    }
+
+    @Override
     public void initGame(List<CoupCommunicationInterface> registeredPlayers) {
 
         context = new ServerSideGameContext();
@@ -78,7 +85,7 @@ public class CoupGameMaster implements Runnable {
     }
 
     @Override
-    public void run() {
+    protected void runGame() {
         CoupCommunicationInterface winningPlayer = null;
         while (winningPlayer == null) {
 
@@ -113,6 +120,11 @@ public class CoupGameMaster implements Runnable {
         for (CoupCommunicationInterface p : context.getPlayerList()) {
             p.messageFromGM(msg);
         }
+    }
+
+    @Override
+    protected String getGameThreadName() {
+        return "Coup GameMaster";
     }
 
     public CoupGameContext getCurrentGameContext(CoupCommunicationInterface p) {
