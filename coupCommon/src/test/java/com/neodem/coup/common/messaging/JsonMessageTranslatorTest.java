@@ -17,11 +17,11 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class JsonMessageTranslatorTest {
 
-    private JsonMessageTranslator t;
+    private JsonCoupMessageTranslator t;
 
     @Before
     public void before() {
-        t = new JsonMessageTranslator();
+        t = new JsonCoupMessageTranslator();
     }
 
     @After
