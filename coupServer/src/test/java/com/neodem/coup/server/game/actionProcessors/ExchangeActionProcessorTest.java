@@ -3,6 +3,7 @@ package com.neodem.coup.server.game.actionProcessors;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.neodem.bandaid.gamemaster.PlayerCallback;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.server.game.ServerSideGameContext;
 import org.junit.After;
@@ -29,7 +30,7 @@ public class ExchangeActionProcessorTest {
 
     @Before
     public void before() {
-        mockPlayer = mock(PlayerCallback.class);
+        mockPlayer = mock(CoupPlayerCallback.class);
 
         context = new ServerSideGameContext();
         context.addPlayer(mockPlayer);

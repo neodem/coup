@@ -1,10 +1,10 @@
 package com.neodem.coup.client;
 
 import com.neodem.coup.client.players.RandomCoupPlayer;
-import com.neodem.coup.common.game.CoupCommunicationInterface;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.messaging.CoupMessageTranslator;
 import com.neodem.coup.common.messaging.JsonCoupMessageTranslator;
-import com.neodem.coup.common.proxy.ServiceProxy;
+import com.neodem.coup.common.proxy.CoupServiceProxy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,9 +31,9 @@ public class Coup4ClientRunner {
         setupPlayer(new RandomCoupPlayer("Player4"));
     }
 
-    private void setupPlayer(CoupCommunicationInterface player) {
+    private void setupPlayer(CoupPlayerCallback player) {
         log.info("Starting player : " + player);
-        ServiceProxy sp = new ServiceProxy(player, messageTranslator, "localhost", 6969);
+        CoupServiceProxy sp = new CoupServiceProxy(player, messageTranslator, "localhost", 6969);
         sp.init();
     }
 }
