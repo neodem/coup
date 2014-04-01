@@ -20,7 +20,6 @@ import com.neodem.coup.server.game.resolvers.ChallengeResolver;
 import com.neodem.coup.server.game.resolvers.CounterResolver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,12 +46,6 @@ public class CoupGameMaster extends BaseGameMaster {
     private ChallengeResolver challengeResolver;
     private CounterResolver counterResolver;
     private AssasinationProcessor assasinationProcessor;
-
-    public static void main(String[] args) {
-        String springContextFile = "server-config.xml";
-        log.info(springContextFile);
-        new ClassPathXmlApplicationContext(springContextFile);
-    }
 
     @Override
     protected Logger getLog() {

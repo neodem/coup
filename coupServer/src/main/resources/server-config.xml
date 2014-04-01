@@ -6,12 +6,16 @@
     <bean id="coupGameMaster" class="com.neodem.coup.server.game.CoupGameMaster"/>
 
     <bean id="coupServer" class="com.neodem.bandaid.server.BandaidGameServer" init-method="start">
-        <property name="messageTranslator" ref="messageTranslator"/>
         <property name="gameMaster" ref="coupGameMaster"/>
         <property name="comServer" ref="communicationsServer"/>
+        <property name="playerProxyFactory" ref="coupPlayerProxyFactory"/>
     </bean>
 
-    <bean id="messageTranslator" class="com.neodem.bandaid.messaging.JsonMessageTranslator"/>
+    <bean id="coupPlayerProxyFactory" class="com.neodem.coup.common.proxy.CoupPlayerProxyFactory">
+        <property name="coupMessageTranslator" ref="coupMessageTranslator"/>
+    </bean>
+
+    <bean id="coupMessageTranslator" class="com.neodem.coup.common.messaging.JsonCoupMessageTranslator"/>
 
     <bean id="communicationsServer" class="com.neodem.bandaid.network.ComServer"/>
 
