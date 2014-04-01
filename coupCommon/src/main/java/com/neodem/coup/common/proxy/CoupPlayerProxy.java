@@ -10,7 +10,7 @@ import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.common.game.cards.CoupCardType;
 import com.neodem.coup.common.messaging.CoupMessageTranslator;
 
-import static com.neodem.bandaid.messaging.MessageType.*;
+import static com.neodem.coup.common.messaging.CoupMessageType.*;
 
 /**
  * This class will communicate with it's parter on the client side
