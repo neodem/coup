@@ -1,7 +1,6 @@
 package com.neodem.coup.common.proxy;
 
 import com.google.common.collect.Multiset;
-import com.neodem.bandaid.network.ComServer;
 import com.neodem.bandaid.proxy.ServiceProxy;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayerCallback;
@@ -26,35 +25,13 @@ public class CoupServiceProxy extends ServiceProxy {
     private final CoupPlayerCallback player;
 
     public CoupServiceProxy(CoupPlayerCallback target, CoupMessageTranslator messageTranslator, String host, int port) {
-        super(target, messageTranslator, host, port);
+        super(target, host, port);
         this.player = target;
         this.messageTranslator = messageTranslator;
     }
 
-    @Override
-    public void init() {
-        super.init();
-        String m = messageTranslator.marshalRegistrationMesage(player.getPlayerName());
-        log.debug("{} : registering with the server : {}", player.getPlayerName(), reply);
-        send(ComServer.Server, m);
-    }
-
-    @Override
-    public void handleMessage(int from, String m) {
-        log.trace("{} : message received from {} : {}", player.getPlayerName(), from, m);
-
+    public String handleMessageWithReply(String m) {
         CoupMessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
-
-        if (type.requiresReply()) {
-            String reply = handleMessageWithReply(type, m);
-            log.trace("{} : replying to server : {}", player.getPlayerName(), reply);
-            send(ComServer.Server, reply);
-        } else {
-            handleAsynchonousMessage(type, m);
-        }
-    }
-
-    public String handleMessageWithReply(CoupMessageType type, String m) {
         String replyMessage = null;
 
         CoupGameContext gc;
@@ -109,7 +86,8 @@ public class CoupServiceProxy extends ServiceProxy {
         return replyMessage;
     }
 
-    public void handleAsynchonousMessage(CoupMessageType type, String m) {
+    public void handleAsynchonousMessage(String m) {
+        CoupMessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
         CoupGameContext gc;
         String playerNane;
         CoupAction a;
