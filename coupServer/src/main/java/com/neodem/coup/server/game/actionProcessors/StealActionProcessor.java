@@ -1,7 +1,7 @@
 package com.neodem.coup.server.game.actionProcessors;
 
+import com.neodem.bandaid.gamemaster.PlayerError;
 import com.neodem.coup.common.game.CoupPlayerCallback;
-import com.neodem.coup.common.game.PlayerError;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.actions.SimpleCoupAction;
 import com.neodem.coup.server.game.PlayerInfoState;

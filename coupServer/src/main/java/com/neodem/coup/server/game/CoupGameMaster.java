@@ -1,8 +1,8 @@
 package com.neodem.coup.server.game;
 
-import com.neodem.bandaid.gameMaster.BaseGameMaster;
-import com.neodem.bandaid.gameMaster.PlayerCallback;
-import com.neodem.bandaid.gameMaster.PlayerError;
+import com.neodem.bandaid.gamemaster.BaseGameMaster;
+import com.neodem.bandaid.gamemaster.PlayerCallback;
+import com.neodem.bandaid.gamemaster.PlayerError;
 import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayerCallback;

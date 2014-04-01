@@ -1,6 +1,6 @@
 package com.neodem.coup.server.game;
 
-import com.neodem.bandaid.gameMaster.PlayerCallback;
+import com.neodem.bandaid.gamemaster.PlayerCallback;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.cards.CoupDeck;
