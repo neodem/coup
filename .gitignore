@@ -3,6 +3,8 @@
 target/*
 *.iml
 
+out/*
+
 logs/
 coup.log*
 
