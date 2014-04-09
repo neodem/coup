@@ -2,7 +2,7 @@ package com.neodem.coup.common.proxy;
 
 import com.neodem.bandaid.proxy.PlayerProxy;
 import com.neodem.bandaid.proxy.PlayerProxyFactory;
-import com.neodem.bandaid.server.BandaidGameServer;
+import com.neodem.bandaid.server.BandaidGameServerImpl;
 import com.neodem.coup.common.messaging.CoupMessageTranslator;
 
 /**
@@ -17,7 +17,7 @@ public class CoupPlayerProxyFactory implements PlayerProxyFactory {
     }
 
     @Override
-    public PlayerProxy makeNewProxy(String playerName, int from, BandaidGameServer server) {
+    public PlayerProxy makeNewProxy(String playerName, int from, BandaidGameServerImpl server) {
         return new CoupPlayerProxy(playerName, from, coupMessageTranslator, server);
     }
 

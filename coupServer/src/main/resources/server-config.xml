@@ -5,7 +5,7 @@
 
     <bean id="coupGameMaster" class="com.neodem.coup.server.game.CoupGameMaster"/>
 
-    <bean id="coupServer" class="com.neodem.bandaid.server.BandaidGameServer" init-method="start">
+    <bean id="coupServer" class="com.neodem.bandaid.server.BandaidGameServerImpl" init-method="start">
         <property name="gameMaster" ref="coupGameMaster"/>
         <property name="comServer" ref="communicationsServer"/>
         <property name="playerProxyFactory" ref="coupPlayerProxyFactory"/>
