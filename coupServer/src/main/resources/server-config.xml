@@ -3,12 +3,24 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="coupGameMaster" class="com.neodem.coup.server.game.CoupGameMaster"/>
+    <bean id="coupGameMaster" class="com.neodem.coup.server.game.CoupGameMaster">
+        <property name="coupMessageTranslator" ref="coupMessageTranslator"/>
+    </bean>
 
-    <bean id="coupServer" class="com.neodem.bandaid.server.BandaidGameServerImpl" init-method="start">
-        <property name="gameMaster" ref="coupGameMaster"/>
+    <bean id="serverMessageTranslator" class="com.neodem.bandaid.messaging.JsonServerMessageTranslator"/>
+
+    <bean id="bandaidServer" class="com.neodem.bandaid.server.BandaidServer" init-method="start">
+        <property name="bandaidGameServer" ref="bandaidGameServer"/>
         <property name="comServer" ref="communicationsServer"/>
-        <property name="playerProxyFactory" ref="coupPlayerProxyFactory"/>
+        <property name="serverMessageTranslator" ref="serverMessageTranslator"/>
+    </bean>
+
+    <bean id="bandaidGameServer" class="com.neodem.bandaid.server.BandaidGameServerImpl">
+        <property name="gameMasters">
+            <map>
+                <entry key="coup" value-ref="coupGameMaster"/>
+            </map>
+        </property>
     </bean>
 
     <bean id="coupPlayerProxyFactory" class="com.neodem.coup.common.proxy.CoupPlayerProxyFactory">

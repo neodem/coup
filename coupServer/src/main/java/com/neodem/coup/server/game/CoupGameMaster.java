@@ -3,12 +3,16 @@ package com.neodem.coup.server.game;
 import com.neodem.bandaid.gamemaster.BaseGameMaster;
 import com.neodem.bandaid.gamemaster.PlayerCallback;
 import com.neodem.bandaid.gamemaster.PlayerError;
+import com.neodem.bandaid.network.ComInterface;
+import com.neodem.bandaid.proxy.PlayerProxy;
 import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.ComplexCoupAction;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.actions.CoupAction.ActionType;
+import com.neodem.coup.common.messaging.CoupMessageTranslator;
+import com.neodem.coup.common.proxy.CoupPlayerProxy;
 import com.neodem.coup.common.util.DisplayUtils;
 import com.neodem.coup.server.game.actionProcessors.ActionProcessor;
 import com.neodem.coup.server.game.actionProcessors.AssasinationProcessor;
@@ -21,6 +25,7 @@ import com.neodem.coup.server.game.resolvers.CounterResolver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -46,14 +51,55 @@ public class CoupGameMaster extends BaseGameMaster {
     private ChallengeResolver challengeResolver;
     private CounterResolver counterResolver;
     private AssasinationProcessor assasinationProcessor;
+    private List<PlayerCallback> registeredPlayers = new ArrayList<>();
+    private CoupMessageTranslator coupMessageTranslator;
+    private String gameStatus = "Ready to Register Players";
+
+    @Override
+    public boolean gameReady() {
+        if (registeredPlayers.size() == 4) {
+            gameStatus = "Ready to Start";
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public String getGameDescription() {
+        return "Coup";
+    }
+
+    @Override
+    public String getGameStatus() {
+        return gameStatus;
+    }
+
+    @Override
+    public PlayerProxy makeNewProxy(String playerName, int myNetworkId, ComInterface server) {
+        return new CoupPlayerProxy(playerName, myNetworkId, coupMessageTranslator, server);
+    }
 
     @Override
     protected Logger getLog() {
         return log;
     }
 
+    /**
+     * @param networkId
+     * @param player
+     * @return if ok
+     */
     @Override
-    public void initGame(List<PlayerCallback> registeredPlayers) {
+    public boolean registerPlayer(int networkId, PlayerCallback player) {
+        if (registeredPlayers.size() == 4) return false;
+        registeredPlayers.add(player);
+        return true;
+    }
+
+    @Override
+    public void initGame() {
+        gameStatus = "Initializing";
 
         context = new ServerSideGameContext();
 
@@ -87,6 +133,7 @@ public class CoupGameMaster extends BaseGameMaster {
 
     @Override
     protected void runGame() {
+        gameStatus = "Started";
         CoupPlayerCallback winningPlayer = null;
         while (winningPlayer == null) {
 
@@ -115,6 +162,8 @@ public class CoupGameMaster extends BaseGameMaster {
                 }
             }
         }
+
+        gameStatus = "Over";
         String msg = "The game is over : " + winningPlayer.getPlayerName() + " was the winner!";
         log.info(msg);
 
@@ -323,5 +372,9 @@ public class CoupGameMaster extends BaseGameMaster {
             ap.process(actingPlayer, null, currentAction);
 
         updatePlayers();
+    }
+
+    public void setCoupMessageTranslator(CoupMessageTranslator coupMessageTranslator) {
+        this.coupMessageTranslator = coupMessageTranslator;
     }
 }
