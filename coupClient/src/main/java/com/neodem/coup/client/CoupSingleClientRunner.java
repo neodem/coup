@@ -2,7 +2,7 @@ package com.neodem.coup.client;
 
 import com.neodem.coup.client.players.RandomCoupPlayer;
 import com.neodem.coup.common.messaging.JsonCoupMessageTranslator;
-import com.neodem.coup.common.proxy.CoupServiceProxy;
+import com.neodem.coup.common.proxy.CoupBandaidServerNetworkedProxyServerSide;
 
 /**
  * Fires up a single client
@@ -12,7 +12,7 @@ import com.neodem.coup.common.proxy.CoupServiceProxy;
  */
 public class CoupSingleClientRunner {
     public static void main(String[] args) {
-        CoupServiceProxy sp = new CoupServiceProxy(new RandomCoupPlayer("Player4"), new JsonCoupMessageTranslator(), "localhost", 6969);
+        CoupBandaidServerNetworkedProxyServerSide sp = new CoupBandaidServerNetworkedProxyServerSide(new RandomCoupPlayer("Player4"), new JsonCoupMessageTranslator(), "localhost", 6969);
         sp.init();
     }
 }

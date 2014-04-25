@@ -9,7 +9,7 @@
 
     <bean id="serverMessageTranslator" class="com.neodem.bandaid.messaging.JsonServerMessageTranslator"/>
 
-    <bean id="bandaidServer" class="com.neodem.bandaid.server.BandaidServer" init-method="start">
+    <bean id="bandaidServer" class="com.neodem.bandaid.server.BandaidServer2" init-method="start">
         <property name="bandaidGameServer" ref="bandaidGameServer"/>
         <property name="comServer" ref="communicationsServer"/>
         <property name="serverMessageTranslator" ref="serverMessageTranslator"/>
