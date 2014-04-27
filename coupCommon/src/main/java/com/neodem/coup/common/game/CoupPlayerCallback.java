@@ -1,7 +1,7 @@
 package com.neodem.coup.common.game;
 
 import com.google.common.collect.Multiset;
-import com.neodem.bandaid.gamemaster.PlayerCallback;
+import com.neodem.bandaid.gamemasterstuff.PlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.common.game.cards.CoupCardType;

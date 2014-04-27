@@ -1,10 +1,8 @@
 package com.neodem.coup.server.game;
 
-import com.neodem.bandaid.gamemaster.BaseGameMaster;
-import com.neodem.bandaid.gamemaster.PlayerCallback;
-import com.neodem.bandaid.gamemaster.PlayerError;
-import com.neodem.bandaid.network.ComInterface;
-import com.neodem.bandaid.proxy.PlayerProxy;
+import com.neodem.bandaid.gamemasterstuff.BaseGameMaster;
+import com.neodem.bandaid.gamemasterstuff.PlayerCallback;
+import com.neodem.bandaid.gamemasterstuff.PlayerError;
 import com.neodem.common.utility.collections.Lists;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayerCallback;
@@ -12,32 +10,16 @@ import com.neodem.coup.common.game.actions.ComplexCoupAction;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.actions.CoupAction.ActionType;
 import com.neodem.coup.common.messaging.CoupMessageTranslator;
-import com.neodem.coup.common.proxy.CoupPlayerProxy;
 import com.neodem.coup.common.util.DisplayUtils;
-import com.neodem.coup.server.game.actionProcessors.ActionProcessor;
-import com.neodem.coup.server.game.actionProcessors.AssasinationProcessor;
-import com.neodem.coup.server.game.actionProcessors.CoupActionProcessor;
-import com.neodem.coup.server.game.actionProcessors.ExchangeActionProcessor;
-import com.neodem.coup.server.game.actionProcessors.IncomeProcessor;
-import com.neodem.coup.server.game.actionProcessors.StealActionProcessor;
+import com.neodem.coup.server.game.actionProcessors.*;
 import com.neodem.coup.server.game.resolvers.ChallengeResolver;
 import com.neodem.coup.server.game.resolvers.CounterResolver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Assassinate;
-import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Coup;
-import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Exchange;
-import static com.neodem.coup.common.game.actions.CoupAction.ActionType.ForeignAid;
-import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Income;
-import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Steal;
-import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Tax;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.*;
 
 /**
  * Author: vfumo
@@ -56,13 +38,20 @@ public class CoupGameMaster extends BaseGameMaster {
     private String gameStatus = "Ready to Register Players";
 
     @Override
-    public boolean gameReady() {
+    public boolean isGameReadyToStart() {
         if (registeredPlayers.size() == 4) {
             gameStatus = "Ready to Start";
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public boolean registerPlayer(PlayerCallback player) {
+        if (registeredPlayers.size() == 4) return false;
+        registeredPlayers.add(player);
+        return true;
     }
 
     @Override
@@ -76,25 +65,8 @@ public class CoupGameMaster extends BaseGameMaster {
     }
 
     @Override
-    public PlayerProxy makeNewProxy(String playerName, int myNetworkId, ComInterface server) {
-        return new CoupPlayerProxy(playerName, myNetworkId, coupMessageTranslator, server);
-    }
-
-    @Override
     protected Logger getLog() {
         return log;
-    }
-
-    /**
-     * @param networkId
-     * @param player
-     * @return if ok
-     */
-    @Override
-    public boolean registerPlayer(int networkId, PlayerCallback player) {
-        if (registeredPlayers.size() == 4) return false;
-        registeredPlayers.add(player);
-        return true;
     }
 
     @Override

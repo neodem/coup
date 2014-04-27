@@ -4,6 +4,7 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multiset;
+import com.neodem.bandaid.messaging.JsonServerMessageTranslator;
 import com.neodem.bandaid.messaging.JsonUtil;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.actions.ComplexCoupAction;
@@ -26,7 +27,7 @@ import java.util.Map;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public class JsonCoupMessageTranslator implements CoupMessageTranslator {
+public class JsonCoupMessageTranslator extends JsonServerMessageTranslator implements CoupMessageTranslator {
 
     private static final String CONTEXT = "GameContext";
     private static final String ACTION = "Action";
@@ -57,7 +58,7 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
     public String marshalMessage(CoupMessageType type, String message) {
         JSONObject j = new JSONObject();
         setMessageTypeIntoJSONObject(type, j);
-        JsonUtil.setStringIntoJSONObject(message, j);
+        JsonUtil.setGenericStringIntoJSONObject(message, j);
         return j.toString();
     }
 
@@ -68,7 +69,6 @@ public class JsonCoupMessageTranslator implements CoupMessageTranslator {
         setPlayerNameIntoJSONObject(playerName, j);
         return j.toString();
     }
-
 
     @Override
     public String marshalMessage(CoupMessageType type, boolean bool) {

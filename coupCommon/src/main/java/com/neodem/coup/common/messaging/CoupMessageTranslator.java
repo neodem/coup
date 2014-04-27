@@ -1,6 +1,7 @@
 package com.neodem.coup.common.messaging;
 
 import com.google.common.collect.Multiset;
+import com.neodem.bandaid.messaging.ServerMessageTranslator;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.cards.CoupCard;
@@ -10,7 +11,7 @@ import com.neodem.coup.common.game.cards.CoupCardType;
  * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
  * Created Date: 3/27/14
  */
-public interface CoupMessageTranslator {
+public interface CoupMessageTranslator extends ServerMessageTranslator {
 
     String marshalMessage(CoupMessageType type, CoupGameContext gc);
 

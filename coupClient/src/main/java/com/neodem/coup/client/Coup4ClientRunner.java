@@ -4,7 +4,7 @@ import com.neodem.coup.client.players.RandomCoupPlayer;
 import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.messaging.CoupMessageTranslator;
 import com.neodem.coup.common.messaging.JsonCoupMessageTranslator;
-import com.neodem.coup.common.proxy.CoupBandaidServerNetworkedProxyServerSide;
+import com.neodem.coup.common.proxy.CoupPlayerCallbackNetworkTransport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,7 +33,7 @@ public class Coup4ClientRunner {
 
     private void setupPlayer(CoupPlayerCallback player) {
         log.info("Starting player : " + player);
-        CoupBandaidServerNetworkedProxyServerSide sp = new CoupBandaidServerNetworkedProxyServerSide(player, messageTranslator, "localhost", 6969);
-        sp.init();
+        CoupPlayerCallbackNetworkTransport cp = new CoupPlayerCallbackNetworkTransport("localhost", player, messageTranslator);
+        cp.init();
     }
 }

@@ -1,7 +1,7 @@
 package com.neodem.coup.common.proxy;
 
 import com.google.common.collect.Multiset;
-import com.neodem.bandaid.proxy.ServiceProxy;
+import com.neodem.bandaid.proxy.PlayerCallbackNetworkTransport;
 import com.neodem.coup.common.game.CoupGameContext;
 import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
@@ -15,22 +15,25 @@ import org.apache.logging.log4j.Logger;
 import static com.neodem.coup.common.messaging.CoupMessageType.reply;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
- * Created Date: 3/27/14
+ * Will make a CoupPlayerCallback communicate over the network to the server.
+ *
+ * Created by vfumo on 4/27/14.
  */
-public class CoupServiceProxy extends ServiceProxy {
+public class CoupPlayerCallbackNetworkTransport extends PlayerCallbackNetworkTransport {
 
-    private static final Logger log = LogManager.getLogger(CoupServiceProxy.class.getName());
+    private static final Logger log = LogManager.getLogger(CoupPlayerCallbackNetworkTransport.class.getName());
     private final CoupMessageTranslator messageTranslator;
-    private final CoupPlayerCallback player;
+    private CoupPlayerCallback player;
 
-    public CoupServiceProxy(CoupPlayerCallback target, CoupMessageTranslator messageTranslator, String host, int port) {
-        super(target, host, port);
-        this.player = target;
+    public CoupPlayerCallbackNetworkTransport(String hostname, CoupPlayerCallback player, CoupMessageTranslator messageTranslator) {
+        super(hostname, player, messageTranslator);
+        this.player = player;
         this.messageTranslator = messageTranslator;
     }
 
-    public String handleMessageWithReply(String m) {
+    @Override
+    protected String handleGameMessageWithReply(int from, String m) {
+
         CoupMessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
         String replyMessage = null;
 
@@ -86,7 +89,9 @@ public class CoupServiceProxy extends ServiceProxy {
         return replyMessage;
     }
 
-    public void handleAsynchonousMessage(String m) {
+    @Override
+    protected void handleGameMessage(int from, String m) {
+
         CoupMessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
         CoupGameContext gc;
         String playerNane;
