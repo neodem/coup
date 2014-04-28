@@ -11,7 +11,7 @@ import java.util.Iterator;
 /**
  * The internal player state held by the server
  * <p/>
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/24/14
  */
 public class PlayerInfoState {

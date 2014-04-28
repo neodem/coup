@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Iterator;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/24/14
  */
 public class ExchangeActionProcessor extends BaseActionProcessor implements ActionProcessor {

@@ -8,7 +8,7 @@ import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.common.game.cards.CoupCardType;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/27/14
  */
 public interface CoupMessageTranslator extends ServerMessageTranslator {

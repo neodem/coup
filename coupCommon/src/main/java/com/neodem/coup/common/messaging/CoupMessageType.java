@@ -3,13 +3,10 @@ package com.neodem.coup.common.messaging;
 import com.neodem.bandaid.messaging.GameMessageType;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/27/14
  */
 public enum CoupMessageType implements GameMessageType {
-
-    //TODO figure out a way to abstract this out so we can have a base message type and a game specific one on top
-
 
     //==== game related message types
     yourTurn,

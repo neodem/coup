@@ -6,7 +6,7 @@ import com.neodem.coup.server.game.PlayerInfoState;
 import com.neodem.coup.server.game.ServerSideGameContext;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/25/14
  */
 public abstract class DamagingActionProcessor extends BaseActionProcessor {

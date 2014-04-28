@@ -5,7 +5,7 @@ import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/26/14
  */
 public interface ActionProcessor {

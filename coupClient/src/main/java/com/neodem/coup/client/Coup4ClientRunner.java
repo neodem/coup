@@ -34,6 +34,5 @@ public class Coup4ClientRunner {
     private void setupPlayer(CoupPlayerCallback player) {
         log.info("Starting player : " + player);
         CoupPlayerCallbackNetworkTransport cp = new CoupPlayerCallbackNetworkTransport("localhost", player, messageTranslator);
-        cp.init();
     }
 }

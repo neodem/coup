@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/25/14
  */
 public class ServerSideGameContext {
