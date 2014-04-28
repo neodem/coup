@@ -8,7 +8,7 @@ import com.neodem.coup.common.game.cards.CoupCardType;
 /**
  * note : Any time you get a CoupGameContext, it will show you the current players context and your specific info.
  * <p/>
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/24/14
  */
 public interface CoupCommunicationInterface {

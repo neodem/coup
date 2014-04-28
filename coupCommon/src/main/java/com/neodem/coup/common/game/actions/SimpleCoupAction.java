@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 2/28/14
  */
 public class SimpleCoupAction extends CoupAction {

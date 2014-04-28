@@ -5,7 +5,7 @@ import com.neodem.coup.common.game.CoupCommunicationInterface;
 import java.util.List;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/31/14
  */
 public interface GameMaster {

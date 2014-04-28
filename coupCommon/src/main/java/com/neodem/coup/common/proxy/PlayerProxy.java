@@ -15,7 +15,7 @@ import static com.neodem.coup.common.messaging.MessageType.*;
  * This class will communicate with it's parter on the client side
  * via messages
  * <p/>
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/27/14
  */
 public class PlayerProxy implements CoupCommunicationInterface {

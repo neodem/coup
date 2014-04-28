@@ -1,7 +1,7 @@
 package com.neodem.coup.common.network;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/30/14
  */
 public interface ComInterface {

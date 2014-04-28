@@ -3,7 +3,7 @@ package com.neodem.coup.common.game.actions;
 import com.neodem.coup.common.game.actions.CoupAction.ActionType;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/29/14
  */
 public class CoupActionFactory {

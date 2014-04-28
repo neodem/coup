@@ -7,7 +7,7 @@ import com.neodem.coup.server.game.ServerSideGameContext;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/26/14
  */
 public abstract class BaseActionProcessor implements ActionProcessor {

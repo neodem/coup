@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import static com.neodem.coup.common.messaging.MessageType.reply;
 
 /**
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/27/14
  */
 public class ServiceProxy extends ComBaseClient {
