@@ -33,7 +33,7 @@ public class CoupPlayerCallbackNetworkTransport extends PlayerCallbackNetworkTra
 
     @Override
     protected String handleGameMessageWithReply(int from, String m) {
-        log.debug("handleGameMessageWithReply({},{})", from, m);
+        log.trace("handleGameMessageWithReply({},{})", from, m);
 
         CoupMessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
         String replyMessage = null;
@@ -92,7 +92,7 @@ public class CoupPlayerCallbackNetworkTransport extends PlayerCallbackNetworkTra
 
     @Override
     protected void handleGameMessage(int from, String m) {
-        log.debug("handleGameMessage({},{})", from, m);
+        log.trace("handleGameMessage({},{})", from, m);
 
         CoupMessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
         CoupGameContext gc;

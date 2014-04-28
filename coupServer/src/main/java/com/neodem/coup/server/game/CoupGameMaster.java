@@ -1,6 +1,7 @@
 package com.neodem.coup.server.game;
 
 import com.neodem.bandaid.gamemasterstuff.BaseGameMaster;
+import com.neodem.bandaid.gamemasterstuff.GameStatus;
 import com.neodem.bandaid.gamemasterstuff.PlayerCallback;
 import com.neodem.bandaid.gamemasterstuff.PlayerError;
 import com.neodem.common.utility.collections.Lists;
@@ -48,12 +49,12 @@ public class CoupGameMaster extends BaseGameMaster {
     private CounterResolver counterResolver;
     private AssasinationProcessor assasinationProcessor;
     private List<PlayerCallback> registeredPlayers = new ArrayList<>();
-    private String gameStatus = "Ready to Register Players";
+    private GameStatus gameStatus = GameStatus.AcceptingPlayers;
 
     @Override
     public boolean isGameReadyToStart() {
-        if (registeredPlayers.size() == 4) {
-            gameStatus = "Ready to Start";
+        if (gameStatus == GameStatus.AcceptingPlayers && registeredPlayers.size() == 4) {
+            gameStatus = GameStatus.Ready;
             return true;
         }
 
@@ -73,7 +74,7 @@ public class CoupGameMaster extends BaseGameMaster {
     }
 
     @Override
-    public String getGameStatus() {
+    public GameStatus getGameStatus() {
         return gameStatus;
     }
 
@@ -84,7 +85,11 @@ public class CoupGameMaster extends BaseGameMaster {
 
     @Override
     public void initGame() {
-        gameStatus = "Initializing";
+        if (gameStatus != GameStatus.Ready) {
+            throw new IllegalStateException("Game is not in a Ready state");
+        }
+
+        gameStatus = GameStatus.Initializing;
 
         context = new ServerSideGameContext();
 
@@ -114,12 +119,20 @@ public class CoupGameMaster extends BaseGameMaster {
         for (CoupPlayerCallback p : context.getPlayerList()) {
             p.initializePlayer(getCurrentGameContext(p));
         }
+
+        gameStatus = GameStatus.Initialized;
     }
 
     @Override
     protected void runGame() {
-        gameStatus = "Started";
+        if (gameStatus != GameStatus.Initialized) {
+            throw new IllegalStateException("Game is not in an Initialized state");
+        }
+
+        gameStatus = GameStatus.Started;
+
         CoupPlayerCallback winningPlayer = null;
+
         while (winningPlayer == null) {
 
             for (CoupPlayerCallback currentPlayer : context.getPlayerList()) {
@@ -148,7 +161,7 @@ public class CoupGameMaster extends BaseGameMaster {
             }
         }
 
-        gameStatus = "Over";
+        gameStatus = GameStatus.Over;
         String msg = "The game is over : " + winningPlayer.getPlayerName() + " was the winner!";
         log.info(msg);
 
