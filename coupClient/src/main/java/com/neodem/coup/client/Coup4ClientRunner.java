@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Will start up 4 clients.
  * <p/>
- * Author: Vincent Fumo (vfumo) : vincent_fumo@cable.comcast.com
+ * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/27/14
  */
 public class Coup4ClientRunner {
