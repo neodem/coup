@@ -1,5 +1,6 @@
 package com.neodem.coup.client;
 
+import com.neodem.bandaid.gamemasterstuff.PlayerError;
 import com.neodem.coup.client.players.RandomCoupPlayer;
 import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.messaging.CoupMessageTranslator;
@@ -34,5 +35,11 @@ public class Coup4ClientRunner {
     private void setupPlayer(CoupPlayerCallback player) {
         log.info("Starting player : " + player);
         CoupPlayerCallbackNetworkTransport cp = new CoupPlayerCallbackNetworkTransport("localhost", player, messageTranslator);
+        try {
+            cp.connect();
+            cp.registerForGame("coup");
+        } catch (PlayerError playerError) {
+            playerError.printStackTrace();
+        }
     }
 }
