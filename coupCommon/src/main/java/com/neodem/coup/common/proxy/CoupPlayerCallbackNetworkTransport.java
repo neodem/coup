@@ -16,7 +16,7 @@ import static com.neodem.coup.common.messaging.CoupMessageType.reply;
 
 /**
  * Will make a CoupPlayerCallback communicate over the network to the server.
- *
+ * <p/>
  * Created by vfumo on 4/27/14.
  */
 public class CoupPlayerCallbackNetworkTransport extends PlayerCallbackNetworkTransport {
@@ -33,6 +33,7 @@ public class CoupPlayerCallbackNetworkTransport extends PlayerCallbackNetworkTra
 
     @Override
     protected String handleGameMessageWithReply(int from, String m) {
+        log.debug("handleGameMessageWithReply({},{})", from, m);
 
         CoupMessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
         String replyMessage = null;
@@ -91,10 +92,11 @@ public class CoupPlayerCallbackNetworkTransport extends PlayerCallbackNetworkTra
 
     @Override
     protected void handleGameMessage(int from, String m) {
+        log.debug("handleGameMessage({},{})", from, m);
 
         CoupMessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
         CoupGameContext gc;
-        String playerNane;
+        String playerName;
         CoupAction a;
         String message;
 
@@ -109,9 +111,9 @@ public class CoupPlayerCallbackNetworkTransport extends PlayerCallbackNetworkTra
                 break;
             case actionHappened:
                 gc = messageTranslator.unmarshalCoupGameContextFromMessage(m);
-                playerNane = messageTranslator.unmarshalPlayerNameFromMessage(m);
+                playerName = messageTranslator.unmarshalPlayerNameFromMessage(m);
                 a = messageTranslator.unmarshalCoupActionFromMessage(m);
-                player.actionHappened(playerNane, a, gc);
+                player.actionHappened(playerName, a, gc);
                 break;
             case intializePlayer:
                 gc = messageTranslator.unmarshalCoupGameContextFromMessage(m);
