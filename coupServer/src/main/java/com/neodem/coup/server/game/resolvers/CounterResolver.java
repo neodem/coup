@@ -1,6 +1,6 @@
 package com.neodem.coup.server.game.resolvers;
 
-import com.neodem.coup.common.game.CoupCommunicationInterface;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.cards.CoupCardType;
 
@@ -24,7 +24,7 @@ public class CounterResolver {
      * @param counteredAction  the action being countered
      * @return true if the counter was successful, false otherwise
      */
-    public boolean resolveCounter(CoupCommunicationInterface actingPlayer, CoupCommunicationInterface counteringPlayer, CoupAction counteredAction) {
+    public boolean resolveCounter(CoupPlayerCallback actingPlayer, CoupPlayerCallback counteringPlayer, CoupAction counteredAction) {
         if (actingPlayer.doYouWantToChallengeThisCounter(counteringPlayer.getPlayerName())) {
             Collection<CoupCardType> cardsNeededToCounter = counteredAction.getCounterCard();
 
@@ -36,6 +36,4 @@ public class CounterResolver {
 
         return true;
     }
-
-
 }

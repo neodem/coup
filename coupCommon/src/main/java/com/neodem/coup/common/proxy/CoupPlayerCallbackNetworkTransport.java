@@ -1,60 +1,42 @@
 package com.neodem.coup.common.proxy;
 
 import com.google.common.collect.Multiset;
-import com.neodem.coup.common.game.CoupCommunicationInterface;
+import com.neodem.bandaid.proxy.PlayerCallbackNetworkTransport;
 import com.neodem.coup.common.game.CoupGameContext;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.common.game.cards.CoupCardType;
-import com.neodem.coup.common.messaging.MessageTranslator;
-import com.neodem.coup.common.messaging.MessageType;
-import com.neodem.coup.common.network.ComBaseClient;
-import com.neodem.coup.common.network.ComServer;
+import com.neodem.coup.common.messaging.CoupMessageTranslator;
+import com.neodem.coup.common.messaging.CoupMessageType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static com.neodem.coup.common.messaging.MessageType.reply;
+import static com.neodem.coup.common.messaging.CoupMessageType.reply;
 
 /**
  * Author: Vincent Fumo (vfumo) : neodem@gmail.com
- * Created Date: 3/27/14
+ * Will make a CoupPlayerCallback communicate over the network to the server.
+ * <p/>
+ * Created by vfumo on 4/27/14.
  */
-public class ServiceProxy extends ComBaseClient {
+public class CoupPlayerCallbackNetworkTransport extends PlayerCallbackNetworkTransport {
 
-    private static final Logger log = LogManager.getLogger(ServiceProxy.class.getName());
-    private final MessageTranslator messageTranslator;
-    private final CoupCommunicationInterface player;
+    private static final Logger log = LogManager.getLogger(CoupPlayerCallbackNetworkTransport.class.getName());
+    private final CoupMessageTranslator messageTranslator;
+    private CoupPlayerCallback player;
 
-    public ServiceProxy(CoupCommunicationInterface target, MessageTranslator messageTranslator, String host, int port) {
-        super(host, port);
-        this.player = target;
+    public CoupPlayerCallbackNetworkTransport(String hostname, CoupPlayerCallback player, CoupMessageTranslator messageTranslator) {
+        super(hostname, player, messageTranslator);
+        this.player = player;
         this.messageTranslator = messageTranslator;
     }
 
     @Override
-    public void init() {
-        super.init();
-        String m = messageTranslator.marshalRegistrationMesage(player.getPlayerName());
-        log.debug("{} : registering with the server : {}", player.getPlayerName(), reply);
-        send(ComServer.Server, m);
-    }
+    protected String handleGameMessageWithReply(int from, String m) {
+        log.trace("handleGameMessageWithReply({},{})", from, m);
 
-    @Override
-    public void handleMessage(int from, String m) {
-        log.trace("{} : message received from {} : {}", player.getPlayerName(), from, m);
-
-        MessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
-
-        if (type.requiresReply()) {
-            String reply = handleMessageWithReply(type, m);
-            log.trace("{} : replying to server : {}", player.getPlayerName(), reply);
-            send(ComServer.Server, reply);
-        } else {
-            handleAsynchonousMessage(type, m);
-        }
-    }
-
-    public String handleMessageWithReply(MessageType type, String m) {
+        CoupMessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
         String replyMessage = null;
 
         CoupGameContext gc;
@@ -109,9 +91,13 @@ public class ServiceProxy extends ComBaseClient {
         return replyMessage;
     }
 
-    public void handleAsynchonousMessage(MessageType type, String m) {
+    @Override
+    protected void handleGameMessage(int from, String m) {
+        log.trace("handleGameMessage({},{})", from, m);
+
+        CoupMessageType type = messageTranslator.unmarshalMessageTypeFromMessage(m);
         CoupGameContext gc;
-        String playerNane;
+        String playerName;
         CoupAction a;
         String message;
 
@@ -126,9 +112,9 @@ public class ServiceProxy extends ComBaseClient {
                 break;
             case actionHappened:
                 gc = messageTranslator.unmarshalCoupGameContextFromMessage(m);
-                playerNane = messageTranslator.unmarshalPlayerNameFromMessage(m);
+                playerName = messageTranslator.unmarshalPlayerNameFromMessage(m);
                 a = messageTranslator.unmarshalCoupActionFromMessage(m);
-                player.actionHappened(playerNane, a, gc);
+                player.actionHappened(playerName, a, gc);
                 break;
             case intializePlayer:
                 gc = messageTranslator.unmarshalCoupGameContextFromMessage(m);

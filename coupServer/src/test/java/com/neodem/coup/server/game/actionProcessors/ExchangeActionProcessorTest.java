@@ -2,7 +2,8 @@ package com.neodem.coup.server.game.actionProcessors;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import com.neodem.coup.common.game.CoupCommunicationInterface;
+import com.neodem.bandaid.gamemasterstuff.PlayerCallback;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.server.game.ServerSideGameContext;
 import org.junit.After;
@@ -25,11 +26,11 @@ import static org.mockito.Mockito.mock;
 public class ExchangeActionProcessorTest {
     private ServerSideGameContext context;
     private ExchangeActionProcessor processor;
-    private CoupCommunicationInterface mockPlayer;
+    private PlayerCallback mockPlayer;
 
     @Before
     public void before() {
-        mockPlayer = mock(CoupCommunicationInterface.class);
+        mockPlayer = mock(CoupPlayerCallback.class);
 
         context = new ServerSideGameContext();
         context.addPlayer(mockPlayer);

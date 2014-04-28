@@ -3,16 +3,32 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="coupMessageTranslator" class="com.neodem.coup.common.messaging.JsonCoupMessageTranslator"/>
+
+    <bean id="communicationsServer" class="com.neodem.bandaid.network.ComServer"/>
+
     <bean id="coupGameMaster" class="com.neodem.coup.server.game.CoupGameMaster"/>
 
-    <bean id="coupServer" class="com.neodem.coup.server.game.BandaidGameServer" init-method="startCoupServer">
-        <property name="messageTranslator" ref="messageTranslator"/>
-        <property name="gameMaster" ref="coupGameMaster"/>
-        <property name="comServer" ref="communicationsServer"/>
+    <bean id="coupPlayerCallbackProxyFactory" class="com.neodem.coup.common.proxy.CoupPlayerCallbackProxyFactory">
+        <property name="coupMessageTranslator" ref="coupMessageTranslator"/>
     </bean>
 
-    <bean id="messageTranslator" class="com.neodem.coup.common.messaging.JsonMessageTranslator"/>
+    <bean id="bandaidGameServer" class="com.neodem.bandaid.server.BandaidGameServerImpl">
+        <property name="gameMasters">
+            <map>
+                <entry key="coup" value-ref="coupGameMaster"/>
+            </map>
+        </property>
+    </bean>
 
-    <bean id="communicationsServer" class="com.neodem.coup.common.network.ComServer"/>
+    <bean id="bandaidGameServerNetworkTransport" class="com.neodem.bandaid.proxy.BandaidGameServerNetworkTransport">
+        <property name="bandaidGameServer" ref="bandaidGameServer"/>
+        <property name="playerCallbackProxyFactory" ref="coupPlayerCallbackProxyFactory"/>
+    </bean>
+
+    <bean id="bandaidServer" class="com.neodem.bandaid.server.BandaidServer" init-method="start">
+        <property name="bandaidGameServerNetworkTransport" ref="bandaidGameServerNetworkTransport"/>
+        <property name="comServer" ref="communicationsServer"/>
+    </bean>
 
 </beans>

@@ -1,10 +1,11 @@
 package com.neodem.coup.client;
 
+import com.neodem.bandaid.gamemasterstuff.PlayerError;
 import com.neodem.coup.client.players.RandomCoupPlayer;
-import com.neodem.coup.common.game.CoupCommunicationInterface;
-import com.neodem.coup.common.messaging.JsonMessageTranslator;
-import com.neodem.coup.common.messaging.MessageTranslator;
-import com.neodem.coup.common.proxy.ServiceProxy;
+import com.neodem.coup.common.game.CoupPlayerCallback;
+import com.neodem.coup.common.messaging.CoupMessageTranslator;
+import com.neodem.coup.common.messaging.JsonCoupMessageTranslator;
+import com.neodem.coup.common.proxy.CoupPlayerCallbackNetworkTransport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 public class Coup4ClientRunner {
 
     private static final Logger log = LogManager.getLogger(Coup4ClientRunner.class.getName());
-    private MessageTranslator messageTranslator = new JsonMessageTranslator();
+    private CoupMessageTranslator messageTranslator = new JsonCoupMessageTranslator();
 
     public static void main(String[] args) {
         Coup4ClientRunner runner = new Coup4ClientRunner();
@@ -31,9 +32,14 @@ public class Coup4ClientRunner {
         setupPlayer(new RandomCoupPlayer("Player4"));
     }
 
-    private void setupPlayer(CoupCommunicationInterface player) {
+    private void setupPlayer(CoupPlayerCallback player) {
         log.info("Starting player : " + player);
-        ServiceProxy sp = new ServiceProxy(player, messageTranslator, "localhost", 6969);
-        sp.init();
+        CoupPlayerCallbackNetworkTransport cp = new CoupPlayerCallbackNetworkTransport("localhost", player, messageTranslator);
+        try {
+            cp.connect();
+            cp.registerForGame("coup");
+        } catch (PlayerError playerError) {
+            playerError.printStackTrace();
+        }
     }
 }

@@ -17,11 +17,11 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class JsonMessageTranslatorTest {
 
-    private JsonMessageTranslator t;
+    private JsonCoupMessageTranslator t;
 
     @Before
     public void before() {
-        t = new JsonMessageTranslator();
+        t = new JsonCoupMessageTranslator();
     }
 
     @After
@@ -36,7 +36,7 @@ public class JsonMessageTranslatorTest {
         cardCollection.add(new CoupCard(1, CoupCardType.Ambassador, false));
         cardCollection.add(new CoupCard(2, CoupCardType.Ambassador, false));
 
-        String m = t.marshalMessage(MessageType.actionHappened, cardCollection);
+        String m = t.marshalMessage(CoupMessageType.actionHappened, cardCollection);
 
         Multiset<CoupCard> result = t.unmarshalCardMultisetFromMessage(m);
 

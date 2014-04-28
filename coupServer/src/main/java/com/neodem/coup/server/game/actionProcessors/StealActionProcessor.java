@@ -1,7 +1,7 @@
 package com.neodem.coup.server.game.actionProcessors;
 
-import com.neodem.coup.common.game.CoupCommunicationInterface;
-import com.neodem.coup.common.game.PlayerError;
+import com.neodem.bandaid.gamemasterstuff.PlayerError;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.actions.SimpleCoupAction;
 import com.neodem.coup.server.game.PlayerInfoState;
@@ -27,7 +27,7 @@ public class StealActionProcessor extends BaseActionProcessor implements ActionP
     }
 
     @Override
-    public void validate(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
+    public void validate(CoupPlayerCallback actingPlayer, String targetPlayerName, CoupAction currentAction) throws PlayerError {
 
         if (currentAction.getActionType() == SimpleCoupAction.ActionType.Steal) {
             if (StringUtils.isBlank(targetPlayerName)) {
@@ -50,7 +50,7 @@ public class StealActionProcessor extends BaseActionProcessor implements ActionP
     }
 
     @Override
-    public void process(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) {
+    public void process(CoupPlayerCallback actingPlayer, String targetPlayerName, CoupAction currentAction) {
         PlayerInfoState aInfo = context.getPlayerInfo(actingPlayer);
         PlayerInfoState oInfo = context.getPlayerInfo(targetPlayerName);
 

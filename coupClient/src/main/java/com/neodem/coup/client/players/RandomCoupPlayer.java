@@ -3,8 +3,8 @@ package com.neodem.coup.client.players;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.neodem.common.utility.collections.Lists;
-import com.neodem.coup.common.game.CoupCommunicationInterface;
 import com.neodem.coup.common.game.CoupGameContext;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.actions.CoupAction.ActionType;
 import com.neodem.coup.common.game.actions.CoupActionFactory;
@@ -30,11 +30,11 @@ import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Steal;
  * Author: vfumo
  * Date: 2/28/14
  */
-public class RandomCoupPlayer extends BaseCoupPlayer implements CoupCommunicationInterface {
+public class RandomCoupPlayer extends BaseCoupPlayer implements CoupPlayerCallback {
     private static final Logger log = LogManager.getLogger(RandomCoupPlayer.class.getName());
+    private final Random r = new Random(System.currentTimeMillis());
     protected CoupGameContext currentGameContext;
     private CoupPlayerInfo myState = null;
-    private final Random r = new Random(System.currentTimeMillis());
 
     public RandomCoupPlayer(String name) {
         super(name);

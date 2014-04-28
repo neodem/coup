@@ -1,6 +1,6 @@
 package com.neodem.coup.common.game.player;
 
-import com.neodem.coup.common.game.CoupCommunicationInterface;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
  * Author: Vincent Fumo (vfumo) : neodem@gmail.com
  * Created Date: 3/27/14
  */
-public abstract class BaseCoupPlayer implements CoupCommunicationInterface {
+public abstract class BaseCoupPlayer implements CoupPlayerCallback {
 
     private static final Logger log = LogManager.getLogger(BaseCoupPlayer.class.getName());
     protected final String playerName;

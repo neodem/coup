@@ -1,8 +1,9 @@
 package com.neodem.coup.client;
 
+import com.neodem.bandaid.gamemasterstuff.PlayerError;
 import com.neodem.coup.client.players.RandomCoupPlayer;
-import com.neodem.coup.common.messaging.JsonMessageTranslator;
-import com.neodem.coup.common.proxy.ServiceProxy;
+import com.neodem.coup.common.messaging.JsonCoupMessageTranslator;
+import com.neodem.coup.common.proxy.CoupPlayerCallbackNetworkTransport;
 
 /**
  * Fires up a single client
@@ -12,7 +13,12 @@ import com.neodem.coup.common.proxy.ServiceProxy;
  */
 public class CoupSingleClientRunner {
     public static void main(String[] args) {
-        ServiceProxy sp = new ServiceProxy(new RandomCoupPlayer("Player4"), new JsonMessageTranslator(), "localhost", 6969);
-        sp.init();
+        CoupPlayerCallbackNetworkTransport cp = new CoupPlayerCallbackNetworkTransport("localhost", new RandomCoupPlayer("Player4"), new JsonCoupMessageTranslator());
+        try {
+            cp.connect();
+            cp.registerForGame("coup");
+        } catch (PlayerError playerError) {
+            playerError.printStackTrace();
+        }
     }
 }

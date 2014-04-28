@@ -3,7 +3,7 @@ package com.neodem.coup.server.game.actionProcessors;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
-import com.neodem.coup.common.game.CoupCommunicationInterface;
+import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.cards.CoupCard;
 import com.neodem.coup.server.game.PlayerInfoState;
@@ -30,7 +30,7 @@ public class ExchangeActionProcessor extends BaseActionProcessor implements Acti
     }
 
     @Override
-    public void process(CoupCommunicationInterface actingPlayer, String targetPlayerName, CoupAction currentAction) {
+    public void process(CoupPlayerCallback actingPlayer, String targetPlayerName, CoupAction currentAction) {
         getLog().debug(String.format("%s is doing an exchange...", actingPlayer));
 
         PlayerInfoState currentPlayerInfo = context.getPlayerInfo(actingPlayer);
@@ -59,7 +59,7 @@ public class ExchangeActionProcessor extends BaseActionProcessor implements Acti
         context.getDeck().shuffleDeck();
     }
 
-    private Multiset<CoupCard> getReturnedCards(CoupCommunicationInterface p, Multiset<CoupCard> handCards) {
+    private Multiset<CoupCard> getReturnedCards(CoupPlayerCallback p, Multiset<CoupCard> handCards) {
 
         // deal with exchange
         Multiset<CoupCard> returnedCards = p.exchangeCards(handCards);
