@@ -9,17 +9,31 @@ import com.neodem.coup.common.game.CoupPlayerCallback;
 import com.neodem.coup.common.game.actions.ComplexCoupAction;
 import com.neodem.coup.common.game.actions.CoupAction;
 import com.neodem.coup.common.game.actions.CoupAction.ActionType;
-import com.neodem.coup.common.messaging.CoupMessageTranslator;
 import com.neodem.coup.common.util.DisplayUtils;
-import com.neodem.coup.server.game.actionProcessors.*;
+import com.neodem.coup.server.game.actionProcessors.ActionProcessor;
+import com.neodem.coup.server.game.actionProcessors.AssasinationProcessor;
+import com.neodem.coup.server.game.actionProcessors.CoupActionProcessor;
+import com.neodem.coup.server.game.actionProcessors.ExchangeActionProcessor;
+import com.neodem.coup.server.game.actionProcessors.IncomeProcessor;
+import com.neodem.coup.server.game.actionProcessors.StealActionProcessor;
 import com.neodem.coup.server.game.resolvers.ChallengeResolver;
 import com.neodem.coup.server.game.resolvers.CounterResolver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import static com.neodem.coup.common.game.actions.CoupAction.ActionType.*;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Assassinate;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Coup;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Exchange;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.ForeignAid;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Income;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Steal;
+import static com.neodem.coup.common.game.actions.CoupAction.ActionType.Tax;
 
 /**
  * Author: vfumo
@@ -34,7 +48,6 @@ public class CoupGameMaster extends BaseGameMaster {
     private CounterResolver counterResolver;
     private AssasinationProcessor assasinationProcessor;
     private List<PlayerCallback> registeredPlayers = new ArrayList<>();
-    private CoupMessageTranslator coupMessageTranslator;
     private String gameStatus = "Ready to Register Players";
 
     @Override
@@ -344,9 +357,5 @@ public class CoupGameMaster extends BaseGameMaster {
             ap.process(actingPlayer, null, currentAction);
 
         updatePlayers();
-    }
-
-    public void setCoupMessageTranslator(CoupMessageTranslator coupMessageTranslator) {
-        this.coupMessageTranslator = coupMessageTranslator;
     }
 }
